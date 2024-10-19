@@ -1,6 +1,16 @@
 steps:
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/tab-board/tab-board-image', '.']
-
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/tab-board-image', '.']
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'tab-board-service'
+      - '--image'
+      - 'gcr.io/$PROJECT_ID/tab-board-image'
+      - '--region'
+      - 'asia-east1'
+      - '--allow-unauthenticated'
 options:
   logging: CLOUD_LOGGING_ONLY
