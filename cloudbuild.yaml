@@ -1,6 +1,6 @@
 steps:
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/$PROJECT_ID/tab-board-image', '.']
+    args: ['build', '-t', 'gcr.io/tab-board/tab-board-image', '.']
 
 options:
   logging: CLOUD_LOGGING_ONLY
