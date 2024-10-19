@@ -1,3 +1,7 @@
 document.getElementById('launchFullscreen').addEventListener('click', function() {
-    chrome.tabs.create({ url: "src/fullscreen.html" });
+  // Open fullscreen.html
+  chrome.tabs.create({ url: "src/fullscreen.html" }, function(tab) {
+    // Send a message to background.js to inject the content.js
+    chrome.runtime.sendMessage({ action: "extractContentFromTabs" });
   });
+});
