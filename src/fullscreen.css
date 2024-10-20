@@ -1,118 +1,126 @@
 /* General body and canvas styling */
 body {
-    margin: 0;
-    overflow: hidden;
+	margin: 0;
+	overflow: hidden;
 }
 
 #canvas {
-    position: relative;
-    width: 100vw;
-    height: calc(100vh - 50px); /* Adjust height to account for the navbar */
-    background-color: #f0f0f0;
-    background-image: linear-gradient(90deg, #ccc 1px, transparent 1px),
-                      linear-gradient(180deg, #ccc 1px, transparent 1px);
-    background-size: 20px 20px; /* Adjust grid size here */
-    top: 50px; /* Place it under the navbar */
-    overflow: hidden;
+	position: relative;
+	width: 100vw;
+	height: calc(100vh - 50px); /* Adjust height to account for the navbar */
+	background-color: #f0f0f0;
+	background-image: linear-gradient(90deg, #ccc 1px, transparent 1px),
+		linear-gradient(180deg, #ccc 1px, transparent 1px);
+	background-size: 20px 20px; /* Adjust grid size here */
+	top: 50px; /* Place it under the navbar */
+	overflow: hidden;
 }
 
 /* Nav bar styling */
 .navbar {
-    position: fixed;
-    top: 0;
-    width: 100vw;
-    height: 50px;
-    background-color: #333;
-    color: white;
-    display: flex;
-    justify-content: space-between; /* Space between title and menu */
-    align-items: center;
-    padding: 0 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    font-family: Arial, sans-serif;
-    z-index: 10;
-    box-sizing: border-box; /* Make sure padding is included in width */
+	position: fixed;
+	top: 0;
+	width: 100vw;
+	height: 50px;
+	background-color: #333;
+	color: white;
+	display: flex;
+	justify-content: space-between; /* Space between title and menu */
+	align-items: center;
+	padding: 0 20px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+	font-family: Arial, sans-serif;
+	z-index: 10;
+	box-sizing: border-box; /* Make sure padding is included in width */
 }
 
 /* Navigation links */
 .navbar ul {
-    list-style: none; /* Remove bullet points */
-    margin: 0;
-    padding: 0;
-    display: flex; /* Flexbox for horizontal layout */
-    flex-grow: 1; /* Make the ul fill remaining space */
-    justify-content: flex-end; /* Align menu to the right */
+	list-style: none; /* Remove bullet points */
+	margin: 0;
+	padding: 0;
+	display: flex; /* Flexbox for horizontal layout */
+	flex-grow: 1; /* Make the ul fill remaining space */
+	justify-content: flex-end; /* Align menu to the right */
 }
 
 .navbar li {
-    margin-right: 20px; /* Space between items */
+	margin-right: 20px; /* Space between items */
 }
 
 .navbar li:last-child {
-    margin-right: 0; /* No space for the last item */
+	margin-right: 0; /* No space for the last item */
 }
 
 .navbar a {
-    text-decoration: none;
-    color: white;
-    padding: 10px 20px;
-    background-color: #444; /* Button-like background */
-    border-radius: 5px; /* Rounded corners */
-    font-weight: bold;
-    transition: background-color 0.3s; /* Smooth hover transition */
+	text-decoration: none;
+	color: white;
+	padding: 10px 20px;
+	background-color: #444; /* Button-like background */
+	border-radius: 5px; /* Rounded corners */
+	font-weight: bold;
+	transition: background-color 0.3s; /* Smooth hover transition */
 }
 
 /* Button hover effect */
 .navbar a:hover {
-    background-color: #555;
+	background-color: #555;
 }
 
 /* Styling for nodes */
 .node {
-    width: 100px;
-    height: 50px;
-    background-color: #3498db;
-    position: absolute;
-    cursor: pointer;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 5px;
-    font-family: Arial, sans-serif;
-    user-select: none; /* Prevents text selection */
+	width: 100px;
+	height: 50px;
+	background-color: #3498db;
+	position: absolute;
+	cursor: pointer;
+	color: white;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 5px;
+	font-family: Arial, sans-serif;
+	user-select: none; /* Prevents text selection */
 }
 
 /* Attach points on each side of the node */
 .attach-point {
-    width: 10px;
-    height: 10px;
-    background-color: red;
-    position: absolute;
-    border-radius: 50%;
-    cursor: pointer;
+	width: 10px;
+	height: 10px;
+	background-color: red;
+	position: absolute;
+	border-radius: 50%;
+	cursor: pointer;
 }
 
-.attach-point.left { left: -5px; top: 50%; transform: translateY(-50%); }
-.attach-point.right { right: -5px; top: 50%; transform: translateY(-50%); }
+.attach-point.left {
+	left: -5px;
+	top: 50%;
+	transform: translateY(-50%);
+}
+.attach-point.right {
+	right: -5px;
+	top: 50%;
+	transform: translateY(-50%);
+}
 
 /* SVG for curvy edges */
 svg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
 }
 
 path {
-    stroke: #2c3e50;
-    stroke-width: 2;
-    fill: none;
+	stroke: #2c3e50;
+	stroke-width: 2;
+	fill: none;
 }
 
 /* Highlight edge on hover */
 path:hover {
-    stroke: #e74c3c; /* Change color on hover */
-    cursor: pointer; /* Show pointer when hovering over edge */
+	stroke: #e74c3c; /* Change color on hover */
+	cursor: pointer; /* Show pointer when hovering over edge */
 }

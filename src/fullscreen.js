@@ -1,10 +1,17 @@
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-	if (message.action === "extractContent") {
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+	if (request.action === "displayContent") {
+		console.log("Message received!");
+
 		// Append content to a div in fullscreen.html
 		const contentDiv = document.getElementById('content');
 		const contentNode = document.createElement('p');
-		//contentNode.textContent = `Content from ${message.url}: ${message.content}`;
-		//contentDiv.appendChild(contentNode);
+		contentNode.textContent = `Content from ${request.url}: ${request.content}`;
+		console.log(contentNode);
+
+		// Make sure to append it to the content div
+		// if (contentDiv) {
+		//     contentDiv.appendChild(contentNode);
+		// }
 	}
 });
 
