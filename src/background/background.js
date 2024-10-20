@@ -7,7 +7,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                     // Inject the content.js into each tab
                     chrome.scripting.executeScript({
                         target: { tabId: tab.id },
-                        files: ['src/content.js']
+                        files: ['src/content/content.js']
                     });
                 }
             });

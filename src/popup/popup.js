@@ -1,6 +1,6 @@
 document.getElementById('launchFullscreen').addEventListener('click', function () {
 	// Open fullscreen.html and get the tab ID of the new tab
-	chrome.tabs.create({ url: "src/fullscreen.html" }, function (fullscreenTab) {
+	chrome.tabs.create({ url: "src/fullscreen/fullscreen.html" }, function (fullscreenTab) {
 
 		// Wait for the fullscreen tab to finish loading
 		chrome.tabs.onUpdated.addListener(function onUpdated(tabId, changeInfo, tab) {

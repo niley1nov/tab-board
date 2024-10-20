@@ -4,12 +4,12 @@
     "version": "0.1.0",
     "description": "Tab Board",
     "action": {
-      "default_popup": "src/popup.html"
+      "default_popup": "src/popup/popup.html"
     },
     "content_scripts": [
         {
             "matches": ["<all_urls>"],
-            "js": ["src/content.js"]
+            "js": ["src/content/content.js"]
         }
     ],
     "permissions": [
@@ -28,6 +28,6 @@
         "https://*/*"
     ],
     "background": {
-        "service_worker": "src/background.js"
+        "service_worker": "src/background/background.js"
     }
   }
