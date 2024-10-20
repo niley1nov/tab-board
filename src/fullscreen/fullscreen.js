@@ -1,18 +1,17 @@
+let tabsList = [];
+
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-	if (request.action === "displayContent") {
-		console.log("Message received!");
+  if (request.action === "sendTabData") {
+    // Add the received tab data to the tabsList array
+    tabsList.push(request.tabData);
 
-		// Append content to a div in fullscreen.html
-		const contentDiv = document.getElementById('content');
-		const contentNode = document.createElement('p');
-		contentNode.textContent = `Content from ${request.url}: ${request.content}`;
-		console.log(contentNode);
+    // Log the updated list to check that new data is being added
+    console.log("Updated tabs list:", tabsList);
 
-		// Make sure to append it to the content div
-		// if (contentDiv) {
-		//     contentDiv.appendChild(contentNode);
-		// }
-	}
+    // You can now manipulate the tabsList as needed, or process each new tab
+    const recentTab = tabsList[tabsList.length - 1];
+    console.log(`Received tab - ID: ${recentTab.id}, Title: ${recentTab.title}, URL: ${recentTab.url}`);
+  }
 });
 
 document.addEventListener('DOMContentLoaded', function () {
