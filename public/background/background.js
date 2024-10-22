@@ -24,6 +24,8 @@ function queryAndExtractTabContent() {
 // Check if the tab is valid for content extraction
 function isValidTab(tab) {
 	return !tab.url.startsWith('chrome://') &&
+		!tab.url.startsWith('extension://') &&
+		!tab.url.startsWith('edge://') &&
 		!tab.url.startsWith('chrome-extension://') &&
 		!!tab.url;
 }
@@ -59,7 +61,6 @@ function handleExtractedContent(request) {
 		content: request.content,
 		url: request.url
 	};
-
 	// Send the data of this single tab to the fullscreen page
 	chrome.runtime.sendMessage({
 		action: "sendTabData",

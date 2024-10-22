@@ -6,12 +6,26 @@ function App() {
   const handleOpenBoard = () => {
     if (typeof window !== 'undefined' && window.chrome && window.chrome.tabs) {
       // Open board.html in a new tab with the #/board route
-      window.chrome.tabs.create({ url: window.chrome.runtime.getURL("board.html#/board") });
+      window.chrome.tabs.create({ url: window.chrome.runtime.getURL("board.html#/board") }, function (boardTab) {
+        // Ensure that `boardTab` is correctly defined
+        if (boardTab && boardTab.id) {
+          // Wait for the board tab to finish loading
+          window.chrome.tabs.onUpdated.addListener(function onUpdated(tabId, changeInfo) {
+            // Ensure the correct tab and that the page is fully loaded
+            if (tabId === boardTab.id && changeInfo.status === 'complete') {
+              // Now that the board page is ready, send the message to extract content from all tabs
+              window.chrome.runtime.sendMessage({ action: "extractContentFromTabs" });
+
+              // Remove the listener to prevent future triggers
+              window.chrome.tabs.onUpdated.removeListener(onUpdated);
+            }
+          });
+        }
+      });
     } else {
       alert('This feature is only available in the Chrome extension context.');
     }
   };
-  
 
   return (
     <div className="App">
