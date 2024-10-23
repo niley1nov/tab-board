@@ -36,10 +36,11 @@ const Board = () => {
 		svgRef.current = svg;
 		canvas.appendChild(svg);
 
-		// Handle incoming tab data (this can be linked to Chrome runtime if needed)
-		window.chrome.runtime.onMessage.addListener((request) => {
+		// Message handler function
+		const handleTabData = (request) => {
 			if (request.action === 'sendTabData') {
 				const updatedTabsList = [...tabsList, request.tabData];
+
 				// Create a new node at dynamic positions
 				createNode(xPosRef.current, yPosRef.current, request.tabData.title);
 
@@ -53,8 +54,17 @@ const Board = () => {
 				// Add tab data to the state
 				setTabsList((prevTabsList) => [...prevTabsList, request.tabData]);
 			}
-		});
-	}, [tabsList]);
+		};
+
+		// Attach the listener
+		window.chrome.runtime.onMessage.addListener(handleTabData);
+
+		// Cleanup function to remove the listener when the component unmounts or effect re-runs
+		return () => {
+			window.chrome.runtime.onMessage.removeListener(handleTabData);
+		};
+	}, [tabsList]);  // Dependency array ensures that the effect runs when tabsList changes
+
 
 	return (
 		<div>
