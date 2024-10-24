@@ -1,11 +1,15 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
+import ReactDOM from 'react-dom';
+import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import App from './App';
+import Board from './Board';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+ReactDOM.render(
+  <Router>
+    <Routes>
+      <Route path="/" element={<App />} />
+      <Route path="/board" element={<Board />} />
+    </Routes>
+  </Router>,
+  document.getElementById('root')  // Make sure this matches the ID in board.html
 );
