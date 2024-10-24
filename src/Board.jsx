@@ -42,6 +42,8 @@ const Board = () => {
 				const updatedTabsList = [...tabsList, request.tabData];
 
 				// Create a new node at dynamic positions
+				console.log(request.tabData);
+				console.log('-------------------------------');
 				createNode(xPosRef.current, yPosRef.current, request.tabData.title);
 
 				// Update positions for next node
