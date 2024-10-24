@@ -1,5 +1,5 @@
 import React from 'react';
-import './App.css';
+import '../stylesheets/App.css';
 
 function App() {
   // Function to handle "Open Board" button click

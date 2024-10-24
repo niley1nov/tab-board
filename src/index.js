@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
-import App from './App';
-import Board from './Board';
+import App from './containers/App';
+import Board from './containers/Board';
 
 ReactDOM.render(
   <Router>
@@ -11,5 +11,5 @@ ReactDOM.render(
       <Route path="/board" element={<Board />} />
     </Routes>
   </Router>,
-  document.getElementById('root')  // Make sure this matches the ID in board.html
+  document.getElementById('root')
 );
