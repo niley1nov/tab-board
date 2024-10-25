@@ -109,6 +109,7 @@ function extractContentAndSend(tabId, tabTitle, tabUrl) {
     const tabData = {
         title: tabTitle,
         url: tabUrl,
+        tabId: tabId,
         metaTags: getMetaTags(),         // Extract meta tags
         content: document.body.innerText, // Structured text content (headings, paragraphs, etc.)
         jsonLD: getJSONLD(),             // Extract JSON-LD structured data
@@ -119,7 +120,7 @@ function extractContentAndSend(tabId, tabTitle, tabUrl) {
     chrome.runtime.sendMessage({
         action: "extractContent",
         content: tabData,
-        tabId,
+        tabId: tabId,
         title: tabTitle,
         url: tabUrl
     });

@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
-import App from './App';
-import Board from './Board';
+import App from './components/App';
+import Board from './containers/Board';
 
 ReactDOM.render(
   <Router>
