@@ -45,42 +45,6 @@ function extractContentAndSend(tabId, tabTitle, tabUrl) {
         return metaTags;
     }
 
-    // Extract important headings and structured text
-    function getStructuredContent() {
-        let structuredContent = '';
-
-        // Capture important headers (H1, H2, etc.)
-        const headers = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
-        headers.forEach(header => {
-            structuredContent += `${header.tagName}: ${header.innerText.trim()}\n`;
-        });
-
-        // Capture paragraphs and their hierarchy
-        const paragraphs = document.querySelectorAll('p');
-        paragraphs.forEach(paragraph => {
-            structuredContent += `P: ${paragraph.innerText.trim()}\n`;
-        });
-
-        // Capture bold and italic texts as important context
-        const boldTexts = document.querySelectorAll('b, strong');
-        boldTexts.forEach(bold => {
-            structuredContent += `BOLD: ${bold.innerText.trim()}\n`;
-        });
-
-        const italicTexts = document.querySelectorAll('i, em');
-        italicTexts.forEach(italic => {
-            structuredContent += `ITALIC: ${italic.innerText.trim()}\n`;
-        });
-
-        // Extract links with their text
-        const links = document.querySelectorAll('a[href]');
-        links.forEach(link => {
-            structuredContent += `LINK: ${link.innerText.trim()} (${link.href})\n`;
-        });
-
-        return structuredContent;
-    }
-
     // Extract JSON-LD structured data (e.g., Schema.org)
     function getJSONLD() {
         const jsonLDScripts = document.querySelectorAll('script[type="application/ld+json"]');
