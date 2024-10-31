@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import CustomNode from '../components/CustomNode';
+import NavBar from '../components/NavBar';
 import {
   ReactFlow,
   MiniMap,
@@ -102,6 +103,7 @@ const Board = () => {
 
   return (
     <div style={{ width: '100vw', height: '100vh' }}>
+      <NavBar />
       <ReactFlow
         nodes={nodes}
         edges={edges}
