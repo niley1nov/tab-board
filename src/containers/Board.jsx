@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import CustomNode from '../components/CustomNode';
+import TabNode from '../components/TabNode';
+import PromptNode from '../components/PromptNode';
 import NavBar from '../components/NavBar';
 import {
 	ReactFlow,
@@ -24,7 +25,7 @@ const rfStyle = {
 };
 
 const Board = () => {
-	const nodeTypes = { customNode: CustomNode };
+	const nodeTypes = { TabNode: TabNode, PromptNode: PromptNode };
 
 	const [nodes, setNodes, onNodesChange] = useNodesState([]);
 	const [edges, setEdges, onEdgesChange] = useEdgesState([]);
@@ -44,7 +45,7 @@ const Board = () => {
 
 	const handleAddNode = () => {
 		console.log('Button click received in parent');
-		const newNode = createCustomNode(xCustPosRef.current, yCustPosRef.current);
+		const newNode = createPromptNode(xCustPosRef.current, yCustPosRef.current);
 		setNodes((prevNodes) => [...prevNodes, newNode]);
 		// Update positions for next node
 		yCustPosRef.current += 250;  // Increment x position for the next node
@@ -90,18 +91,18 @@ const Board = () => {
 			id: tabId,
 			position: { x: x, y: y },
 			data: { label: request.content.title, onOpenMenu: (e) => openMenu(e, tabId) },
-			type: 'customNode',
+			type: 'TabNode',
 		};
 		return node;
 	};
 
-	const createCustomNode = (x, y) => {
+	const createPromptNode = (x, y) => {
 		const tabId = generateRandomID();
 		const node = {
 			id: tabId,
 			position: { x: x, y: y },
 			data: { label: 'Custom Node', onOpenMenu: (e) => openMenu(e, tabId) },
-			type: 'customNode',
+			type: 'PromptNode',
 		};
 		return node;
 	};

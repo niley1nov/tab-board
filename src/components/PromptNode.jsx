@@ -11,9 +11,9 @@ import { red } from '@mui/material/colors';
 import { Handle, Position } from '@xyflow/react';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import '../stylesheets/CustomNode.css';  // External CSS
+import '../stylesheets/PromptNode.css';  // External CSS
 
-const CustomNode = ({ data }) => {
+const PromptNode = ({ data }) => {
 	const [expanded, setExpanded] = useState(false);
 
 	const handleExpandClick = () => {
@@ -78,4 +78,4 @@ const CustomNode = ({ data }) => {
 	);
 };
 
-export default CustomNode;
+export default PromptNode;
