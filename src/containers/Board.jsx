@@ -9,10 +9,11 @@ import {
 	Background,
 	useNodesState,
 	useEdgesState,
-	addEdge,
+	//addEdge,
 	BackgroundVariant
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
+import Edge from '../components/Edge';
 import { Menu, MenuItem, Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField } from '@mui/material';
 
 const NODE_WIDTH = 200;
@@ -26,6 +27,9 @@ const rfStyle = {
 
 const Board = () => {
 	const nodeTypes = { TabNode: TabNode, PromptNode: PromptNode };
+	const edgeTypes = {
+		Edge: Edge,
+	};
 
 	const [nodes, setNodes, onNodesChange] = useNodesState([]);
 	const [edges, setEdges, onEdgesChange] = useEdgesState([]);
@@ -37,6 +41,20 @@ const Board = () => {
 	const yPosRef = useRef(100);
 	const xCustPosRef = useRef(700);
 	const yCustPosRef = useRef(100);
+
+	const addEdge = (params, eds) => {
+		console.log("Adding custom edge:", params);
+		// Customize edge creation logic here
+		const newEdge = {
+			id: `e${params.source}-${params.target}`,
+			source: params.source,
+			target: params.target,
+			type: 'Edge',
+			style: { stroke: '#ff0000' }, // Custom styling
+			...params,
+		};
+		return [...eds, newEdge];
+	};
 
 	const openMenu = (event, nodeId) => {
 		setAnchorEl(event.currentTarget);
@@ -138,6 +156,7 @@ const Board = () => {
 				nodes={nodes}
 				edges={edges}
 				nodeTypes={nodeTypes}
+				edgeTypes={edgeTypes}
 				onNodesChange={onNodesChange}
 				onEdgesChange={onEdgesChange}
 				onConnect={(params) => setEdges((eds) => addEdge(params, eds))}

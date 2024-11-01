@@ -1,0 +1,15 @@
+.custom-edge {
+	stroke: blue; /* Initial color */
+	stroke-width: 3px; /* Initial thickness */
+	transition: stroke 0.2s ease; /* Smooth transition for hover */
+}
+
+.custom-edge:hover {
+	stroke: red; /* Change to red on hover */
+}
+
+/* Override React Flow's default style on dragging */
+.react-flow__edge-path {
+	stroke: blue !important;
+	stroke-width: 3px !important;
+}
