@@ -33,11 +33,21 @@ const Board = () => {
 	const [editDialogOpen, setEditDialogOpen] = useState(false);
 	const [newTitle, setNewTitle] = useState('');
 	const xPosRef = useRef(100);
-    const yPosRef = useRef(100);
+	const yPosRef = useRef(100);
+	const xCustPosRef = useRef(700);
+	const yCustPosRef = useRef(100);
 
 	const openMenu = (event, nodeId) => {
 		setAnchorEl(event.currentTarget);
 		setSelectedNodeId(nodeId);
+	};
+
+	const handleAddNode = () => {
+		console.log('Button click received in parent');
+		const newNode = createCustomNode(xCustPosRef.current, yCustPosRef.current);
+		setNodes((prevNodes) => [...prevNodes, newNode]);
+		// Update positions for next node
+		yCustPosRef.current += 250;  // Increment x position for the next node
 	};
 
 	const closeMenu = () => {
@@ -69,17 +79,32 @@ const Board = () => {
 		closeMenu();
 	};
 
+	function generateRandomID(length = 8) {
+		return Math.random().toString(36).substr(2, length);
+	}
+
 	// Helper function to create a node
-    const createNode = (x, y, request) => {
-        const tabId = request.content.tabId.toString();
-        const node = {
-            id: tabId,
-            position: { x: x, y: y },
-            data: { label: request.content.title, onOpenMenu: (e) => openMenu(e, tabId) },
-            type: 'customNode',
-        };
-        return node;
-    };
+	const createNode = (x, y, request) => {
+		const tabId = request.content.tabId.toString();
+		const node = {
+			id: tabId,
+			position: { x: x, y: y },
+			data: { label: request.content.title, onOpenMenu: (e) => openMenu(e, tabId) },
+			type: 'customNode',
+		};
+		return node;
+	};
+
+	const createCustomNode = (x, y) => {
+		const tabId = generateRandomID();
+		const node = {
+			id: tabId,
+			position: { x: x, y: y },
+			data: { label: 'Custom Node', onOpenMenu: (e) => openMenu(e, tabId) },
+			type: 'customNode',
+		};
+		return node;
+	};
 
 	// Use effect to initialize the canvas and SVG
 	useEffect(() => {
@@ -92,7 +117,7 @@ const Board = () => {
 				const newNode = createNode(xPosRef.current, yPosRef.current, request.tabData);
 				setNodes((prevNodes) => [...prevNodes, newNode]);
 				// Update positions for next node
-				yPosRef.current += 200;  // Increment x position for the next node
+				yPosRef.current += 250;  // Increment x position for the next node
 			}
 		};
 
@@ -107,7 +132,7 @@ const Board = () => {
 
 	return (
 		<div style={{ width: '100vw', height: '100vh' }}>
-			<NavBar />
+			<NavBar onAddNode={handleAddNode} />
 			<ReactFlow
 				nodes={nodes}
 				edges={edges}
@@ -121,12 +146,10 @@ const Board = () => {
 				<MiniMap />
 				<Background variant={BackgroundVariant.Dots} />
 			</ReactFlow>
-
 			<Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={closeMenu}>
 				<MenuItem onClick={openEditDialog}>Edit Title</MenuItem>
 				<MenuItem onClick={handleRemoveConnections}>Remove Connections</MenuItem>
 			</Menu>
-
 			<Dialog open={editDialogOpen} onClose={closeEditDialog}>
 				<DialogTitle>Edit Node Title</DialogTitle>
 				<DialogContent>

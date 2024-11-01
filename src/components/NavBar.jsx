@@ -12,6 +12,7 @@ import AppsIcon from '@mui/icons-material/Apps';
 import DeleteIcon from '@mui/icons-material/Delete';
 import PersonIcon from '@mui/icons-material/Person';
 import EditIcon from '@mui/icons-material/Edit';
+import AddIcon from '@mui/icons-material/Add';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import { styled } from '@mui/system';
 
@@ -26,7 +27,8 @@ const TabSection = styled(Box)(({ theme }) => ({
 	alignItems: 'center',
 }));
 
-function Navbar() {
+function Navbar({ onAddNode }) {
+
 	return (
 		<Box sx={{ flexGrow: 1 }}>
 			{/* Blue Header Section */}
@@ -54,14 +56,14 @@ function Navbar() {
 					<IconButton color="default">
 						<AppsIcon />
 					</IconButton>
-					<IconButton color="default">
-						<DeleteIcon />
-					</IconButton>
-					<IconButton color="default">
-						<PersonIcon />
-					</IconButton>
-					<IconButton color="default">
-						<EditIcon />
+					<IconButton color="default" onClick={onAddNode}>
+						<AddIcon />
+						<IconButton color="default">
+							<DeleteIcon />
+						</IconButton>
+						<IconButton color="default">
+							<PersonIcon />
+						</IconButton>
 					</IconButton>
 					<IconButton color="default">
 						<ListAltIcon />
