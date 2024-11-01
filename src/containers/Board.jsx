@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import CustomNode from '../components/CustomNode';
 import NavBar from '../components/NavBar';
 import {
@@ -32,6 +32,8 @@ const Board = () => {
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [editDialogOpen, setEditDialogOpen] = useState(false);
 	const [newTitle, setNewTitle] = useState('');
+	const xPosRef = useRef(100);
+    const yPosRef = useRef(100);
 
 	const openMenu = (event, nodeId) => {
 		setAnchorEl(event.currentTarget);
@@ -67,39 +69,41 @@ const Board = () => {
 		closeMenu();
 	};
 
+	// Helper function to create a node
+    const createNode = (x, y, request) => {
+        const tabId = request.content.tabId.toString();
+        const node = {
+            id: tabId,
+            position: { x: x, y: y },
+            data: { label: request.content.title, onOpenMenu: (e) => openMenu(e, tabId) },
+            type: 'customNode',
+        };
+        return node;
+    };
+
+	// Use effect to initialize the canvas and SVG
 	useEffect(() => {
-		const fetchTabs = async () => {
-			if (typeof window.chrome !== 'undefined' && window.chrome.tabs) {
-				window.chrome.tabs.query({}, (tabs) => {
-					const newNodes = tabs.map((tab, index) => {
-						const xPosition = (index % Math.floor(window.innerWidth / (NODE_WIDTH + SPACING))) * (NODE_WIDTH + SPACING);
-						const yPosition = TOP_SPACING + Math.floor(index / Math.floor(window.innerWidth / (NODE_WIDTH + SPACING))) * (NODE_HEIGHT + SPACING);
-						return {
-							id: tab.id.toString(),
-							position: { x: xPosition, y: yPosition },
-							data: { label: tab.title, onOpenMenu: (e) => openMenu(e, tab.id.toString()) },
-							type: 'customNode',
-						};
-					});
-					setNodes(newNodes);
-				});
-			} else {
-				const mockTabs = [
-					{ id: 1, title: 'Tab 1' },
-					{ id: 2, title: 'Tab 2' },
-				];
-				const newNodes = mockTabs.map((tab) => ({
-					id: tab.id.toString(),
-					position: { x: Math.random() * 500, y: Math.random() * 500 },
-					data: { label: tab.title, onOpenMenu: (e) => openMenu(e, tab.id.toString()) },
-					type: 'customNode',
-				}));
-				setNodes(newNodes);
+		// Message handler function
+		const handleTabData = (request) => {
+			if (request.action === 'sendTabData') {
+				// Create a new node at dynamic positions
+				console.log(request);
+				console.log('-------------------------------');
+				const newNode = createNode(xPosRef.current, yPosRef.current, request.tabData);
+				setNodes((prevNodes) => [...prevNodes, newNode]);
+				// Update positions for next node
+				yPosRef.current += 200;  // Increment x position for the next node
 			}
 		};
 
-		fetchTabs();
-	}, []);
+		// Attach the listener
+		window.chrome.runtime.onMessage.addListener(handleTabData);
+
+		// Cleanup function to remove the listener when the component unmounts or effect re-runs
+		return () => {
+			window.chrome.runtime.onMessage.removeListener(handleTabData);
+		};
+	}, []);  // Dependency array ensures that the effect runs when tabsList changes
 
 	return (
 		<div style={{ width: '100vw', height: '100vh' }}>
