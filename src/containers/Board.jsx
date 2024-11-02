@@ -33,7 +33,7 @@ const Board = () => {
 
 	const [nodes, setNodes, onNodesChange] = useNodesState([]);
 	const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-	const [selectedNodeId, setSelectedNodeId] = useState(null);
+	const [selectedNode, setSelectedNode] = useState(null);
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [editDialogOpen, setEditDialogOpen] = useState(false);
 	const [newTitle, setNewTitle] = useState('');
@@ -56,9 +56,9 @@ const Board = () => {
 		return [...eds, newEdge];
 	};
 
-	const openMenu = (event, nodeId) => {
+	const openMenu = (event, node) => {
 		setAnchorEl(event.currentTarget);
-		setSelectedNodeId(nodeId);
+		setSelectedNode(node);
 	};
 
 	const handleAddNode = () => {
@@ -71,10 +71,10 @@ const Board = () => {
 
 	const closeMenu = () => {
 		setAnchorEl(null);
+		//setSelectedNode(null); // Reset the selected node
 	};
 
 	const openEditDialog = () => {
-		const selectedNode = nodes.find((node) => node.id === selectedNodeId);
 		setNewTitle(selectedNode?.data?.label || '');
 		setEditDialogOpen(true);
 		closeMenu();
@@ -87,14 +87,14 @@ const Board = () => {
 	const handleTitleChange = () => {
 		setNodes((nds) =>
 			nds.map((node) =>
-				node.id === selectedNodeId ? { ...node, data: { ...node.data, label: newTitle } } : node
+				node.id === selectedNode.id ? { ...node, data: { ...node.data, label: newTitle } } : node
 			)
 		);
 		closeEditDialog();
 	};
 
-	const handleRemoveConnections = () => {
-		setEdges((eds) => eds.filter((edge) => edge.source !== selectedNodeId && edge.target !== selectedNodeId));
+	const handleDeleteNode = () => {
+		setNodes((nodes) => nodes.filter((node) => node.id != selectedNode.id));
 		closeMenu();
 	};
 
@@ -108,7 +108,10 @@ const Board = () => {
 		const node = {
 			id: tabId,
 			position: { x: x, y: y },
-			data: { label: request.content.title, onOpenMenu: (e) => openMenu(e, tabId) },
+			data: { 
+				label: request.content.title, 
+				onOpenMenu: (e) => openMenu(e, node) 
+			},
 			type: 'TabNode',
 		};
 		return node;
@@ -119,7 +122,10 @@ const Board = () => {
 		const node = {
 			id: tabId,
 			position: { x: x, y: y },
-			data: { label: 'Custom Node', onOpenMenu: (e) => openMenu(e, tabId) },
+			data: { 
+				label: 'Custom Node', 
+				onOpenMenu: (e) => openMenu(e, node) 
+			},
 			type: 'PromptNode',
 		};
 		return node;
@@ -167,8 +173,10 @@ const Board = () => {
 				<Background variant={BackgroundVariant.Dots} />
 			</ReactFlow>
 			<Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={closeMenu}>
-				<MenuItem onClick={openEditDialog}>Edit Title</MenuItem>
-				<MenuItem onClick={handleRemoveConnections}>Remove Connections</MenuItem>
+				<MenuItem onClick={openEditDialog}>Edit</MenuItem>
+				{selectedNode?.type === 'PromptNode' && ( // Condition for showing "Delete"
+					<MenuItem onClick={handleDeleteNode}>Delete</MenuItem>
+				)}
 			</Menu>
 			<Dialog open={editDialogOpen} onClose={closeEditDialog}>
 				<DialogTitle>Edit Node Title</DialogTitle>

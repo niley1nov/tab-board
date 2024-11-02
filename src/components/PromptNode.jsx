@@ -49,28 +49,6 @@ const PromptNode = ({ data }) => {
 					</Typography>
 				</CardContent>
 
-				<CardActions disableSpacing>
-					<IconButton
-						onClick={handleExpandClick}
-						aria-expanded={expanded}
-						aria-label="show more"
-						className={`custom-node-expand ${expanded ? 'expanded' : ''}`}
-					>
-						<ExpandMoreIcon />
-					</IconButton>
-				</CardActions>
-
-				<Collapse in={expanded} timeout="auto" unmountOnExit>
-					<CardContent>
-						<Typography>Details about this node:</Typography>
-						<Typography>
-							This is some additional information that appears when the node is expanded.
-						</Typography>
-						<Typography>
-							You can include any details or more fields here that you want to show when expanded.
-						</Typography>
-					</CardContent>
-				</Collapse>
 			</Card>
 
 			<Handle type="source" position={Position.Right} id="a" />

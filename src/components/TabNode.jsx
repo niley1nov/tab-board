@@ -22,7 +22,7 @@ const TabNode = ({ data }) => {
 
 	return (
 		<div className="custom-node">
-			<Handle type="target" position={Position.Left} />
+			<Handle type="target" position={Position.Left} style={{ background: '#555' }}/>
 
 			<Card className="custom-node-card">
 				<CardHeader
@@ -73,7 +73,7 @@ const TabNode = ({ data }) => {
 				</Collapse>
 			</Card>
 
-			<Handle type="source" position={Position.Right} id="a" />
+			<Handle type="source" position={Position.Right} id="a" style={{ background: '#555' }}/>
 		</div>
 	);
 };
