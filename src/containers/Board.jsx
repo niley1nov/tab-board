@@ -27,6 +27,15 @@ const Board = () => {
 		Edge: Edge,
 	};
 
+	const adjacencyList = useRef({}); // Initialize adjacency list
+
+	const addNodeToAdjacencyList = (nodeId) => {
+		if (!adjacencyList.current[nodeId]) {
+			adjacencyList.current[nodeId] = { left: [], right: [] };
+		}
+		console.log(adjacencyList);
+	};
+
 	const createOutputNode = (x, y) => {
 		const tabId = generateRandomID();
 		const node = {
@@ -38,13 +47,11 @@ const Board = () => {
 				onOpenMenu: (e) => openMenu(e, node), // Pass the entire node
 			},
 		};
+		addNodeToAdjacencyList(tabId); // Add node to adjacency list on creation
 		return node;
 	};
 
-	const initialNodes = [
-		createOutputNode(1300, 100)
-	]
-
+	const initialNodes = [createOutputNode(1300, 100)];
 	const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
 	const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 	const [selectedNode, setSelectedNode] = useState(null);
@@ -56,8 +63,25 @@ const Board = () => {
 	const xCustPosRef = useRef(700);
 	const yCustPosRef = useRef(100);
 
+
+
+	// Helper to update adjacency list when an edge is added
+	const updateAdjacencyList = (source, target, action) => {
+		if (action === 'add') {
+			if (!adjacencyList.current[source]) adjacencyList.current[source] = { left: [], right: [] };
+			if (!adjacencyList.current[target]) adjacencyList.current[target] = { left: [], right: [] };
+			
+			// Assuming left is source -> target and right is target -> source
+			adjacencyList.current[source].right.push(target);
+			adjacencyList.current[target].left.push(source);
+		} else if (action === 'remove') {
+			adjacencyList.current[source].right = adjacencyList.current[source].right.filter((id) => id !== target);
+			adjacencyList.current[target].left = adjacencyList.current[target].left.filter((id) => id !== source);
+		}
+		console.log(adjacencyList);
+	};
+
 	const addEdge = (params, eds) => {
-		console.log("Adding custom edge:", params);
 		// Customize edge creation logic here
 		const newEdge = {
 			id: `e${params.source}-${params.target}`,
@@ -67,6 +91,8 @@ const Board = () => {
 			style: { stroke: '#ff0000' }, // Custom styling
 			...params,
 		};
+
+		updateAdjacencyList(params.source, params.target, 'add'); // Update adjacency list
 		return [...eds, newEdge];
 	};
 
@@ -76,7 +102,6 @@ const Board = () => {
 	};
 
 	const handleAddNode = () => {
-		console.log('Button click received in parent');
 		const newNode = createPromptNode(xCustPosRef.current, yCustPosRef.current);
 		setNodes((prevNodes) => [...prevNodes, newNode]);
 		// Update positions for next node
@@ -108,7 +133,21 @@ const Board = () => {
 	};
 
 	const handleDeleteNode = () => {
-		setNodes((nodes) => nodes.filter((node) => node.id != selectedNode.id));
+		// Remove node from adjacency list and update neighbors
+		const nodeId = selectedNode.id;
+		const neighbors = adjacencyList.current[nodeId];
+
+		if (neighbors) {
+			neighbors.left.forEach((neighbor) => {
+				adjacencyList.current[neighbor].right = adjacencyList.current[neighbor].right.filter((id) => id !== nodeId);
+			});
+			neighbors.right.forEach((neighbor) => {
+				adjacencyList.current[neighbor].left = adjacencyList.current[neighbor].left.filter((id) => id !== nodeId);
+			});
+			delete adjacencyList.current[nodeId]; // Remove the node itself
+		}
+
+		setNodes((nodes) => nodes.filter((node) => node.id !== nodeId));
 		closeMenu();
 	};
 
@@ -128,6 +167,7 @@ const Board = () => {
 			},
 			type: 'TabNode',
 		};
+		addNodeToAdjacencyList(tabId); // Add node to adjacency list on creation
 		return node;
 	};
 
@@ -142,6 +182,7 @@ const Board = () => {
 			},
 			type: 'PromptNode',
 		};
+		addNodeToAdjacencyList(tabId); // Add node to adjacency list on creation
 		return node;
 	};
 
@@ -151,8 +192,6 @@ const Board = () => {
 		const handleTabData = (request) => {
 			if (request.action === 'sendTabData') {
 				// Create a new node at dynamic positions
-				console.log(request);
-				console.log('-------------------------------');
 				const newNode = createNode(xPosRef.current, yPosRef.current, request.tabData);
 				setNodes((prevNodes) => [...prevNodes, newNode]);
 				// Update positions for next node
