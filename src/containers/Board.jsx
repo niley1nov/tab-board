@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import TabNode from '../components/TabNode';
 import PromptNode from '../components/PromptNode';
+import OutputNode from '../components/OutputNode';
 import NavBar from '../components/NavBar';
 import {
 	ReactFlow,
@@ -16,22 +17,35 @@ import '@xyflow/react/dist/style.css';
 import Edge from '../components/Edge';
 import { Menu, MenuItem, Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField } from '@mui/material';
 
-const NODE_WIDTH = 200;
-const NODE_HEIGHT = 100;
-const SPACING = 150;
-const TOP_SPACING = 100;
-
 const rfStyle = {
 	backgroundColor: '#B8CEFF',
 };
 
 const Board = () => {
-	const nodeTypes = { TabNode: TabNode, PromptNode: PromptNode };
+	const nodeTypes = { TabNode: TabNode, PromptNode: PromptNode, OutputNode: OutputNode };
 	const edgeTypes = {
 		Edge: Edge,
 	};
 
-	const [nodes, setNodes, onNodesChange] = useNodesState([]);
+	const createOutputNode = (x, y) => {
+		const tabId = generateRandomID();
+		const node = {
+			id: tabId,
+			type: 'OutputNode',
+			position: { x: x, y: y },
+			data: {
+				label: 'Output Node',
+				onOpenMenu: (e) => openMenu(e, node), // Pass the entire node
+			},
+		};
+		return node;
+	};
+
+	const initialNodes = [
+		createOutputNode(1300, 100)
+	]
+
+	const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
 	const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 	const [selectedNode, setSelectedNode] = useState(null);
 	const [anchorEl, setAnchorEl] = useState(null);
@@ -108,9 +122,9 @@ const Board = () => {
 		const node = {
 			id: tabId,
 			position: { x: x, y: y },
-			data: { 
-				label: request.content.title, 
-				onOpenMenu: (e) => openMenu(e, node) 
+			data: {
+				label: request.content.title,
+				onOpenMenu: (e) => openMenu(e, node)
 			},
 			type: 'TabNode',
 		};
@@ -122,9 +136,9 @@ const Board = () => {
 		const node = {
 			id: tabId,
 			position: { x: x, y: y },
-			data: { 
-				label: 'Custom Node', 
-				onOpenMenu: (e) => openMenu(e, node) 
+			data: {
+				label: 'Custom Node',
+				onOpenMenu: (e) => openMenu(e, node)
 			},
 			type: 'PromptNode',
 		};
