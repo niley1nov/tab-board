@@ -58,12 +58,12 @@ function Navbar({ onAddNode }) {
 					</IconButton>
 					<IconButton color="default" onClick={onAddNode}>
 						<AddIcon />
-						<IconButton color="default">
-							<DeleteIcon />
-						</IconButton>
-						<IconButton color="default">
-							<PersonIcon />
-						</IconButton>
+					</IconButton>
+					<IconButton color="default">
+						<DeleteIcon />
+					</IconButton>
+					<IconButton color="default">
+						<PersonIcon />
 					</IconButton>
 					<IconButton color="default">
 						<ListAltIcon />
