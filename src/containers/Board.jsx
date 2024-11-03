@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import TabNode from '../components/TabNode';
 import PromptNode from '../components/PromptNode';
 import OutputNode from '../components/OutputNode';
+import Sidebar from '../components/Sidebar';
 import NavBar from '../components/NavBar';
 import {
 	ReactFlow,
@@ -214,21 +215,7 @@ const Board = () => {
 					<Controls />
 					<Background variant={BackgroundVariant.Dots} />
 				</ReactFlow>
-				<div style={{
-					width: '300px',
-					padding: '20px',
-					backgroundColor: '#f0f0f0',
-					display: 'flex',
-					flexDirection: 'column',
-					justifyContent: 'space-between',
-				}}>
-					<div>
-						<h2>Sidebar Title</h2>
-						<p>Some descriptive text or instructions.</p>
-					</div>
-
-					<Button variant="contained" onClick={() => console.log("Button 1 clicked")}>Button 1</Button>
-				</div>
+				<Sidebar />
 			</div>
 			<Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={closeMenu}>
 				<MenuItem onClick={openEditDialog}>Edit</MenuItem>
