@@ -44,15 +44,19 @@ const Board = () => {
 			position: { x: x, y: y },
 			data: {
 				label: 'Output Node',
-				onOpenMenu: (e) => openMenu(e, node), // Pass the entire node
+				onOpenMenu: (e) => openMenu(e, node),
 			},
 		};
-		addNodeToAdjacencyList(tabId); // Add node to adjacency list on creation
 		return node;
 	};
 
-	const initialNodes = [createOutputNode(1300, 100)];
-	const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+	const initialNode = createOutputNode(1300, 100);
+	// Lazy initialization of initial nodes
+	const [nodes, setNodes, onNodesChange] = useNodesState(() => {
+		const initialNode = createOutputNode(1300, 100);
+		addNodeToAdjacencyList(initialNode.id); // Add to adjacency list
+		return [initialNode];
+	});
 	const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 	const [selectedNode, setSelectedNode] = useState(null);
 	const [anchorEl, setAnchorEl] = useState(null);
