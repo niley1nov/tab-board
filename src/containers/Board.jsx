@@ -10,7 +10,6 @@ import {
 	Background,
 	useNodesState,
 	useEdgesState,
-	//addEdge,
 	BackgroundVariant
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
@@ -28,7 +27,7 @@ const Board = () => {
 		Edge: Edge,
 	};
 
-	const adjacencyList = useRef({}); // Initialize adjacency list
+	const adjacencyList = useRef({});
 
 	const addNodeToAdjacencyList = (nodeId) => {
 		if (!adjacencyList.current[nodeId]) {
@@ -52,10 +51,9 @@ const Board = () => {
 	};
 
 	const initialNode = createOutputNode(1300, 100);
-	// Lazy initialization of initial nodes
 	const [nodes, setNodes, onNodesChange] = useNodesState(() => {
 		const initialNode = createOutputNode(1300, 100);
-		addNodeToAdjacencyList(initialNode.id); // Add to adjacency list
+		addNodeToAdjacencyList(initialNode.id);
 		return [initialNode];
 	});
 	const [edges, setEdges, onEdgesChange] = useEdgesState([]);
@@ -68,15 +66,11 @@ const Board = () => {
 	const xCustPosRef = useRef(700);
 	const yCustPosRef = useRef(100);
 
-
-
-	// Helper to update adjacency list when an edge is added
 	const updateAdjacencyList = (source, target, action) => {
 		if (action === 'add') {
 			if (!adjacencyList.current[source]) adjacencyList.current[source] = { left: [], right: [] };
 			if (!adjacencyList.current[target]) adjacencyList.current[target] = { left: [], right: [] };
-			
-			// Assuming left is source -> target and right is target -> source
+
 			adjacencyList.current[source].right.push(target);
 			adjacencyList.current[target].left.push(source);
 		} else if (action === 'remove') {
@@ -87,17 +81,16 @@ const Board = () => {
 	};
 
 	const addEdge = (params, eds) => {
-		// Customize edge creation logic here
 		const newEdge = {
 			id: `e${params.source}-${params.target}`,
 			source: params.source,
 			target: params.target,
 			type: 'Edge',
-			style: { stroke: '#ff0000' }, // Custom styling
+			style: { stroke: '#ff0000' },
 			...params,
 		};
 
-		updateAdjacencyList(params.source, params.target, 'add'); // Update adjacency list
+		updateAdjacencyList(params.source, params.target, 'add');
 		return [...eds, newEdge];
 	};
 
@@ -109,13 +102,11 @@ const Board = () => {
 	const handleAddNode = () => {
 		const newNode = createPromptNode(xCustPosRef.current, yCustPosRef.current);
 		setNodes((prevNodes) => [...prevNodes, newNode]);
-		// Update positions for next node
-		yCustPosRef.current += 250;  // Increment x position for the next node
+		yCustPosRef.current += 250;
 	};
 
 	const closeMenu = () => {
 		setAnchorEl(null);
-		//setSelectedNode(null); // Reset the selected node
 	};
 
 	const openEditDialog = () => {
@@ -138,7 +129,6 @@ const Board = () => {
 	};
 
 	const handleDeleteNode = () => {
-		// Remove node from adjacency list and update neighbors
 		const nodeId = selectedNode.id;
 		const neighbors = adjacencyList.current[nodeId];
 
@@ -149,7 +139,7 @@ const Board = () => {
 			neighbors.right.forEach((neighbor) => {
 				adjacencyList.current[neighbor].left = adjacencyList.current[neighbor].left.filter((id) => id !== nodeId);
 			});
-			delete adjacencyList.current[nodeId]; // Remove the node itself
+			delete adjacencyList.current[nodeId];
 		}
 
 		setNodes((nodes) => nodes.filter((node) => node.id !== nodeId));
@@ -160,7 +150,6 @@ const Board = () => {
 		return Math.random().toString(36).substr(2, length);
 	}
 
-	// Helper function to create a node
 	const createNode = (x, y, request) => {
 		const tabId = request.content.tabId.toString();
 		const node = {
@@ -172,7 +161,7 @@ const Board = () => {
 			},
 			type: 'TabNode',
 		};
-		addNodeToAdjacencyList(tabId); // Add node to adjacency list on creation
+		addNodeToAdjacencyList(tabId)
 		return node;
 	};
 
@@ -187,53 +176,63 @@ const Board = () => {
 			},
 			type: 'PromptNode',
 		};
-		addNodeToAdjacencyList(tabId); // Add node to adjacency list on creation
+		addNodeToAdjacencyList(tabId);
 		return node;
 	};
 
-	// Use effect to initialize the canvas and SVG
 	useEffect(() => {
-		// Message handler function
 		const handleTabData = (request) => {
 			if (request.action === 'sendTabData') {
-				// Create a new node at dynamic positions
 				const newNode = createNode(xPosRef.current, yPosRef.current, request.tabData);
 				setNodes((prevNodes) => [...prevNodes, newNode]);
-				// Update positions for next node
-				yPosRef.current += 250;  // Increment x position for the next node
+				yPosRef.current += 250;
 			}
 		};
 
-		// Attach the listener
 		window.chrome.runtime.onMessage.addListener(handleTabData);
 
-		// Cleanup function to remove the listener when the component unmounts or effect re-runs
 		return () => {
 			window.chrome.runtime.onMessage.removeListener(handleTabData);
 		};
-	}, []);  // Dependency array ensures that the effect runs when tabsList changes
+	}, []);
 
 	return (
-		<div style={{ width: '100vw', height: '100vh', overflow: 'hidden', display: 'flex', flexDirection: 'column'  }}>
+		<div style={{ width: '100vw', height: '100vh', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
 			<NavBar onAddNode={handleAddNode} />
-			<ReactFlow
-				nodes={nodes}
-				edges={edges}
-				nodeTypes={nodeTypes}
-				edgeTypes={edgeTypes}
-				onNodesChange={onNodesChange}
-				onEdgesChange={onEdgesChange}
-				onConnect={(params) => setEdges((eds) => addEdge(params, eds))}
-				defaultViewport={defaultViewport}
-				style={rfStyle}
-			>
-				<Controls />
-				<MiniMap />
-				<Background variant={BackgroundVariant.Dots} />
-			</ReactFlow>
+			<div style={{ flex: 1, display: 'flex', flexDirection: 'row' }}>
+				<ReactFlow
+					nodes={nodes}
+					edges={edges}
+					nodeTypes={nodeTypes}
+					edgeTypes={edgeTypes}
+					onNodesChange={onNodesChange}
+					onEdgesChange={onEdgesChange}
+					onConnect={(params) => setEdges((eds) => addEdge(params, eds))}
+					defaultViewport={defaultViewport}
+					style={rfStyle}
+				>
+					<Controls />
+					<Background variant={BackgroundVariant.Dots} />
+				</ReactFlow>
+				<div style={{
+					width: '300px',
+					padding: '20px',
+					backgroundColor: '#f0f0f0',
+					display: 'flex',
+					flexDirection: 'column',
+					justifyContent: 'space-between',
+				}}>
+					<div>
+						<h2>Sidebar Title</h2>
+						<p>Some descriptive text or instructions.</p>
+					</div>
+
+					<Button variant="contained" onClick={() => console.log("Button 1 clicked")}>Button 1</Button>
+				</div>
+			</div>
 			<Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={closeMenu}>
 				<MenuItem onClick={openEditDialog}>Edit</MenuItem>
-				{selectedNode?.type === 'PromptNode' && ( // Condition for showing "Delete"
+				{selectedNode?.type === 'PromptNode' && (
 					<MenuItem onClick={handleDeleteNode}>Delete</MenuItem>
 				)}
 			</Menu>
@@ -249,6 +248,7 @@ const Board = () => {
 			</Dialog>
 		</div>
 	);
+
 }
 
 export default Board;

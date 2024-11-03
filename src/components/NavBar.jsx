@@ -11,18 +11,16 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import AppsIcon from '@mui/icons-material/Apps';
 import DeleteIcon from '@mui/icons-material/Delete';
 import PersonIcon from '@mui/icons-material/Person';
-import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import { styled } from '@mui/system';
 
-// Custom styled component for the white tab section
 const TabSection = styled(Box)(({ theme }) => ({
 	backgroundColor: '#fff',
-	borderRadius: '8px 8px 0 0', // Rounded corners on top only
-	boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)', // Subtle shadow to give raised effect
+	borderRadius: '8px 8px 0 0',
+	boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
 	padding: '8px 16px',
-	marginTop: '-4px', // Slight overlap with the blue AppBar
+	marginTop: '-4px',
 	display: 'flex',
 	alignItems: 'center',
 }));
@@ -30,7 +28,7 @@ const TabSection = styled(Box)(({ theme }) => ({
 function Navbar({ onAddNode }) {
 
 	return (
-		<Box sx={{ flexGrow: 1 }}>
+		<Box sx={{ flexShrink: 1 }}>
 			{/* Blue Header Section */}
 			<AppBar position="static" color="primary" sx={{ backgroundColor: '#2196f3', boxShadow: 'none' }}>
 				<Toolbar>
