@@ -18,8 +18,9 @@ import Edge from '../components/Edge';
 import { Menu, MenuItem, Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField } from '@mui/material';
 
 const rfStyle = {
-	backgroundColor: '#B8CEFF',
+	backgroundColor: '#B8CEFF', flexGrow: 1
 };
+const defaultViewport = { x: 0, y: 0, zoom: 1 };
 
 const Board = () => {
 	const nodeTypes = { TabNode: TabNode, PromptNode: PromptNode, OutputNode: OutputNode };
@@ -213,7 +214,7 @@ const Board = () => {
 	}, []);  // Dependency array ensures that the effect runs when tabsList changes
 
 	return (
-		<div style={{ width: '100vw', height: '100vh' }}>
+		<div style={{ width: '100vw', height: '100vh', overflow: 'hidden', display: 'flex', flexDirection: 'column'  }}>
 			<NavBar onAddNode={handleAddNode} />
 			<ReactFlow
 				nodes={nodes}
@@ -223,6 +224,7 @@ const Board = () => {
 				onNodesChange={onNodesChange}
 				onEdgesChange={onEdgesChange}
 				onConnect={(params) => setEdges((eds) => addEdge(params, eds))}
+				defaultViewport={defaultViewport}
 				style={rfStyle}
 			>
 				<Controls />
