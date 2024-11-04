@@ -16,6 +16,10 @@ import {
 import '@xyflow/react/dist/style.css';
 import '../stylesheets/Board.css';
 
+const NODE_WIDTH = 200;       // Node width for spacing calculations
+const NODE_HEIGHT = 100;      // Node height for row adjustments
+const HORIZONTAL_SPACING = 50;  // Horizontal spacing between nodes
+const VERTICAL_SPACING = 150;   // Vertical spacing for new rows
 import { Menu, MenuItem, Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField } from '@mui/material';
 
 const rfStyle = { backgroundColor: '#B8CEFF', flexGrow: 1 };
@@ -63,10 +67,9 @@ const Board = () => {
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [editDialogOpen, setEditDialogOpen] = useState(false);
 	const [newTitle, setNewTitle] = useState('');
-	const xPosRef = useRef(100);
-	const yPosRef = useRef(100);
-	const xCustPosRef = useRef(700);
-	const yCustPosRef = useRef(100);
+	const xPosRef = useRef(100);  // Initial x position
+	const yPosRef = useRef(100);  // Initial y position
+	const containerWidth = window.innerWidth;  // Dynamic screen width
 
 	const handleSetSelectedNode = (node) => {
 		console.log("Selected node:", node); // Print the selected node
@@ -97,6 +100,7 @@ const Board = () => {
 	};
 
 	const addEdge = (params, eds) => {
+    
 		const newEdge = {
 			id: `e${params.source}-${params.target}`,
 			source: params.source,
@@ -116,14 +120,13 @@ const Board = () => {
 	};
 
 	const handleAddNode = () => {
-		const newNode = createPromptNode(xCustPosRef.current, yCustPosRef.current);
+		console.log('Button click received in parent');
+		const newNode = createPromptNode(xPosRef.current, yPosRef.current);
 		setNodes((prevNodes) => [...prevNodes, newNode]);
-		yCustPosRef.current += 250;
+		adjustPositionForNextNode();
 	};
 
-	const closeMenu = () => {
-		setAnchorEl(null);
-	};
+	const closeMenu = () => setAnchorEl(null);
 
 	const openEditDialog = () => {
 		setNewTitle(selectedNode?.data?.label || '');
@@ -131,9 +134,7 @@ const Board = () => {
 		closeMenu();
 	};
 
-	const closeEditDialog = () => {
-		setEditDialogOpen(false);
-	};
+	const closeEditDialog = () => setEditDialogOpen(false);
 
 	const handleTitleChange = () => {
 		setNodes((nds) =>
@@ -162,9 +163,7 @@ const Board = () => {
 		closeMenu();
 	};
 
-	function generateRandomID(length = 8) {
-		return Math.random().toString(36).substr(2, length);
-	}
+	const generateRandomID = (length = 8) => Math.random().toString(36).substr(2, length);
 
 	const createNode = (x, y, request) => {
 		const tabId = request.content.tabId.toString();
@@ -200,14 +199,26 @@ const Board = () => {
 		return node;
 	};
 
+	const adjustPositionForNextNode = () => {
+		// Calculate next position based on container width and node spacing
+		xPosRef.current += NODE_WIDTH + HORIZONTAL_SPACING;
+		if (xPosRef.current + NODE_WIDTH > containerWidth) {
+			// If it exceeds screen width, reset x and move to next row
+			xPosRef.current = 100;  // Reset to starting x position
+			yPosRef.current += NODE_HEIGHT + VERTICAL_SPACING;
+		}
+	};
+
 	useEffect(() => {
 		const handleTabData = (request) => {
 			if (request.action === 'sendTabData') {
+				console.log(request);
 				const newNode = createNode(xPosRef.current, yPosRef.current, request.tabData);
 				setNodes((prevNodes) => [...prevNodes, newNode]);
-				yPosRef.current += 250;
+				adjustPositionForNextNode();
 			}
 		};
+
 		window.chrome.runtime.onMessage.addListener(handleTabData);
 
 		return () => {
