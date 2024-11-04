@@ -4,9 +4,9 @@ import PromptNode from '../components/PromptNode';
 import OutputNode from '../components/OutputNode';
 import Sidebar from '../components/Sidebar';
 import NavBar from '../components/NavBar';
+import Edge from '../components/Edge';
 import {
 	ReactFlow,
-	MiniMap,
 	Controls,
 	Background,
 	useNodesState,
@@ -14,20 +14,16 @@ import {
 	BackgroundVariant
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-import Edge from '../components/Edge';
+import '../stylesheets/Board.css';
+
 import { Menu, MenuItem, Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField } from '@mui/material';
 
-const rfStyle = {
-	backgroundColor: '#B8CEFF', flexGrow: 1
-};
+const rfStyle = { backgroundColor: '#B8CEFF', flexGrow: 1 };
 const defaultViewport = { x: 0, y: 0, zoom: 1 };
 
 const Board = () => {
 	const nodeTypes = { TabNode: TabNode, PromptNode: PromptNode, OutputNode: OutputNode };
-	const edgeTypes = {
-		Edge: Edge,
-	};
-
+	const edgeTypes = { Edge: Edge };
 	const adjacencyList = useRef({});
 
 	const addNodeToAdjacencyList = (nodeId) => {
@@ -46,12 +42,17 @@ const Board = () => {
 			data: {
 				label: 'Output Node',
 				onOpenMenu: (e) => openMenu(e, node),
+				content: '',
+				onClick: () => handleSetSelectedNode(node), // Set selected node on click
 			},
 		};
 		return node;
 	};
 
-	const initialNode = createOutputNode(1300, 100);
+	const [sidebarContent, setSidebarContent] = useState({
+		title: "Dynamic Sidebar Title",
+		description: "This description is passed as a prop to the Sidebar component."
+	});
 	const [nodes, setNodes, onNodesChange] = useNodesState(() => {
 		const initialNode = createOutputNode(1300, 100);
 		addNodeToAdjacencyList(initialNode.id);
@@ -66,6 +67,20 @@ const Board = () => {
 	const yPosRef = useRef(100);
 	const xCustPosRef = useRef(700);
 	const yCustPosRef = useRef(100);
+
+	const handleSetSelectedNode = (node) => {
+		console.log("Selected node:", node); // Print the selected node
+		setSidebarContent((prevContent) => ({
+			...prevContent,
+			title: node.data.label
+		}));
+		setSelectedNode(node); // Update the selected node state
+	};
+
+	const getNode = (id) => {
+		const node = nodes.find((node) => node.id === id);
+		return node || null;
+	};
 
 	const updateAdjacencyList = (source, target, action) => {
 		if (action === 'add') {
@@ -158,7 +173,9 @@ const Board = () => {
 			position: { x: x, y: y },
 			data: {
 				label: request.content.title,
-				onOpenMenu: (e) => openMenu(e, node)
+				content: request.content.content,
+				onOpenMenu: (e) => openMenu(e, node),
+				onClick: () => handleSetSelectedNode(node), // Set selected node on click
 			},
 			type: 'TabNode',
 		};
@@ -173,7 +190,9 @@ const Board = () => {
 			position: { x: x, y: y },
 			data: {
 				label: 'Custom Node',
-				onOpenMenu: (e) => openMenu(e, node)
+				onOpenMenu: (e) => openMenu(e, node),
+				content: '',
+				onClick: () => handleSetSelectedNode(node), // Set selected node on click
 			},
 			type: 'PromptNode',
 		};
@@ -189,7 +208,6 @@ const Board = () => {
 				yPosRef.current += 250;
 			}
 		};
-
 		window.chrome.runtime.onMessage.addListener(handleTabData);
 
 		return () => {
@@ -215,7 +233,7 @@ const Board = () => {
 					<Controls />
 					<Background variant={BackgroundVariant.Dots} />
 				</ReactFlow>
-				<Sidebar />
+				<Sidebar content={sidebarContent} />
 			</div>
 			<Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={closeMenu}>
 				<MenuItem onClick={openEditDialog}>Edit</MenuItem>
@@ -235,7 +253,6 @@ const Board = () => {
 			</Dialog>
 		</div>
 	);
-
 }
 
 export default Board;

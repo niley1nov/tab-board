@@ -21,7 +21,7 @@ const OutputNode = ({ data }) => {
 	};
 
 	return (
-		<div className="custom-node">
+		<div className="custom-node" onClick={data.onClick}>
 			<Handle type="target" position={Position.Left} />
 
 			<Card className="custom-node-card">
