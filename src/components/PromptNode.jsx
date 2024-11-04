@@ -3,7 +3,6 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import SendIcon from '@mui/icons-material/Send';
 import { Handle, Position } from '@xyflow/react';
@@ -15,34 +14,6 @@ const PromptNode = ({ data }) => {
 	const [response, setResponse] = useState('');
 	const nodeRef = useRef(null);
 
-  // Handle selection when clicking the node
-	const handleSelect = (event) => {
-		event.stopPropagation();
-		setHighlighted(true);
-	};
-
-	// Deselect the node when clicking outside
-	useEffect(() => {
-		const handleClickOutside = (event) => {
-			if (nodeRef.current && !nodeRef.current.contains(event.target)) {
-				setHighlighted(false);
-			}
-		};
-		document.addEventListener('mousedown', handleClickOutside);
-		return () => {
-			document.removeEventListener('mousedown', handleClickOutside);
-		};
-	}, []);
-
-	// Handle highlighting during dragging
-	const handleDragStart = () => {
-		setHighlighted(true);
-	};
-
-	const handleDragEnd = () => {
-		setHighlighted(false);
-	};
-  
 	// Function to handle prompt submission to the API
 	const handlePromptSubmit = async () => {
 		// if (!prompt) return; // Prevent empty submissions
@@ -63,13 +34,9 @@ const PromptNode = ({ data }) => {
 	};
 
 	return (
-		<div
+		<div onClick={data.onClick}
 			ref={nodeRef}
 			className={`prompt-node ${highlighted ? 'highlighted' : ''}`}
-			onClick={handleSelect}
-			draggable
-			onDragStart={handleDragStart}
-			onDragEnd={handleDragEnd}
 		>
 			{/* Left Handle for Schema */}
 			<Handle type="target" position={Position.Left} id="schema" style={{ top: '50%' }} />
@@ -77,7 +44,7 @@ const PromptNode = ({ data }) => {
 			{/* Header Section */}
 			<div className="prompt-node-header">
 				<Typography variant="subtitle2" className="prompt-node-title">
-					Gemini Nano
+					{data.label}
 				</Typography>
 				<div className="prompt-node-actions">
 					<IconButton aria-label="settings" onClick={data.onOpenMenu} size="small">
