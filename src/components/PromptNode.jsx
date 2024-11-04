@@ -15,7 +15,7 @@ const PromptNode = ({ data }) => {
 	const [response, setResponse] = useState('');
 	const nodeRef = useRef(null);
 
-	// Handle selection when clicking the node
+  // Handle selection when clicking the node
 	const handleSelect = (event) => {
 		event.stopPropagation();
 		setHighlighted(true);
@@ -42,7 +42,7 @@ const PromptNode = ({ data }) => {
 	const handleDragEnd = () => {
 		setHighlighted(false);
 	};
-
+  
 	// Function to handle prompt submission to the API
 	const handlePromptSubmit = async () => {
 		// if (!prompt) return; // Prevent empty submissions

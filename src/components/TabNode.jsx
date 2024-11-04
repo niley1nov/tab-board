@@ -11,7 +11,7 @@ import '../stylesheets/TabNode.css';
 
 const TabNode = ({ data }) => {
 	return (
-		<div className="tab-node">
+		<div className="tab-node" onClick={data.onClick}>
 			{/* Left Handle for Input Connection */}
 			<Handle type="target" position={Position.Left} id="input" style={{ top: '50%' }} />
 

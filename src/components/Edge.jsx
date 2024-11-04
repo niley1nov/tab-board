@@ -30,7 +30,6 @@ export default function CustomEdge({
 	const onEdgeClick = (event) => {
 		event.stopPropagation();
 		setEdges((edges) => edges.filter((edge) => edge.id !== id));
-		console.log('Edge clicked:', id);
 	};
 
 	return (

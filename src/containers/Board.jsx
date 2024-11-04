@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import TabNode from '../components/TabNode';
 import PromptNode from '../components/PromptNode';
+import OutputNode from '../components/OutputNode';
+import Sidebar from '../components/Sidebar';
 import NavBar from '../components/NavBar';
+import Edge from '../components/Edge';
 import {
 	ReactFlow,
-	MiniMap,
 	Controls,
 	Background,
 	useNodesState,
@@ -12,25 +14,56 @@ import {
 	BackgroundVariant
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-import Edge from '../components/Edge';
-import { Menu, MenuItem, Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField } from '@mui/material';
+import '../stylesheets/Board.css';
 
 const NODE_WIDTH = 200;       // Node width for spacing calculations
 const NODE_HEIGHT = 100;      // Node height for row adjustments
 const HORIZONTAL_SPACING = 50;  // Horizontal spacing between nodes
 const VERTICAL_SPACING = 150;   // Vertical spacing for new rows
+import { Menu, MenuItem, Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField } from '@mui/material';
 
-const rfStyle = {
-	backgroundColor: '#B8CEFF',
-};
+const rfStyle = { backgroundColor: '#B8CEFF', flexGrow: 1 };
+const defaultViewport = { x: 0, y: 0, zoom: 1 };
 
 const Board = () => {
-	const nodeTypes = { TabNode: TabNode, PromptNode: PromptNode };
+	const nodeTypes = { TabNode: TabNode, PromptNode: PromptNode, OutputNode: OutputNode };
 	const edgeTypes = { Edge: Edge };
+	const adjacencyList = useRef({});
 
-	const [nodes, setNodes, onNodesChange] = useNodesState([]);
+	const addNodeToAdjacencyList = (nodeId) => {
+		if (!adjacencyList.current[nodeId]) {
+			adjacencyList.current[nodeId] = { left: [], right: [] };
+		}
+		console.log(adjacencyList);
+	};
+
+	const createOutputNode = (x, y) => {
+		const tabId = generateRandomID();
+		const node = {
+			id: tabId,
+			type: 'OutputNode',
+			position: { x: x, y: y },
+			data: {
+				label: 'Output Node',
+				onOpenMenu: (e) => openMenu(e, node),
+				content: '',
+				onClick: () => handleSetSelectedNode(node), // Set selected node on click
+			},
+		};
+		return node;
+	};
+
+	const [sidebarContent, setSidebarContent] = useState({
+		title: "Dynamic Sidebar Title",
+		description: "This description is passed as a prop to the Sidebar component."
+	});
+	const [nodes, setNodes, onNodesChange] = useNodesState(() => {
+		const initialNode = createOutputNode(1300, 100);
+		addNodeToAdjacencyList(initialNode.id);
+		return [initialNode];
+	});
 	const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-	const [selectedNodeId, setSelectedNodeId] = useState(null);
+	const [selectedNode, setSelectedNode] = useState(null);
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [editDialogOpen, setEditDialogOpen] = useState(false);
 	const [newTitle, setNewTitle] = useState('');
@@ -38,8 +71,36 @@ const Board = () => {
 	const yPosRef = useRef(100);  // Initial y position
 	const containerWidth = window.innerWidth;  // Dynamic screen width
 
+	const handleSetSelectedNode = (node) => {
+		console.log("Selected node:", node); // Print the selected node
+		setSidebarContent((prevContent) => ({
+			...prevContent,
+			title: node.data.label
+		}));
+		setSelectedNode(node); // Update the selected node state
+	};
+
+	const getNode = (id) => {
+		const node = nodes.find((node) => node.id === id);
+		return node || null;
+	};
+
+	const updateAdjacencyList = (source, target, action) => {
+		if (action === 'add') {
+			if (!adjacencyList.current[source]) adjacencyList.current[source] = { left: [], right: [] };
+			if (!adjacencyList.current[target]) adjacencyList.current[target] = { left: [], right: [] };
+
+			adjacencyList.current[source].right.push(target);
+			adjacencyList.current[target].left.push(source);
+		} else if (action === 'remove') {
+			adjacencyList.current[source].right = adjacencyList.current[source].right.filter((id) => id !== target);
+			adjacencyList.current[target].left = adjacencyList.current[target].left.filter((id) => id !== source);
+		}
+		console.log(adjacencyList);
+	};
+
 	const addEdge = (params, eds) => {
-		console.log("Adding custom edge:", params);
+    
 		const newEdge = {
 			id: `e${params.source}-${params.target}`,
 			source: params.source,
@@ -48,12 +109,14 @@ const Board = () => {
 			style: { stroke: '#ff0000' },
 			...params,
 		};
+
+		updateAdjacencyList(params.source, params.target, 'add');
 		return [...eds, newEdge];
 	};
 
-	const openMenu = (event, nodeId) => {
+	const openMenu = (event, node) => {
 		setAnchorEl(event.currentTarget);
-		setSelectedNodeId(nodeId);
+		setSelectedNode(node);
 	};
 
 	const handleAddNode = () => {
@@ -66,7 +129,6 @@ const Board = () => {
 	const closeMenu = () => setAnchorEl(null);
 
 	const openEditDialog = () => {
-		const selectedNode = nodes.find((node) => node.id === selectedNodeId);
 		setNewTitle(selectedNode?.data?.label || '');
 		setEditDialogOpen(true);
 		closeMenu();
@@ -77,14 +139,27 @@ const Board = () => {
 	const handleTitleChange = () => {
 		setNodes((nds) =>
 			nds.map((node) =>
-				node.id === selectedNodeId ? { ...node, data: { ...node.data, label: newTitle } } : node
+				node.id === selectedNode.id ? { ...node, data: { ...node.data, label: newTitle } } : node
 			)
 		);
 		closeEditDialog();
 	};
 
-	const handleRemoveConnections = () => {
-		setEdges((eds) => eds.filter((edge) => edge.source !== selectedNodeId && edge.target !== selectedNodeId));
+	const handleDeleteNode = () => {
+		const nodeId = selectedNode.id;
+		const neighbors = adjacencyList.current[nodeId];
+
+		if (neighbors) {
+			neighbors.left.forEach((neighbor) => {
+				adjacencyList.current[neighbor].right = adjacencyList.current[neighbor].right.filter((id) => id !== nodeId);
+			});
+			neighbors.right.forEach((neighbor) => {
+				adjacencyList.current[neighbor].left = adjacencyList.current[neighbor].left.filter((id) => id !== nodeId);
+			});
+			delete adjacencyList.current[nodeId];
+		}
+
+		setNodes((nodes) => nodes.filter((node) => node.id !== nodeId));
 		closeMenu();
 	};
 
@@ -95,9 +170,15 @@ const Board = () => {
 		const node = {
 			id: tabId,
 			position: { x: x, y: y },
-			data: { label: request.content.title, onOpenMenu: (e) => openMenu(e, tabId) },
+			data: {
+				label: request.content.title,
+				content: request.content.content,
+				onOpenMenu: (e) => openMenu(e, node),
+				onClick: () => handleSetSelectedNode(node), // Set selected node on click
+			},
 			type: 'TabNode',
 		};
+		addNodeToAdjacencyList(tabId)
 		return node;
 	};
 
@@ -106,9 +187,15 @@ const Board = () => {
 		const node = {
 			id: tabId,
 			position: { x: x, y: y },
-			data: { label: 'Custom Node', onOpenMenu: (e) => openMenu(e, tabId) },
+			data: {
+				label: 'Custom Node',
+				onOpenMenu: (e) => openMenu(e, node),
+				content: '',
+				onClick: () => handleSetSelectedNode(node), // Set selected node on click
+			},
 			type: 'PromptNode',
 		};
+		addNodeToAdjacencyList(tabId);
 		return node;
 	};
 
@@ -140,25 +227,30 @@ const Board = () => {
 	}, []);
 
 	return (
-		<div style={{ width: '100vw', height: '100vh' }}>
+		<div style={{ width: '100vw', height: '100vh', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
 			<NavBar onAddNode={handleAddNode} />
-			<ReactFlow
-				nodes={nodes}
-				edges={edges}
-				nodeTypes={nodeTypes}
-				edgeTypes={edgeTypes}
-				onNodesChange={onNodesChange}
-				onEdgesChange={onEdgesChange}
-				onConnect={(params) => setEdges((eds) => addEdge(params, eds))}
-				style={rfStyle}
-			>
-				<Controls />
-				<MiniMap />
-				<Background variant={BackgroundVariant.Dots} />
-			</ReactFlow>
+			<div style={{ flex: 1, display: 'flex', flexDirection: 'row' }}>
+				<ReactFlow
+					nodes={nodes}
+					edges={edges}
+					nodeTypes={nodeTypes}
+					edgeTypes={edgeTypes}
+					onNodesChange={onNodesChange}
+					onEdgesChange={onEdgesChange}
+					onConnect={(params) => setEdges((eds) => addEdge(params, eds))}
+					defaultViewport={defaultViewport}
+					style={rfStyle}
+				>
+					<Controls />
+					<Background variant={BackgroundVariant.Dots} />
+				</ReactFlow>
+				<Sidebar content={sidebarContent} />
+			</div>
 			<Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={closeMenu}>
-				<MenuItem onClick={openEditDialog}>Edit Title</MenuItem>
-				<MenuItem onClick={handleRemoveConnections}>Remove Connections</MenuItem>
+				<MenuItem onClick={openEditDialog}>Edit</MenuItem>
+				{selectedNode?.type === 'PromptNode' && (
+					<MenuItem onClick={handleDeleteNode}>Delete</MenuItem>
+				)}
 			</Menu>
 			<Dialog open={editDialogOpen} onClose={closeEditDialog}>
 				<DialogTitle>Edit Node Title</DialogTitle>
