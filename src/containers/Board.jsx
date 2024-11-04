@@ -9,17 +9,16 @@ import {
 	Background,
 	useNodesState,
 	useEdgesState,
-	//addEdge,
 	BackgroundVariant
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import Edge from '../components/Edge';
 import { Menu, MenuItem, Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField } from '@mui/material';
 
-const NODE_WIDTH = 200;
-const NODE_HEIGHT = 100;
-const SPACING = 150;
-const TOP_SPACING = 100;
+const NODE_WIDTH = 200;       // Node width for spacing calculations
+const NODE_HEIGHT = 100;      // Node height for row adjustments
+const HORIZONTAL_SPACING = 50;  // Horizontal spacing between nodes
+const VERTICAL_SPACING = 150;   // Vertical spacing for new rows
 
 const rfStyle = {
 	backgroundColor: '#B8CEFF',
@@ -27,9 +26,7 @@ const rfStyle = {
 
 const Board = () => {
 	const nodeTypes = { TabNode: TabNode, PromptNode: PromptNode };
-	const edgeTypes = {
-		Edge: Edge,
-	};
+	const edgeTypes = { Edge: Edge };
 
 	const [nodes, setNodes, onNodesChange] = useNodesState([]);
 	const [edges, setEdges, onEdgesChange] = useEdgesState([]);
@@ -37,20 +34,18 @@ const Board = () => {
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [editDialogOpen, setEditDialogOpen] = useState(false);
 	const [newTitle, setNewTitle] = useState('');
-	const xPosRef = useRef(100);
-	const yPosRef = useRef(100);
-	const xCustPosRef = useRef(700);
-	const yCustPosRef = useRef(100);
+	const xPosRef = useRef(100);  // Initial x position
+	const yPosRef = useRef(100);  // Initial y position
+	const containerWidth = window.innerWidth;  // Dynamic screen width
 
 	const addEdge = (params, eds) => {
 		console.log("Adding custom edge:", params);
-		// Customize edge creation logic here
 		const newEdge = {
 			id: `e${params.source}-${params.target}`,
 			source: params.source,
 			target: params.target,
 			type: 'Edge',
-			style: { stroke: '#ff0000' }, // Custom styling
+			style: { stroke: '#ff0000' },
 			...params,
 		};
 		return [...eds, newEdge];
@@ -63,15 +58,12 @@ const Board = () => {
 
 	const handleAddNode = () => {
 		console.log('Button click received in parent');
-		const newNode = createPromptNode(xCustPosRef.current, yCustPosRef.current);
+		const newNode = createPromptNode(xPosRef.current, yPosRef.current);
 		setNodes((prevNodes) => [...prevNodes, newNode]);
-		// Update positions for next node
-		yCustPosRef.current += 250;  // Increment x position for the next node
+		adjustPositionForNextNode();
 	};
 
-	const closeMenu = () => {
-		setAnchorEl(null);
-	};
+	const closeMenu = () => setAnchorEl(null);
 
 	const openEditDialog = () => {
 		const selectedNode = nodes.find((node) => node.id === selectedNodeId);
@@ -80,9 +72,7 @@ const Board = () => {
 		closeMenu();
 	};
 
-	const closeEditDialog = () => {
-		setEditDialogOpen(false);
-	};
+	const closeEditDialog = () => setEditDialogOpen(false);
 
 	const handleTitleChange = () => {
 		setNodes((nds) =>
@@ -98,11 +88,8 @@ const Board = () => {
 		closeMenu();
 	};
 
-	function generateRandomID(length = 8) {
-		return Math.random().toString(36).substr(2, length);
-	}
+	const generateRandomID = (length = 8) => Math.random().toString(36).substr(2, length);
 
-	// Helper function to create a node
 	const createNode = (x, y, request) => {
 		const tabId = request.content.tabId.toString();
 		const node = {
@@ -125,29 +112,32 @@ const Board = () => {
 		return node;
 	};
 
-	// Use effect to initialize the canvas and SVG
+	const adjustPositionForNextNode = () => {
+		// Calculate next position based on container width and node spacing
+		xPosRef.current += NODE_WIDTH + HORIZONTAL_SPACING;
+		if (xPosRef.current + NODE_WIDTH > containerWidth) {
+			// If it exceeds screen width, reset x and move to next row
+			xPosRef.current = 100;  // Reset to starting x position
+			yPosRef.current += NODE_HEIGHT + VERTICAL_SPACING;
+		}
+	};
+
 	useEffect(() => {
-		// Message handler function
 		const handleTabData = (request) => {
 			if (request.action === 'sendTabData') {
-				// Create a new node at dynamic positions
 				console.log(request);
-				console.log('-------------------------------');
 				const newNode = createNode(xPosRef.current, yPosRef.current, request.tabData);
 				setNodes((prevNodes) => [...prevNodes, newNode]);
-				// Update positions for next node
-				yPosRef.current += 250;  // Increment x position for the next node
+				adjustPositionForNextNode();
 			}
 		};
 
-		// Attach the listener
 		window.chrome.runtime.onMessage.addListener(handleTabData);
 
-		// Cleanup function to remove the listener when the component unmounts or effect re-runs
 		return () => {
 			window.chrome.runtime.onMessage.removeListener(handleTabData);
 		};
-	}, []);  // Dependency array ensures that the effect runs when tabsList changes
+	}, []);
 
 	return (
 		<div style={{ width: '100vw', height: '100vh' }}>
