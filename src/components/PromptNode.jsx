@@ -44,7 +44,7 @@ const PromptNode = ({ data }) => {
 			{/* Header Section */}
 			<div className="prompt-node-header">
 				<Typography variant="subtitle2" className="prompt-node-title">
-					Gemini Nano
+					{data.label}
 				</Typography>
 				<div className="prompt-node-actions">
 					<IconButton aria-label="settings" onClick={data.onOpenMenu} size="small">

@@ -47,6 +47,7 @@ const Board = () => {
 			data: {
 				label: 'Output Node',
 				onOpenMenu: (e) => openMenu(e, node),
+				content: '',
 				onClick: () => handleSetSelectedNode(node), // Set selected node on click
 			},
 		};
@@ -79,7 +80,12 @@ const Board = () => {
 			title: node.data.label
 		}));
 		setSelectedNode(node); // Update the selected node state
-	};	
+	};
+
+	const getNode = (id) => {
+		const node = nodes.find((node) => node.id === id);
+		return node || null;
+	};
 
 	const updateAdjacencyList = (source, target, action) => {
 		if (action === 'add') {
@@ -172,6 +178,7 @@ const Board = () => {
 			position: { x: x, y: y },
 			data: {
 				label: request.content.title,
+				content: request.content.content,
 				onOpenMenu: (e) => openMenu(e, node),
 				onClick: () => handleSetSelectedNode(node), // Set selected node on click
 			},
@@ -189,6 +196,7 @@ const Board = () => {
 			data: {
 				label: 'Custom Node',
 				onOpenMenu: (e) => openMenu(e, node),
+				content: '',
 				onClick: () => handleSetSelectedNode(node), // Set selected node on click
 			},
 			type: 'PromptNode',
