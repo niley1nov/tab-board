@@ -14,6 +14,7 @@ import {
 	BackgroundVariant
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
+import '../stylesheets/Board.css';
 import Edge from '../components/Edge';
 import { Menu, MenuItem, Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField } from '@mui/material';
 
@@ -215,8 +216,8 @@ const Board = () => {
 					<Controls />
 					<Background variant={BackgroundVariant.Dots} />
 				</ReactFlow>
-				<Sidebar />
-			</div>
+					<Sidebar />
+				</div>
 			<Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={closeMenu}>
 				<MenuItem onClick={openEditDialog}>Edit</MenuItem>
 				{selectedNode?.type === 'PromptNode' && (
