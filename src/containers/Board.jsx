@@ -47,12 +47,16 @@ const Board = () => {
 			data: {
 				label: 'Output Node',
 				onOpenMenu: (e) => openMenu(e, node),
+				onClick: () => handleSetSelectedNode(node), // Set selected node on click
 			},
 		};
 		return node;
 	};
 
-	const initialNode = createOutputNode(1300, 100);
+	const [sidebarContent, setSidebarContent] = useState({
+		title: "Dynamic Sidebar Title",
+		description: "This description is passed as a prop to the Sidebar component."
+	});	
 	const [nodes, setNodes, onNodesChange] = useNodesState(() => {
 		const initialNode = createOutputNode(1300, 100);
 		addNodeToAdjacencyList(initialNode.id);
@@ -67,6 +71,15 @@ const Board = () => {
 	const yPosRef = useRef(100);
 	const xCustPosRef = useRef(700);
 	const yCustPosRef = useRef(100);
+
+	const handleSetSelectedNode = (node) => {
+		console.log("Selected node:", node); // Print the selected node
+		setSidebarContent((prevContent) => ({
+			...prevContent,
+			title: node.data.label
+		}));
+		setSelectedNode(node); // Update the selected node state
+	};	
 
 	const updateAdjacencyList = (source, target, action) => {
 		if (action === 'add') {
@@ -159,7 +172,8 @@ const Board = () => {
 			position: { x: x, y: y },
 			data: {
 				label: request.content.title,
-				onOpenMenu: (e) => openMenu(e, node)
+				onOpenMenu: (e) => openMenu(e, node),
+				onClick: () => handleSetSelectedNode(node), // Set selected node on click
 			},
 			type: 'TabNode',
 		};
@@ -174,7 +188,8 @@ const Board = () => {
 			position: { x: x, y: y },
 			data: {
 				label: 'Custom Node',
-				onOpenMenu: (e) => openMenu(e, node)
+				onOpenMenu: (e) => openMenu(e, node),
+				onClick: () => handleSetSelectedNode(node), // Set selected node on click
 			},
 			type: 'PromptNode',
 		};
@@ -216,8 +231,8 @@ const Board = () => {
 					<Controls />
 					<Background variant={BackgroundVariant.Dots} />
 				</ReactFlow>
-					<Sidebar />
-				</div>
+				<Sidebar content={sidebarContent} />
+			</div>
 			<Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={closeMenu}>
 				<MenuItem onClick={openEditDialog}>Edit</MenuItem>
 				{selectedNode?.type === 'PromptNode' && (

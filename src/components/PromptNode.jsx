@@ -34,7 +34,7 @@ const PromptNode = ({ data }) => {
 	};
 
 	return (
-		<div
+		<div onClick={data.onClick}
 			ref={nodeRef}
 			className={`prompt-node ${highlighted ? 'highlighted' : ''}`}
 		>

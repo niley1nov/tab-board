@@ -1,13 +1,13 @@
 import React from 'react';
 import { Button } from '@mui/material';
-import '../stylesheets/Sidebar.css'; // Import the CSS file
+import '../stylesheets/Sidebar.css';
 
-const Sidebar = () => {
+const Sidebar = ({ content }) => {
     return (
         <div className="sidebar">
             <div>
-                <h2 className="sidebar-title">Sidebar Title</h2>
-                <p className="sidebar-description">Some descriptive text or instructions.</p>
+                <h2 className="sidebar-title">{content.title}</h2>
+                <p className="sidebar-description">{content.description}</p>
             </div>
             
             <Button variant="contained" onClick={() => console.log("Button 1 clicked")}>Button 1</Button>
