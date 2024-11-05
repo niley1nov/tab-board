@@ -16,20 +16,6 @@ const PromptNode = ({ data }) => {
 
 	// Function to handle prompt submission to the API
 	const handlePromptSubmit = async () => {
-		// if (!prompt) return; // Prevent empty submissions
-		// try {
-		// 	// Replace with actual API call to Gemini Nano
-		// 	const response = await fetch('https://api.gemini-nano.com/generate', {
-		// 		method: 'POST',
-		// 		headers: { 'Content-Type': 'application/json' },
-		// 		body: JSON.stringify({ prompt })
-		// 	});
-		// 	const data = await response.json();
-		// 	setResponse(data.output); // Adjust according to actual API response format
-		// } catch (error) {
-		// 	console.error('Error:', error);
-		// 	setResponse('Failed to generate response');
-		// }
 		console.log("Inside Handle Prompt")
 	};
 

@@ -51,7 +51,9 @@ const Board = () => {
 
 	const [sidebarContent, setSidebarContent] = useState({
 		title: "Dynamic Sidebar Title",
-		description: "This description is passed as a prop to the Sidebar component."
+		description: "This description is passed as a prop to the Sidebar component.",
+		nodeType: "",
+		additionalContent: ""
 	});
 	const [nodes, setNodes, onNodesChange] = useNodesState(() => {
 		const initialNode = createOutputNode(1300, 100);
@@ -72,7 +74,9 @@ const Board = () => {
 		console.log("Selected node:", node); // Print the selected node
 		setSidebarContent((prevContent) => ({
 			...prevContent,
-			title: node.data.label
+			title: node.data.label,
+			nodeType: node.type,
+			additionalContent: node.data.content
 		}));
 		setSelectedNode(node); // Update the selected node state
 	};
@@ -189,7 +193,7 @@ const Board = () => {
 			id: tabId,
 			position: { x: x, y: y },
 			data: {
-				label: 'Custom Node',
+				label: 'Gemini Nano',
 				onOpenMenu: (e) => openMenu(e, node),
 				content: '',
 				onClick: () => handleSetSelectedNode(node), // Set selected node on click

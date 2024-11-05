@@ -1,99 +1,53 @@
-/* OutputNode.css */
-.custom-node {
-	padding: 10px;
-	border: 1px solid #ccc;
-	border-radius: 8px;
-	background-color: #e6f7ff;
-	box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-	position: relative; /* For absolute positioning of menu */
-	overflow: visible; /* Prevent overflow of content */
-	display: flex;
-	flex-direction: column;
-	align-items: center; /* Center nodes */
+.output-node {
+    position: relative;
+    width: 200px;
+    padding: 8px;
+    border: 1px solid #d3d3d3;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    transition: border 0.2s ease;
 }
 
-.node-content {
-	display: flex;
-	flex-direction: column;
-	align-items: flex-start; /* Align to the left */
-	width: 100%; /* Take full width */
+.output-node-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 0;
 }
 
-.node-label {
-	margin: 0; /* Remove margin */
-	white-space: nowrap; /* Prevent label text from wrapping */
-	overflow: hidden; /* Prevent overflow */
-	text-overflow: ellipsis; /* Show ellipsis for overflow text */
-	width: 100%; /* Full width to show ellipsis */
+.output-node-title {
+    font-size: 0.875rem;
+    font-weight: 500;
 }
 
-.nodrag {
-	width: 100%; /* Full width for the input */
+.output-node-actions .MuiIconButton-root {
+    padding: 4px;
 }
 
-.menu-icon {
-	position: absolute; /* Position it at the top right */
-	top: 10px; /* Adjust top spacing */
-	right: 10px; /* Adjust right spacing */
-	cursor: pointer; /* Pointer cursor for interaction */
-	font-size: 20px; /* Adjust size */
-	color: #555; /* Color for the dots */
+.output-node-divider {
+    margin: 4px 0;
 }
 
-.menu-dropdown {
-	position: absolute; /* Positioning for dropdown */
-	top: 40px; /* Below the three dots */
-	right: 10px; /* Align with right side */
-	background-color: white; /* White background for dropdown */
-	border: 1px solid #ccc; /* Border for dropdown */
-	border-radius: 5px; /* Rounded corners */
-	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow */
-	z-index: 1000; /* Ensure it’s above other elements */
+.output-node-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-top: 4px;
+    padding-bottom: 4px;
 }
 
-.menu-dropdown div {
-	padding: 8px 12px; /* Padding for options */
-	cursor: pointer; /* Pointer cursor for options */
-	transition: background-color 0.2s; /* Smooth background change */
+.output-node-response {
+    padding-top: 4px;
+    font-size: 0.875rem;
+    color: #555;
 }
 
-.menu-dropdown div:hover {
-	background-color: #f0f0f0; /* Highlight on hover */
-}
-
-.react-flow__handle {
-	width: 20px; /* Increase the width */
-	height: 20px; /* Increase the height */
-	border-radius: 100%; /* Optional: to make them circular */
-	background-color: #555; /* Optional: change background color */
-}
-
-.custom-node-card {
-	max-width: 345px; /* Maximum width for the card */
-}
-
-/* Title styling to truncate long text with ellipsis */
-.custom-node-title {
-	white-space: nowrap; /* Prevent text from wrapping */
-	overflow: hidden; /* Hide overflow text */
-	text-overflow: ellipsis; /* Show ellipsis for overflow text */
-	max-width: 150px; /* Adjust this width as needed */
-}
-
-/* Container for the expandable content */
-.expand-container {
-	display: flex;
-	justify-content: space-between; /* Space between content and button */
-	align-items: center; /* Center vertically */
-}
-
-/* Expand button styling */
-.custom-node-expand {
-	margin-left: auto; /* Align to the right */
-	transition: transform 0.2s ease-in-out; /* Smooth rotation transition */
-}
-
-/* Rotated icon when expanded */
-.custom-node-expand.expanded {
-	transform: rotate(180deg); /* Rotate when expanded */
+.output-node-content {
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    /* Optional: spacing between input and button */
 }

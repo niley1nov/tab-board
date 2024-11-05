@@ -1,19 +1,77 @@
-/* Sidebar.css */
-
 .sidebar {
-    width: 300px;
-    padding: 20px;
-    background-color: #f0f0f0;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    background-color: #ffffff; /* White background for clarity */
+    border-radius: 8px; /* Rounded corners */
+    padding: 20px; /* Ample padding for comfort */
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1); /* Softer shadow for depth */
+    width: 350px; /* Fixed width for sidebar */
+    height: 100vh; /* Full height of the viewport */
+    overflow: hidden; /* Hide overflow */
+    display: flex; /* Use flexbox for layout */
+    flex-direction: column; /* Stack children vertically */
 }
 
 .sidebar-title {
-    font-size: 1.2rem;
-    margin-bottom: 10px;
+    font-size: 1.0rem; /* Font size for the title */
+    font-weight: 700; /* Bold title */
+    color: #333; /* Dark color for title */
+    margin: 0; /* No margin for title */
+    word-wrap: break-word; /* Wrap long words to next line */
+}
+
+.sidebar-divider {
+    height: 2px; /* Height of the divider */
+    background-color: #e0e0e0; /* Color of the divider */
+    margin: 10px 0; /* Margin above and below the divider */
+}
+
+.sidebar-content {
+    flex: 1; /* Allow content to grow and fill available space */
+    overflow-y: auto; /* Enable vertical scrolling */
+    padding: 5px; /* Padding for content area */
+    scrollbar-width: thin; /* For Firefox */
+    scrollbar-color: #1976d2 #f1f1f1; /* Scrollbar color for Firefox */
+}
+
+/* Custom scrollbar styles for WebKit browsers (Chrome, Safari) */
+.sidebar-content::-webkit-scrollbar {
+    width: 8px; /* Width of the scrollbar */
+}
+
+.sidebar-content::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Background of the scrollbar track */
+}
+
+.sidebar-content::-webkit-scrollbar-thumb {
+    background-color: #1976d2; /* Color of the scrollbar */
+    border-radius: 10px; /* Rounded edges for the scrollbar */
 }
 
 .sidebar-description {
-    margin-bottom: 20px;
+    margin-bottom: 10px; /* Space between description and other elements */
+    color: #555; /* Slightly lighter color for description */
+}
+
+.sidebar-markdown {
+    background-color: #f9f9f9; /* Light grey background for markdown */
+    border: 1px solid #ddd; /* Subtle border around markdown content */
+    border-radius: 4px; /* Rounded corners for markdown box */
+    padding: 15px; /* Padding inside markdown */
+    overflow-y: auto; /* Scroll if content is too long */
+    font-size: 0.95rem; /* Adjust font size for readability */
+    line-height: 1.5; /* Improved line height for better readability */
+}
+
+.read-more-button {
+    margin-top: 5px; /* Space above button */
+    color: #1976d2; /* Primary color for button */
+    font-weight: 500; /* Slightly bold button text */
+}
+
+.sidebar-output {
+    margin-top: 10px; /* Space above output text */
+    color: #333; /* Darker color for output text */
+    padding: 10px; /* Padding around output text */
+    background-color: #e8f5e9; /* Light green background for output */
+    border: 1px solid #c8e6c9; /* Light green border for output */
+    border-radius: 4px; /* Rounded corners for output */
 }
