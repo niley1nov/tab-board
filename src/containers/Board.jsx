@@ -96,6 +96,11 @@ const Board = () => {
 	const xCustPosRef = useRef(700);
 	const yCustPosRef = useRef(100);
 
+	const getEdge = (id) => {
+		const edge = edges.find((edge) => edge.id == id);
+		return edge || null;
+	}
+
 	const getNode = (id) => {
 		const node = nodes.find((node) => node.id === id);
 		return node || null;
@@ -190,10 +195,12 @@ const Board = () => {
 		return [...eds, newEdge];
 	};
 
-	const handleEdgeChange = (edge) => {
-		onEdgesChange(edge);
+	const handleEdgeChange = (edges) => {
+		const edge = getEdge(edges[0].id);
+		updateAdjacencyList(edge.source, edge.target, 'remove');
 		getNode(edge.source).data.right = getNodesByIds(adjacencyList.current[edge.source].right);
 		getNode(edge.target).data.left = getNodesByIds(adjacencyList.current[edge.target].left);
+		onEdgesChange(edges);
 	};
 
 	const handleSetSelectedNode = (node) => {
@@ -204,7 +211,6 @@ const Board = () => {
 			additionalContent: node.data.content
 		}));
 		setSelectedNode(node);
-		console.log(node);
 	};
 
 	useEffect(() => {
