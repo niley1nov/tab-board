@@ -15,7 +15,6 @@ import {
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import '../stylesheets/Board.css';
-
 import { Menu, MenuItem, Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField } from '@mui/material';
 
 const rfStyle = { backgroundColor: '#B8CEFF', flexGrow: 1 };
@@ -30,23 +29,49 @@ const Board = () => {
 		if (!adjacencyList.current[nodeId]) {
 			adjacencyList.current[nodeId] = { left: [], right: [] };
 		}
-		console.log(adjacencyList);
+	};
+
+	const createNode = (id, type, position, data) => {
+		const node = {
+			id,
+			type,
+			position,
+			data: {
+				onOpenMenu: (e) => openMenu(e, node),
+				onClick: () => handleSetSelectedNode(node),
+				left: [],
+				right: [],
+				...data,
+			}
+		};
+		return node;
+	}
+
+	const createTabNode = (x, y, request) => {
+		const id = request.content.tabId.toString();
+		addNodeToAdjacencyList(id);
+		return createNode(id, 'TabNode', { x, y }, {
+			label: request.content.title,
+			content: request.content.content,
+		});
+	};
+
+	const createPromptNode = (x, y) => {
+		const id = generateRandomID();
+		addNodeToAdjacencyList(id);
+		return createNode(id, 'PromptNode', { x, y }, {
+			label: 'Prompt Node',
+			content: '',
+		});
 	};
 
 	const createOutputNode = (x, y) => {
-		const tabId = generateRandomID();
-		const node = {
-			id: tabId,
-			type: 'OutputNode',
-			position: { x: x, y: y },
-			data: {
-				label: 'Output Node',
-				onOpenMenu: (e) => openMenu(e, node),
-				content: '',
-				onClick: () => handleSetSelectedNode(node), // Set selected node on click
-			},
-		};
-		return node;
+		const id = generateRandomID();
+		addNodeToAdjacencyList(id);
+		return createNode(id, 'OutputNode', { x, y }, {
+			label: 'Output Node',
+			content: '',
+		});
 	};
 
 	const [sidebarContent, setSidebarContent] = useState({
@@ -55,6 +80,7 @@ const Board = () => {
 		nodeType: "",
 		additionalContent: ""
 	});
+
 	const [nodes, setNodes, onNodesChange] = useNodesState(() => {
 		const initialNode = createOutputNode(1300, 100);
 		addNodeToAdjacencyList(initialNode.id);
@@ -70,21 +96,15 @@ const Board = () => {
 	const xCustPosRef = useRef(700);
 	const yCustPosRef = useRef(100);
 
-	const handleSetSelectedNode = (node) => {
-		console.log("Selected node:", node); // Print the selected node
-		setSidebarContent((prevContent) => ({
-			...prevContent,
-			title: node.data.label,
-			nodeType: node.type,
-			additionalContent: node.data.content
-		}));
-		setSelectedNode(node); // Update the selected node state
-	};
-
 	const getNode = (id) => {
 		const node = nodes.find((node) => node.id === id);
 		return node || null;
 	};
+
+	const getNodesByIds = (nodeIds) => {
+		return nodes.filter((node) => nodeIds.includes(node.id));
+	};
+
 
 	const updateAdjacencyList = (source, target, action) => {
 		if (action === 'add') {
@@ -97,32 +117,11 @@ const Board = () => {
 			adjacencyList.current[source].right = adjacencyList.current[source].right.filter((id) => id !== target);
 			adjacencyList.current[target].left = adjacencyList.current[target].left.filter((id) => id !== source);
 		}
-		console.log(adjacencyList);
-	};
-
-	const addEdge = (params, eds) => {
-		const newEdge = {
-			id: `e${params.source}-${params.target}`,
-			source: params.source,
-			target: params.target,
-			type: 'Edge',
-			style: { stroke: '#ff0000' },
-			...params,
-		};
-
-		updateAdjacencyList(params.source, params.target, 'add');
-		return [...eds, newEdge];
 	};
 
 	const openMenu = (event, node) => {
 		setAnchorEl(event.currentTarget);
 		setSelectedNode(node);
-	};
-
-	const handleAddNode = () => {
-		const newNode = createPromptNode(xCustPosRef.current, yCustPosRef.current);
-		setNodes((prevNodes) => [...prevNodes, newNode]);
-		yCustPosRef.current += 250;
 	};
 
 	const closeMenu = () => {
@@ -138,6 +137,10 @@ const Board = () => {
 	const closeEditDialog = () => {
 		setEditDialogOpen(false);
 	};
+
+	function generateRandomID(length = 8) {
+		return Math.random().toString(36).substr(2, length);
+	}
 
 	const handleTitleChange = () => {
 		setNodes((nds) =>
@@ -166,48 +169,48 @@ const Board = () => {
 		closeMenu();
 	};
 
-	function generateRandomID(length = 8) {
-		return Math.random().toString(36).substr(2, length);
-	}
-
-	const createNode = (x, y, request) => {
-		const tabId = request.content.tabId.toString();
-		const node = {
-			id: tabId,
-			position: { x: x, y: y },
-			data: {
-				label: request.content.title,
-				content: request.content.content,
-				onOpenMenu: (e) => openMenu(e, node),
-				onClick: () => handleSetSelectedNode(node), // Set selected node on click
-			},
-			type: 'TabNode',
-		};
-		addNodeToAdjacencyList(tabId)
-		return node;
+	const handleAddNode = () => {
+		const newNode = createPromptNode(xCustPosRef.current, yCustPosRef.current);
+		setNodes((prevNodes) => [...prevNodes, newNode]);
+		yCustPosRef.current += 250;
 	};
 
-	const createPromptNode = (x, y) => {
-		const tabId = generateRandomID();
-		const node = {
-			id: tabId,
-			position: { x: x, y: y },
-			data: {
-				label: 'Gemini Nano',
-				onOpenMenu: (e) => openMenu(e, node),
-				content: '',
-				onClick: () => handleSetSelectedNode(node), // Set selected node on click
-			},
-			type: 'PromptNode',
+	const addEdge = (params, eds) => {
+		const newEdge = {
+			id: `e${params.source}-${params.target}`,
+			source: params.source,
+			target: params.target,
+			type: 'Edge',
+			style: { stroke: '#ff0000' },
+			...params,
 		};
-		addNodeToAdjacencyList(tabId);
-		return node;
+		updateAdjacencyList(params.source, params.target, 'add');
+		getNode(newEdge.source).data.right = getNodesByIds(adjacencyList.current[newEdge.source].right);
+		getNode(newEdge.target).data.left = getNodesByIds(adjacencyList.current[newEdge.target].left);
+		return [...eds, newEdge];
+	};
+
+	const handleEdgeChange = (edge) => {
+		onEdgesChange(edge);
+		getNode(edge.source).data.right = getNodesByIds(adjacencyList.current[edge.source].right);
+		getNode(edge.target).data.left = getNodesByIds(adjacencyList.current[edge.target].left);
+	};
+
+	const handleSetSelectedNode = (node) => {
+		setSidebarContent((prevContent) => ({
+			...prevContent,
+			title: node.data.label,
+			nodeType: node.type,
+			additionalContent: node.data.content
+		}));
+		setSelectedNode(node);
+		console.log(node);
 	};
 
 	useEffect(() => {
 		const handleTabData = (request) => {
 			if (request.action === 'sendTabData') {
-				const newNode = createNode(xPosRef.current, yPosRef.current, request.tabData);
+				const newNode = createTabNode(xPosRef.current, yPosRef.current, request.tabData);
 				setNodes((prevNodes) => [...prevNodes, newNode]);
 				yPosRef.current += 250;
 			}
@@ -220,16 +223,16 @@ const Board = () => {
 	}, []);
 
 	return (
-		<div style={{ width: '100vw', height: '100vh', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+		<div className="board-container">
 			<NavBar onAddNode={handleAddNode} />
-			<div style={{ flex: 1, display: 'flex', flexDirection: 'row' }}>
+			<div className="board-main">
 				<ReactFlow
 					nodes={nodes}
 					edges={edges}
 					nodeTypes={nodeTypes}
 					edgeTypes={edgeTypes}
 					onNodesChange={onNodesChange}
-					onEdgesChange={onEdgesChange}
+					onEdgesChange={handleEdgeChange}
 					onConnect={(params) => setEdges((eds) => addEdge(params, eds))}
 					defaultViewport={defaultViewport}
 					style={rfStyle}
