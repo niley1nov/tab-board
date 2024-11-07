@@ -6,6 +6,7 @@ import TextField from '@mui/material/TextField';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import SendIcon from '@mui/icons-material/Send';
 import { Handle, Position } from '@xyflow/react';
+import GeminiProService from '../services/GeminiProService';
 import '../stylesheets/PromptNode.css';
 
 const PromptNode = ({ data }) => {
@@ -14,9 +15,18 @@ const PromptNode = ({ data }) => {
 	const [response, setResponse] = useState('');
 	const nodeRef = useRef(null);
 
+	const aiService = new GeminiProService();
+
 	// Function to handle prompt submission to the API
 	const handlePromptSubmit = async () => {
-		console.log("Inside Handle Prompt")
+		console.log("Inside Handle Prompt");
+		if(!!prompt) {
+			aiService.callModel(prompt).then(response => {
+				console.log("Model response:", response);
+			}).catch(error =>{
+				console.log("Error", error);
+			});
+		}
 	};
 
 	return (

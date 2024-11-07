@@ -1,11 +1,16 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
-import Divider from '@mui/material/Divider';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import TextField from '@mui/material/TextField';
 import SettingsIcon from '@mui/icons-material/Settings';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import AppsIcon from '@mui/icons-material/Apps';
@@ -25,7 +30,40 @@ const TabSection = styled(Box)(({ theme }) => ({
 	alignItems: 'center',
 }));
 
-function Navbar({ onAddNode }) {
+function Navbar({ onAddNode, onTokenSubmit }) {
+	const [open, setOpen] = useState(false);
+	const [apiToken, setApiToken] = useState('');
+
+	function setInert(inert) {
+		const root = document.getElementById('root');
+		if (root) {
+			root.inert = inert;
+		}
+	}
+
+	const handleSettingOpen = () => {
+		setOpen(true);
+		setInert(true);
+	};
+
+	const handleSettingClose = () => {
+		setOpen(false);
+		//setInert(false);
+	};
+
+	const handleSettingSubmit = () => {
+		// Handle the API token submission logic here
+		console.log("API Token submitted:", apiToken);
+		onTokenSubmit(apiToken);
+		setOpen(false);
+		//setInert(false);
+	};
+
+	useEffect(() => {
+		if (!open) {
+			setInert(false); // Remove inert attribute if dialog is closed
+		}
+	}, [open]);
 
 	return (
 		<Box sx={{ flexShrink: 1 }}>
@@ -84,10 +122,38 @@ function Navbar({ onAddNode }) {
 				</Button>
 
 				{/* Settings Icon */}
-				<IconButton color="default">
+				<IconButton color="default" onClick={handleSettingOpen}>
 					<SettingsIcon />
 				</IconButton>
 			</TabSection>
+
+			{/* Modal Dialog */}
+			<Dialog open={open} onClose={handleSettingClose}>
+				<DialogTitle>Enter API Token</DialogTitle>
+				<DialogContent>
+					<DialogContentText>
+						Please enter your API token to proceed.
+					</DialogContentText>
+					<TextField
+						autoFocus
+						margin="dense"
+						label="API Token"
+						type="text"
+						fullWidth
+						variant="outlined"
+						value={apiToken}
+						onChange={(e) => setApiToken(e.target.value)}
+					/>
+				</DialogContent>
+				<DialogActions>
+					<Button onClick={handleSettingClose} color="primary">
+						Cancel
+					</Button>
+					<Button onClick={handleSettingSubmit} color="primary">
+						Submit
+					</Button>
+				</DialogActions>
+			</Dialog>
 		</Box>
 	);
 }
