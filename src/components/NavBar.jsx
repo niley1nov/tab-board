@@ -18,6 +18,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import PersonIcon from '@mui/icons-material/Person';
 import AddIcon from '@mui/icons-material/Add';
 import ListAltIcon from '@mui/icons-material/ListAlt';
+import {useToken} from '../containers/TokenContext'; // Adjust the path
 import { styled } from '@mui/system';
 
 const TabSection = styled(Box)(({ theme }) => ({
@@ -30,8 +31,9 @@ const TabSection = styled(Box)(({ theme }) => ({
 	alignItems: 'center',
 }));
 
-function Navbar({ onAddNode, onTokenSubmit }) {
+function Navbar({ onAddNode }) {
 	const [open, setOpen] = useState(false);
+	const {token, setToken} = useToken();
 	const [apiToken, setApiToken] = useState('');
 
 	function setInert(inert) {
@@ -48,20 +50,18 @@ function Navbar({ onAddNode, onTokenSubmit }) {
 
 	const handleSettingClose = () => {
 		setOpen(false);
-		//setInert(false);
+		setApiToken(token);
 	};
 
 	const handleSettingSubmit = () => {
-		// Handle the API token submission logic here
 		console.log("API Token submitted:", apiToken);
-		onTokenSubmit(apiToken);
+		setToken(apiToken);
 		setOpen(false);
-		//setInert(false);
 	};
 
 	useEffect(() => {
 		if (!open) {
-			setInert(false); // Remove inert attribute if dialog is closed
+			setInert(false);
 		}
 	}, [open]);
 

@@ -88,7 +88,6 @@ const Board = () => {
 	});
 	const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 	const [selectedNode, setSelectedNode] = useState(null);
-	const [token, setToken] = useState('');
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [editDialogOpen, setEditDialogOpen] = useState(false);
 	const [newTitle, setNewTitle] = useState('');
@@ -181,11 +180,6 @@ const Board = () => {
 		yCustPosRef.current += 250;
 	};
 
-	const handleTokenSubmit = (apiToken) => {
-		console.log("Received token:", apiToken);
-		setToken(apiToken);
-	};
-
 	const addEdge = (params, eds) => {
 		const newEdge = {
 			id: `e${params.source}-${params.target}`,
@@ -236,7 +230,7 @@ const Board = () => {
 
 	return (
 		<div className="board-container">
-			<NavBar onAddNode={handleAddNode} onTokenSubmit={handleTokenSubmit}/>
+			<NavBar onAddNode={handleAddNode}/>
 			<div className="board-main">
 				<ReactFlow
 					nodes={nodes}

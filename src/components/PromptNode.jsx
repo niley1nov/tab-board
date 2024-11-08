@@ -7,12 +7,14 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import SendIcon from '@mui/icons-material/Send';
 import { Handle, Position } from '@xyflow/react';
 import GeminiProService from '../services/GeminiProService';
+import {useToken} from '../containers/TokenContext'; // Adjust the path
 import '../stylesheets/PromptNode.css';
 
 const PromptNode = ({ data }) => {
 	const [highlighted, setHighlighted] = useState(false);
 	const [prompt, setPrompt] = useState('');
 	const [response, setResponse] = useState('');
+	const {token, setToken} = useToken();
 	const nodeRef = useRef(null);
 
 	const aiService = new GeminiProService();
@@ -20,7 +22,7 @@ const PromptNode = ({ data }) => {
 	// Function to handle prompt submission to the API
 	const handlePromptSubmit = async () => {
 		console.log("Inside Handle Prompt");
-		if(!!prompt) {
+		if(!!prompt && !!token) {
 			aiService.callModel(prompt).then(response => {
 				console.log("Model response:", response);
 			}).catch(error =>{
