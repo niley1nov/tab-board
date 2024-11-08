@@ -69,13 +69,30 @@ function extractContentAndSend(tabId, tabTitle, tabUrl) {
 		return openGraphData;
 	}
 
+	function removeHeaderAndFooter(element) {
+		const children = Array.from(element.childNodes);
+		const excludedTags = ['HEADER', 'FOOTER', 'NAV', 'ASIDE'];
+		children.forEach((node) => {
+			if (node.nodeType === Node.ELEMENT_NODE) {
+				if (excludedTags.includes(node.tagName)) {
+					node.remove();
+				} else {
+					removeHeaderAndFooter(node);
+				}
+			}
+		});
+	}
+
+	let bodyClone = document.body.cloneNode(true);
+	removeHeaderAndFooter(bodyClone); //TODO: clean space
+
 	// Build the structured data to send
 	const tabData = {
 		title: tabTitle,
 		url: tabUrl,
 		tabId: tabId,
 		metaTags: getMetaTags(),         // Extract meta tags
-		content: document.body.innerText, // Structured text content (headings, paragraphs, etc.)
+		content: bodyClone.innerText, // Structured text content (headings, paragraphs, etc.)
 		jsonLD: getJSONLD(),             // Extract JSON-LD structured data
 		openGraph: getOpenGraphData(),   // Extract OpenGraph metadata
 	};
@@ -89,7 +106,6 @@ function extractContentAndSend(tabId, tabTitle, tabUrl) {
 		url: tabUrl
 	});
 }
-
 
 // Handle the extracted content and send it to fullscreen.js
 function handleExtractedContent(request) {
