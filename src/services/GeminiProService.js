@@ -8,9 +8,9 @@ import { getGenConfig } from "../utilities/AIUtil.js";
 import { models, getPrompts, safety_settings } from "./AIConfigData.js";
 
 export default class GeminiProService extends AIService {
-    constructor() {
+    constructor(token) {
         super();
-		this.genAI = new GoogleGenerativeAI("Gemini Token");
+		this.genAI = new GoogleGenerativeAI(token);
 	}
 
     async callModel(prompt) {

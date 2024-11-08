@@ -54,7 +54,6 @@ function Navbar({ onAddNode }) {
 	};
 
 	const handleSettingSubmit = () => {
-		console.log("API Token submitted:", apiToken);
 		setToken(apiToken);
 		setOpen(false);
 	};

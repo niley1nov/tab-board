@@ -17,11 +17,10 @@ const PromptNode = ({ data }) => {
 	const {token, setToken} = useToken();
 	const nodeRef = useRef(null);
 
-	const aiService = new GeminiProService();
+	const aiService = new GeminiProService(token);
 
 	// Function to handle prompt submission to the API
 	const handlePromptSubmit = async () => {
-		console.log("Inside Handle Prompt");
 		if(!!prompt && !!token) {
 			aiService.callModel(prompt).then(response => {
 				console.log("Model response:", response);
