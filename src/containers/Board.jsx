@@ -5,6 +5,8 @@ import OutputNode from '../components/OutputNode';
 import Sidebar from '../components/Sidebar';
 import NavBar from '../components/NavBar';
 import Edge from '../components/Edge';
+import NodeMenu from '../components/NodeMenu';
+import EditDialog from '../components/EditDialog';
 import {
 	ReactFlow,
 	Background,
@@ -14,7 +16,6 @@ import {
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import '../stylesheets/Board.css';
-import { Menu, MenuItem, Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField } from '@mui/material';
 
 const rfStyle = { backgroundColor: '#B8CEFF', flexGrow: 1 };
 const defaultViewport = { x: 0, y: 0, zoom: 1 };
@@ -108,7 +109,6 @@ const Board = () => {
 	const getNodesByIds = (nodeIds) => {
 		return nodes.filter((node) => nodeIds.includes(node.id));
 	};
-
 
 	const updateAdjacencyList = (source, target, action) => {
 		if (action === 'add') {
@@ -246,22 +246,20 @@ const Board = () => {
 				</ReactFlow>
 				<Sidebar content={sidebarContent} />
 			</div>
-			<Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={closeMenu}>
-				<MenuItem onClick={openEditDialog}>Edit</MenuItem>
-				{selectedNode?.type === 'PromptNode' && (
-					<MenuItem onClick={handleDeleteNode}>Delete</MenuItem>
-				)}
-			</Menu>
-			<Dialog open={editDialogOpen} onClose={closeEditDialog}>
-				<DialogTitle>Edit Node Title</DialogTitle>
-				<DialogContent>
-					<TextField value={newTitle} onChange={(e) => setNewTitle(e.target.value)} fullWidth />
-				</DialogContent>
-				<DialogActions>
-					<Button onClick={closeEditDialog}>Cancel</Button>
-					<Button onClick={handleTitleChange}>Save</Button>
-				</DialogActions>
-			</Dialog>
+			<NodeMenu
+				anchorEl={anchorEl}
+				onClose={closeMenu}
+				onEdit={openEditDialog}
+				onDelete={handleDeleteNode}
+				nodeType={selectedNode?.type}
+			/>
+			<EditDialog
+				open={editDialogOpen}
+				onClose={closeEditDialog}
+				title={newTitle}
+				onTitleChange={setNewTitle}
+				onSave={handleTitleChange}
+			/>
 		</div>
 	);
 }
