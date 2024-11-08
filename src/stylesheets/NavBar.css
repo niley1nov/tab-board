@@ -1,0 +1,35 @@
+/* Navbar.css */
+
+.navbar-container {
+	background-color: #2979ff;
+	padding: 8px 16px;
+	box-shadow: none;
+	border-radius: 0 0 8px 8px;
+}
+
+.navbar-toolbar {
+	display: flex;
+	justify-content: space-between;
+}
+
+.navbar-icons {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	flex-wrap: wrap; /* Allows items to wrap if they don’t fit in a single row */
+	/* Adjust gap if needed */
+}
+
+/* Navbar.css */
+.board-activity-button {
+    color: #ffffff; /* White text color */
+    border-color: #ffffff; /* White border color */
+    border-radius: 8px;
+    opacity: 0.9; /* Slight transparency to help it stand out */
+}
+
+.run-board-button {
+	background-color: #ffffff;
+	color: #2979ff;
+	border-radius: 8px;
+}
