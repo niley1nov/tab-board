@@ -1,0 +1,49 @@
+/* Main container for the Navbar */
+.app-bar {
+    height: 40px;
+    background-color: #2196f3;
+    box-shadow: none;
+  }
+  
+  @media (min-width: 600px) {
+    /* Override the default height for AppBar on larger screens */
+    .app-bar .MuiToolbar-root {
+      min-height: 40px !important; /* Force 40px to override default 64px */
+    }
+  }
+  
+  /* Tab section styling */
+  .tab-section {
+    background-color: #fff;
+    border-radius: 8px 8px 0 0;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 8px 16px;
+    margin-top: -4px;
+    display: flex;
+    align-items: center;
+  }
+  
+  /* Individual tab styling */
+  .tab-board {
+    display: flex;
+    align-items: center;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 2px 8px;
+    margin-right: 16px;
+  }
+  
+  /* Button styles */
+  .board-activity-button {
+    color: #4caf50;
+    border-color: #4caf50;
+    margin-right: 16px;
+  }
+  
+  .run-board-button {
+    background-color: #2979ff;
+    border-radius: 8px;
+    padding: 6px 16px;
+    margin-right: 8px;
+  }
+  
