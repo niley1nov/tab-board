@@ -7,7 +7,6 @@ import NavBar from '../components/NavBar';
 import Edge from '../components/Edge';
 import {
 	ReactFlow,
-	Controls,
 	Background,
 	useNodesState,
 	useEdgesState,
@@ -243,7 +242,6 @@ const Board = () => {
 					defaultViewport={defaultViewport}
 					style={rfStyle}
 				>
-					<Controls />
 					<Background variant={BackgroundVariant.Dots} />
 				</ReactFlow>
 				<Sidebar content={sidebarContent} />
