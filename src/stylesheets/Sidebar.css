@@ -1,3 +1,4 @@
+/* Main container for the popup */
 .popup-container {
   position: fixed;
   top: 50%;
@@ -66,24 +67,75 @@
   padding: 4px;
 }
 
+/* Responsive styles for smaller screens */
 @media (max-width: 768px) {
   .popup-container {
-      width: 90%; /* Adjust for smaller screens */
-      right: 5%;
+    width: 90%; 
+    right: 5%;
   }
 }
 
 @media (max-width: 480px) {
   .popup-container {
-      width: 100%;
-      right: 0;
-      height: 60vh;
+    width: 100%;
+    right: 0;
+    height: 60vh;
   }
 }
 
+/* Title styling in the sidebar */
 .sidebar-title {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: calc(100% - 40px);
+}
+
+/* Styling for adjacent node input container */
+.adjacent-node-input-container {
+  margin-top: 10px;
+  width: 100%;
+}
+
+/* Title of adjacent nodes */
+.adjacent-node-title {
+  white-space: nowrap;        /* Prevents wrapping */
+  overflow: hidden;           /* Ensures text doesn't spill over */
+  text-overflow: ellipsis;    /* Adds ellipsis if text is too long */
+  margin-bottom: 4px;         /* Adds space below the title */
+  font-size: 14px;            /* Adjust font size if necessary */
+}
+
+/* Flex container to align input and button horizontally */
+.input-send-container {
+  display: flex;               /* Aligns input and button horizontally */
+  align-items: center;         /* Centers them vertically */
+  gap: 8px;                    /* Adds spacing between input and button */
+  width: 100%;
+}
+
+/* Input field takes remaining space */
+.adjacent-node-input-container .MuiTextField-root {
+  flex-grow: 1;                /* Input takes up available space */
+  margin-right: 8px;           /* Adds space between input and button */
+}
+
+/* Styling for send button */
+.adjacent-node-input-container .MuiIconButton-root {
+  padding: 4px;                /* Adjust padding around the send icon */
+}
+
+/* Styling for minimize icon */
+.minimized-icon {
+  background-color: #007bff;
+  color: #fff;
+  border-radius: 50%;
+  padding: 4px;
+}
+
+/* Responsive styles for font size */
+@media (max-width: 480px) {
+  .adjacent-node-input-container .MuiTypography-root {
+    font-size: 12px;
+  }
 }

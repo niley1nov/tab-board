@@ -31,6 +31,7 @@ const Board = () => {
 		}
 	};
 
+	// Modify createNode to include adjacencyNodes
 	const createNode = (id, type, position, data) => {
 		const node = {
 			id,
@@ -41,6 +42,7 @@ const Board = () => {
 				onClick: () => handleSetSelectedNode(node),
 				left: [],
 				right: [],
+				adjacencyNodes: [], // Store the full node data here
 				...data,
 			}
 		};
@@ -75,7 +77,7 @@ const Board = () => {
 	};
 
 	const [sidebarContent, setSidebarContent] = useState({
-		title: "Dynamic Sidebar Title",
+		title: "Dynamic Sidebar",
 		nodeType: "",
 		additionalContent: ""
 	});
@@ -95,11 +97,6 @@ const Board = () => {
 	const yPosRef = useRef(100);
 	const xCustPosRef = useRef(700);
 	const yCustPosRef = useRef(100);
-	
-	const getEdge = (id) => {
-		const edge = edges.find((edge) => edge.id == id);
-		return edge || null;
-	}
 
 	const getNode = (id) => {
 		const node = nodes.find((node) => node.id === id);
@@ -115,11 +112,29 @@ const Board = () => {
 			if (!adjacencyList.current[source]) adjacencyList.current[source] = { left: [], right: [] };
 			if (!adjacencyList.current[target]) adjacencyList.current[target] = { left: [], right: [] };
 
+			// Update the adjacency list to include node data
 			adjacencyList.current[source].right.push(target);
 			adjacencyList.current[target].left.push(source);
+
+			// Fetch the full node data and store in adjacencyNodes array
+			const sourceNode = getNode(source);
+			const targetNode = getNode(target);
+			if (sourceNode && targetNode) {
+				sourceNode.data.adjacencyNodes.push(targetNode); // Store the full node object
+				targetNode.data.adjacencyNodes.push(sourceNode); // Store the full node object
+			}
 		} else if (action === 'remove') {
+			// Remove the target from source's adjacencyNodes and vice versa
 			adjacencyList.current[source].right = adjacencyList.current[source].right.filter((id) => id !== target);
 			adjacencyList.current[target].left = adjacencyList.current[target].left.filter((id) => id !== source);
+
+			// Update adjacencyNodes array on each node after edge removal
+			const sourceNode = getNode(source);
+			const targetNode = getNode(target);
+			if (sourceNode && targetNode) {
+				sourceNode.data.adjacencyNodes = sourceNode.data.adjacencyNodes.filter((node) => node.id !== target);
+				targetNode.data.adjacencyNodes = targetNode.data.adjacencyNodes.filter((node) => node.id !== source);
+			}
 		}
 	};
 
@@ -189,25 +204,24 @@ const Board = () => {
 			...params,
 		};
 		updateAdjacencyList(params.source, params.target, 'add');
-		getNode(newEdge.source).data.right = getNodesByIds(adjacencyList.current[newEdge.source].right);
-		getNode(newEdge.target).data.left = getNodesByIds(adjacencyList.current[newEdge.target].left);
 		return [...eds, newEdge];
 	};
 
 	const handleEdgeChange = (edges) => {
-		const edge = getEdge(edges[0].id);
+		const edge = edges[0];
 		updateAdjacencyList(edge.source, edge.target, 'remove');
-		getNode(edge.source).data.right = getNodesByIds(adjacencyList.current[edge.source].right);
-		getNode(edge.target).data.left = getNodesByIds(adjacencyList.current[edge.target].left);
 		onEdgesChange(edges);
 	};
 
 	const handleSetSelectedNode = (node) => {
+		console.log("SELECTED NODE: ", node);
+		console.log("Adjacent Node Data: ", node.data.adjacencyNodes); // Logs full data of adjacent nodes
 		setSidebarContent((prevContent) => ({
 			...prevContent,
 			title: node.data.label,
 			nodeType: node.type,
-			additionalContent: node.data.content
+			additionalContent: node.data.content,
+			adjacencyNodes: node.data.adjacencyNodes
 		}));
 		setIsSidebarVisible(true);
 		setSelectedNode(node);
