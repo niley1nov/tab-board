@@ -76,7 +76,6 @@ const Board = () => {
 
 	const [sidebarContent, setSidebarContent] = useState({
 		title: "Dynamic Sidebar Title",
-		description: "This description is passed as a prop to the Sidebar component.",
 		nodeType: "",
 		additionalContent: ""
 	});
@@ -87,6 +86,7 @@ const Board = () => {
 		return [initialNode];
 	});
 	const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+	const [isSidebarVisible, setIsSidebarVisible] = useState(false);
 	const [selectedNode, setSelectedNode] = useState(null);
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [editDialogOpen, setEditDialogOpen] = useState(false);
@@ -95,7 +95,7 @@ const Board = () => {
 	const yPosRef = useRef(100);
 	const xCustPosRef = useRef(700);
 	const yCustPosRef = useRef(100);
-
+	
 	const getEdge = (id) => {
 		const edge = edges.find((edge) => edge.id == id);
 		return edge || null;
@@ -209,8 +209,13 @@ const Board = () => {
 			nodeType: node.type,
 			additionalContent: node.data.content
 		}));
+		setIsSidebarVisible(true);
 		setSelectedNode(node);
-	};
+	};	
+	
+	useEffect(() => {
+		console.log("Updated VISIBILITY STATE:", isSidebarVisible);
+	}, [isSidebarVisible]);
 
 	useEffect(() => {
 		const handleTabData = (request) => {
@@ -244,7 +249,11 @@ const Board = () => {
 				>
 					<Background variant={BackgroundVariant.Dots} />
 				</ReactFlow>
-				<Sidebar content={sidebarContent} />
+				<Sidebar 
+					content={sidebarContent}
+					isSidebarVisible={isSidebarVisible}
+                	setIsSidebarVisible={setIsSidebarVisible} 
+				/>
 			</div>
 			<NodeMenu
 				anchorEl={anchorEl}

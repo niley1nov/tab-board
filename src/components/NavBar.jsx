@@ -23,7 +23,7 @@ import { useToken } from '../containers/TokenContext'; // Adjust the path
 // Import the CSS file
 import '../stylesheets/NavBar.css';
 
-function Navbar({ onAddNode }) {
+function NavBar({ onAddNode }) {
 	const [open, setOpen] = useState(false);
 	const { token, setToken } = useToken();
 	const [apiToken, setApiToken] = useState('');
@@ -147,4 +147,4 @@ function Navbar({ onAddNode }) {
 	);
 }
 
-export default Navbar;
+export default NavBar;
