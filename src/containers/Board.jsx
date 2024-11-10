@@ -98,6 +98,11 @@ const Board = () => {
 	const xCustPosRef = useRef(700);
 	const yCustPosRef = useRef(100);
 
+	const getEdge = (id) => {
+		const edge = edges.find((edge) => edge.id == id);
+		return edge || null;
+	}
+
 	const getNode = (id) => {
 		const node = nodes.find((node) => node.id === id);
 		return node || null;
@@ -208,7 +213,7 @@ const Board = () => {
 	};
 
 	const handleEdgeChange = (edges) => {
-		const edge = edges[0];
+		const edge = getEdge(edges[0].id);
 		updateAdjacencyList(edge.source, edge.target, 'remove');
 		onEdgesChange(edges);
 	};
