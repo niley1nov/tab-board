@@ -116,11 +116,11 @@ const Board = () => {
 		if (action === 'add') {
 			if (!adjacencyList.current[source]) adjacencyList.current[source] = { left: [], right: [] };
 			if (!adjacencyList.current[target]) adjacencyList.current[target] = { left: [], right: [] };
-
+	
 			// Update the adjacency list to include node data
 			adjacencyList.current[source].right.push(target);
 			adjacencyList.current[target].left.push(source);
-
+	
 			// Fetch the full node data and store in adjacencyNodes array
 			const sourceNode = getNode(source);
 			const targetNode = getNode(target);
@@ -132,13 +132,18 @@ const Board = () => {
 			// Remove the target from source's adjacencyNodes and vice versa
 			adjacencyList.current[source].right = adjacencyList.current[source].right.filter((id) => id !== target);
 			adjacencyList.current[target].left = adjacencyList.current[target].left.filter((id) => id !== source);
-
+	
 			// Update adjacencyNodes array on each node after edge removal
 			const sourceNode = getNode(source);
 			const targetNode = getNode(target);
 			if (sourceNode && targetNode) {
 				sourceNode.data.adjacencyNodes = sourceNode.data.adjacencyNodes.filter((node) => node.id !== target);
 				targetNode.data.adjacencyNodes = targetNode.data.adjacencyNodes.filter((node) => node.id !== source);
+			}
+	
+			// Update sidebar content to reflect the removal
+			if (selectedNode) {
+				handleSetSelectedNode(selectedNode);  // Call this to refresh sidebar content
 			}
 		}
 	};

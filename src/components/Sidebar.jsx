@@ -26,15 +26,16 @@ const SideBar = ({ content, isSidebarVisible, setIsSidebarVisible }) => {
     
     const { token, setToken } = useToken();
     
-    // Create different states
     const [prompt, setPrompt] = useState('');
+    const [storedPrompt, setStoredPrompt] = useState('');
     const [output, setOutput] = useState(null);
     const [open, setOpen] = useState(false);
 	const [apiToken, setApiToken] = useState('');
-    const [isSwitchOn, setIsSwitchOn] = useState(false);
+    const [isSwitchOn, setIsSwitchOn] = useState({});
     const [isMinimized, setIsMinimized] = useState(false);
     const [adjacentNodeInputs, setAdjacentNodeInputs] = useState({});  // To manage inputs for adjacent nodes
-    const { title, nodeType, additionalContent = "", adjacencyNodes = [] } = content;
+    const [tabNodePrompts, setTabNodePrompts] = useState({});
+    const { title, nodeType, additionalContent = "", adjacencyNodes  } = content;
 
     function setInert(inert) {
 		const root = document.getElementById('root');
@@ -44,25 +45,53 @@ const SideBar = ({ content, isSidebarVisible, setIsSidebarVisible }) => {
 	}
 
 	useEffect(() => {
-		// Initialize apiToken with the current token value on component mount
+        // Initialize apiToken with the current token value on component mount
 		setApiToken(token);
 
-		// Remove inert if dialog is closed
+        // Remove inert if dialog is closed
 		if (!open) {
 			setInert(false);
 		}
 	}, [token, open]);
 
-    // Action to Minimize the sidebar
+    useEffect(() => {
+        if (adjacencyNodes && adjacencyNodes.length > 0) {  // Check if adjacencyNodes exists and is not empty
+            const updatedPrompts = {};
+    
+            console.log('------BEFORE------');
+            console.log('Adjacency Node: ', adjacencyNodes);
+            console.log('Updated Node: ', updatedPrompts);
+    
+            adjacencyNodes.forEach(node => {
+                updatedPrompts[node.id] = tabNodePrompts[node.id] || '';
+            });
+                
+            console.log('------AFTER------');
+            console.log('Adjacency Node: ', adjacencyNodes);
+            console.log('Updated Node: ', updatedPrompts);
+            
+            setTabNodePrompts(updatedPrompts);
+        }
+    }, [adjacencyNodes]);
+    
+
     const togglePopup = () => {
         setIsMinimized(!isMinimized);
         setIsSidebarVisible(!isSidebarVisible);
     };
 
-    const handleSwitchChange = (event) => {
+    const handleSwitchChange = (nodeId) => (event) => {
         const isChecked = event.target.checked;
-        setIsSwitchOn(isChecked);
+
+        console.log("Is Switch On ? BEFORE ===> ",isSwitchOn);
+
+        setIsSwitchOn(prevState => ({
+            ...prevState,
+            [nodeId]: isChecked,  // Update only for the specific node ID
+        }));
     
+        console.log("Is Switch On ? BEFORE ===> ",isSwitchOn);
+
         if (isChecked) {
             setOpen(true);  // Only open when the switch is checked (turned on)
         } else {
@@ -96,12 +125,16 @@ const SideBar = ({ content, isSidebarVisible, setIsSidebarVisible }) => {
 
     // Handle sending input for each adjacent node
     const handleSendInput = (nodeId) => {
-        console.log(`Input sent to node ${nodeId}:`, adjacentNodeInputs[nodeId]);
-        // Here you can add logic to handle the send action, such as sending the input to the node.
+        const promptText = adjacentNodeInputs[nodeId];
+        setTabNodePrompts(prevPrompts => ({
+            ...prevPrompts,
+            [nodeId]: promptText,
+        }));
+        console.log(`Prompt saved for TabNode ${nodeId}:`, promptText);
     };
 
-    // Handle Submit Prompt
     const handleSubmitPrompt = () => {
+        setStoredPrompt(prompt);
         console.log("Prompt submitted:", prompt);
         // Add logic to handle submitting the prompt
     };
@@ -132,31 +165,43 @@ const SideBar = ({ content, isSidebarVisible, setIsSidebarVisible }) => {
                                     {/* List all adjacent nodes with input fields and send icons */}
                                     {adjacencyNodes.length > 0 && (
                                         <Box>
-                                            {adjacencyNodes.map((adjNode) => (
+                                            {adjacencyNodes
+                                                .filter(adjNode => adjNode.type === 'TabNode')
+                                                .map((adjNode) => (
                                                 <Box key={adjNode.id} className="adjacent-node-input-container">
                                                     {/* Title on its own line */}
                                                     <Typography className="adjacent-node-title" variant="body1">
                                                         {adjNode.data.label}
                                                     </Typography>
-                                                    
-                                                    {/* Input and send icon on the next line */}
+
                                                     <Box className="input-send-container" width="100%">
-                                                        <TextField
-                                                            label="Enter a prompt about the tab."
-                                                            variant="outlined"
-                                                            size="small"
+                                                        <input
+                                                            type="text"
+                                                            placeholder="Enter a prompt about the tab."
                                                             value={adjacentNodeInputs[adjNode.id] || ''}
                                                             onChange={(e) => handleAdjacentNodeInputChange(adjNode.id, e.target.value)}
-                                                            sx={{ flexGrow: 1 }} // Allow input to expand
+                                                            style={{
+                                                                padding: '8px',
+                                                                borderRadius: '4px',
+                                                                border: '1px solid #ccc',
+                                                                width: '100%',
+                                                                flexGrow: 1,
+                                                                marginRight: '8px', // Space between input and button
+                                                            }}
                                                         />
-                                                        <IconButton
+                                                        <button
                                                             onClick={() => handleSendInput(adjNode.id)}
-                                                            edge="end"
-                                                            sx={{ padding: 0 }}
+                                                            style={{
+                                                                background: 'none',
+                                                                border: 'none',
+                                                                cursor: 'pointer',
+                                                                padding: '0',
+                                                            }}
                                                         >
                                                             <SendIcon />
-                                                        </IconButton>
+                                                        </button>
                                                     </Box>
+                                                    <br/>
                                                 </Box>
                                             ))}
                                         </Box>
@@ -177,8 +222,8 @@ const SideBar = ({ content, isSidebarVisible, setIsSidebarVisible }) => {
                                     <FormControlLabel
                                         control={
                                             <Switch
-                                                checked={isSwitchOn}
-                                                onChange={handleSwitchChange}
+                                                checked={isSwitchOn[content.id] || false}
+                                                onChange={handleSwitchChange(content.id)}
                                                 color="primary"
                                             />
                                         }
@@ -218,7 +263,7 @@ const SideBar = ({ content, isSidebarVisible, setIsSidebarVisible }) => {
                 )}
             </Box>
             {/* Modal Dialog */}
-			<Dialog open={open} onClose={handleSettingClose}>
+            <Dialog open={open} onClose={handleSettingClose}>
 				<DialogTitle>Enter API Token</DialogTitle>
 				<DialogContent>
 					<DialogContentText>
