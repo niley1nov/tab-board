@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import TabNode from '../components/TabNode';
 import PromptNode from '../components/PromptNode';
 import OutputNode from '../components/OutputNode';
-import Sidebar from '../components/Sidebar';
 import NavBar from '../components/NavBar';
 import Edge from '../components/Edge';
 import NodeMenu from '../components/NodeMenu';
@@ -77,6 +76,7 @@ const Board = () => {
 	};
 
 	const [sidebarContent, setSidebarContent] = useState({
+		id: "",
 		title: "Dynamic Sidebar",
 		nodeType: "",
 		additionalContent: ""
@@ -88,7 +88,6 @@ const Board = () => {
 		return [initialNode];
 	});
 	const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-	const [isSidebarVisible, setIsSidebarVisible] = useState(false);
 	const [selectedNode, setSelectedNode] = useState(null);
 	const [anchorEl, setAnchorEl] = useState(null);
 	const [editDialogOpen, setEditDialogOpen] = useState(false);
@@ -228,19 +227,15 @@ const Board = () => {
 		console.log("Adjacent Node Data: ", node.data.adjacencyNodes); // Logs full data of adjacent nodes
 		setSidebarContent((prevContent) => ({
 			...prevContent,
+			nodeId: node.id,
 			title: node.data.label,
 			nodeType: node.type,
 			additionalContent: node.data.content,
 			adjacencyNodes: node.data.adjacencyNodes
 		}));
-		setIsSidebarVisible(true);
 		setSelectedNode(node);
 	};	
 	
-	useEffect(() => {
-		console.log("Updated VISIBILITY STATE:", isSidebarVisible);
-	}, [isSidebarVisible]);
-
 	useEffect(() => {
 		const handleTabData = (request) => {
 			if (request.action === 'sendTabData') {
@@ -258,7 +253,10 @@ const Board = () => {
 
 	return (
 		<div className="board-container">
-			<NavBar onAddNode={handleAddNode}/>
+			<NavBar 
+				onAddNode={handleAddNode}
+				content={sidebarContent}
+			/>
 			<div className="board-main">
 				<ReactFlow
 					nodes={nodes}
@@ -273,11 +271,6 @@ const Board = () => {
 				>
 					<Background variant={BackgroundVariant.Dots} />
 				</ReactFlow>
-				<Sidebar 
-					content={sidebarContent}
-					isSidebarVisible={isSidebarVisible}
-                	setIsSidebarVisible={setIsSidebarVisible} 
-				/>
 			</div>
 			<NodeMenu
 				anchorEl={anchorEl}

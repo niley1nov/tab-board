@@ -47,10 +47,10 @@
 }
 
 .sidebar-markdown {
-  margin-top: 16px;
   padding: 8px;
-  background-color: #f9f9f9;
+  background-color: #242629;
   border-radius: 4px;
+  color:#f4f4f4
 }
 
 .sidebar-output {

@@ -1,75 +1,74 @@
-import React, { useState, useEffect } from 'react';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import AppsIcon from '@mui/icons-material/Apps';
-import DeleteIcon from '@mui/icons-material/Delete';
-import PersonIcon from '@mui/icons-material/Person';
-import AddIcon from '@mui/icons-material/Add';
-import ListAltIcon from '@mui/icons-material/ListAlt';
+// NavBar.jsx
+import React, { useState } from 'react';
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  IconButton,
+  Button
+} from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import CustomDrawer from './CustomDrawer'; // Import the new DrawerComponent
 
 // Import the CSS file
 import '../stylesheets/NavBar.css';
 
-function NavBar({ onAddNode }) {
+const NavBar = ({ onAddNode, content }) => {
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [prompt, setPrompt] = useState('');
 
-	return (
-		<>
-			{/* Merged Navbar */}
-			<AppBar position="static" className="navbar-container">
-				<Toolbar className="navbar-toolbar">
-					{/* App Title */}
-					<Typography variant="h6" component="div">
-						Tab Board
-					</Typography>
+  const toggleDrawer = (open) => () => {
+    setDrawerOpen(open);
+  };
 
-					{/* Navigation Buttons */}
-					<Box className="navbar-icons">
-						<IconButton color="inherit">
-							<AppsIcon />
-						</IconButton>
-						<IconButton color="inherit" onClick={onAddNode}>
-							<AddIcon />
-						</IconButton>
-						<IconButton color="inherit">
-							<DeleteIcon />
-						</IconButton>
-						<IconButton color="inherit">
-							<PersonIcon />
-						</IconButton>
-						<IconButton color="inherit">
-							<ListAltIcon />
-						</IconButton>
+  return (
+    <>
+      {/* AppBar */}
+      <AppBar position="static" className="app-bar">
+        <Toolbar>
+          {/* App name on the left */}
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: 'white' }}>
+            Tab Board
+          </Typography>
 
-						{/* Buttons */}
-						<Button
-							variant="contained"
-							startIcon={<PlayArrowIcon />}
-							sx={{
-								backgroundColor: '#4caf50', // Green background
-								color: '#ffffff', // White text
-								borderRadius: '8px',
-							}}
-						>
-							Board Activity
-						</Button>
-						<Button
-							variant="contained"
-							startIcon={<PlayArrowIcon />}
-							className="run-board-button"
-						>
-							Run Board
-						</Button>
+          {/* Add Prompt Node Button */}
+          <Button
+            variant="contained"
+            sx={{
+              backgroundColor: '#242629',  // Adjust color here
+              marginRight: '8px',          // Adds space on the right side
+            }}
+            startIcon={<AddCircleIcon />}
+            onClick={onAddNode}
+            className="add-node-button"
+          >
+            Add Prompt Node
+          </Button>
 
-					</Box>
-				</Toolbar>
-			</AppBar>
-		</>
-	);
-}
+          {/* Drawer icon button on the right */}
+          <IconButton
+            edge="end"
+            color="inherit"
+            aria-label="menu"
+            onClick={toggleDrawer(true)}
+            className="menu-icon"
+          >
+            <MenuIcon />
+          </IconButton>
+        </Toolbar>
+      </AppBar>
+
+      {/* Drawer Component */}
+      <CustomDrawer
+        open={drawerOpen}
+        onClose={toggleDrawer(false)}
+        prompt={prompt}
+        setPrompt={setPrompt}
+        content={content}
+      />
+    </>
+  );
+};
 
 export default NavBar;
