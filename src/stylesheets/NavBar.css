@@ -1,35 +1,70 @@
-/* Navbar.css */
-
-.navbar-container {
-	background-color: #2979ff;
-	padding: 8px 16px;
-	box-shadow: none;
-	border-radius: 0 0 8px 8px;
+/* AppBar styling */
+.app-bar {
+	background-color: #0C0E11 !important;
+	border-bottom: 2px solid #242629 !important;
+}
+  
+/* Drawer styling */
+.drawer-paper {
+	width: 300px !important;
+	padding: 16px !important;
+	background-color: #0C0E11 !important;
+	color: white !important;
+	border-left: 2px solid #242629 !important;
+	z-index: 1300 !important;
+}
+  
+/* Drawer header */
+.drawer-header {
+	display: flex !important;
+	justify-content: space-between !important;
+	align-items: center !important;
+}
+  
+/* Text field input styles */
+.text-field {
+	background-color: #242629 !important;
+	color: white !important;
+}
+  
+.text-field .MuiOutlinedInput-notchedOutline {
+	border-color: #242629 !important;
+}
+  
+/* Select field border color */
+.select-border .MuiOutlinedInput-notchedOutline {
+	border-color: #242629 !important;
 }
 
-.navbar-toolbar {
-	display: flex;
-	justify-content: space-between;
+/* Dropdown text and arrow color */
+.select-border .MuiSelect-select, .select-border .MuiSelect-icon {
+	color: white !important; /* Sets both dropdown text and arrow color to white */
 }
 
-.navbar-icons {
-	display: flex;
-	align-items: center;
-	gap: 16px;
-	flex-wrap: wrap; /* Allows items to wrap if they don’t fit in a single row */
-	/* Adjust gap if needed */
+/* Button styling */
+.button {
+	margin-top: 16px !important;
+	color: white !important;
+	background-color: #242629 !important; /* Button background color */
 }
-
-/* Navbar.css */
-.board-activity-button {
-    color: #ffffff; /* White text color */
-    border-color: #ffffff; /* White border color */
-    border-radius: 8px;
-    opacity: 0.9; /* Slight transparency to help it stand out */
+  
+/* Global override for backdrop styles */
+.css-s0r7el {
+	position: unset !important;
+	inset: unset !important;
 }
-
-.run-board-button {
-	background-color: #ffffff;
-	color: #2979ff;
-	border-radius: 8px;
+  
+/* Drawer close icon styles */
+.close-icon {
+	color: white !important;
+}
+  
+/* Menu icon in AppBar */
+.menu-icon {
+	color: white !important;
+}
+  
+/* Run Settings title in Drawer */
+.run-settings-title {
+	color: white !important;
 }

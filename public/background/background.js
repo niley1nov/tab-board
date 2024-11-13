@@ -83,16 +83,13 @@ function extractContentAndSend(tabId, tabTitle, tabUrl) {
 		});
 	}
 
-	let bodyClone = document.body.cloneNode(true);
-	removeHeaderAndFooter(bodyClone); //TODO: clean space
-
 	// Build the structured data to send
 	const tabData = {
 		title: tabTitle,
 		url: tabUrl,
 		tabId: tabId,
 		metaTags: getMetaTags(),         // Extract meta tags
-		content: bodyClone.innerText, // Structured text content (headings, paragraphs, etc.)
+		content: document.body.innerText, // Structured text content (headings, paragraphs, etc.)
 		jsonLD: getJSONLD(),             // Extract JSON-LD structured data
 		openGraph: getOpenGraphData(),   // Extract OpenGraph metadata
 	};

@@ -27,9 +27,10 @@ export default function CustomEdge({
 		targetPosition,
 	});
 
-	const onEdgeClick = (event) => {
-		event.stopPropagation();
-		setEdges((edges) => edges.filter((edge) => edge.id !== id));
+	// Function to delete the edge when clicking on the "X" button
+	const onDeleteClick = (event) => {
+		event.stopPropagation(); // Prevent propagation to prevent edge click behavior
+		setEdges((edges) => edges.filter((edge) => edge.id !== id)); // Remove the edge
 	};
 
 	return (
@@ -37,16 +38,36 @@ export default function CustomEdge({
 			<BaseEdge
 				path={edgePath}
 				markerEnd={markerEnd}
-				style={{ strokeWidth: 3 }} // Ensure thickness is applied here
-				className="custom-edge" // Assign a CSS class for custom styling
+				style={{ strokeWidth: 3 }} // Apply the stroke width for the edge
+				className="custom-edge" // Custom class for additional styling
 			/>
-			<path
-				d={edgePath}
-				fill="none"
-				stroke="transparent"
-				strokeWidth={10}
-				onClick={onEdgeClick}
-			/>
+			{/* No longer need the large transparent clickable path for the edge */}
+			
+			{/* Always show the delete button */}
+			<g>
+				<circle
+					cx={labelX}
+					cy={labelY}
+					r="6" // Set the radius to a smaller value (e.g., 4 instead of 6)
+					fill="white"
+					stroke="black"
+					strokeWidth="1"
+					onClick={onDeleteClick} // Handle delete button click
+				/>
+				<text
+					x={labelX}
+					y={labelY}
+					textAnchor="middle"
+					dominantBaseline="middle"
+					fontSize="14"
+					fill="black"
+					onClick={onDeleteClick} // Handle delete button click
+					style={{ cursor: 'pointer' }}
+				>
+					x
+				</text>
+			</g>
+
 			<EdgeLabelRenderer>
 				<div
 					style={{

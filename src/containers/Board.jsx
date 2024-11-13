@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import TabNode from '../components/TabNode';
 import PromptNode from '../components/PromptNode';
 import OutputNode from '../components/OutputNode';
-import Sidebar from '../components/Sidebar';
 import NavBar from '../components/NavBar';
 import Edge from '../components/Edge';
 import NodeMenu from '../components/NodeMenu';
@@ -31,6 +30,7 @@ const Board = () => {
 		}
 	};
 
+	// Modify createNode to include adjacencyNodes
 	const createNode = (id, type, position, data) => {
 		const node = {
 			id,
@@ -41,6 +41,7 @@ const Board = () => {
 				onClick: () => handleSetSelectedNode(node),
 				left: [],
 				right: [],
+				adjacencyNodes: [], // Store the full node data here
 				...data,
 			}
 		};
@@ -75,8 +76,8 @@ const Board = () => {
 	};
 
 	const [sidebarContent, setSidebarContent] = useState({
-		title: "Dynamic Sidebar Title",
-		description: "This description is passed as a prop to the Sidebar component.",
+		id: "",
+		title: "Dynamic Sidebar",
 		nodeType: "",
 		additionalContent: ""
 	});
@@ -114,12 +115,35 @@ const Board = () => {
 		if (action === 'add') {
 			if (!adjacencyList.current[source]) adjacencyList.current[source] = { left: [], right: [] };
 			if (!adjacencyList.current[target]) adjacencyList.current[target] = { left: [], right: [] };
-
+	
+			// Update the adjacency list to include node data
 			adjacencyList.current[source].right.push(target);
 			adjacencyList.current[target].left.push(source);
+	
+			// Fetch the full node data and store in adjacencyNodes array
+			const sourceNode = getNode(source);
+			const targetNode = getNode(target);
+			if (sourceNode && targetNode) {
+				sourceNode.data.adjacencyNodes.push(targetNode); // Store the full node object
+				targetNode.data.adjacencyNodes.push(sourceNode); // Store the full node object
+			}
 		} else if (action === 'remove') {
+			// Remove the target from source's adjacencyNodes and vice versa
 			adjacencyList.current[source].right = adjacencyList.current[source].right.filter((id) => id !== target);
 			adjacencyList.current[target].left = adjacencyList.current[target].left.filter((id) => id !== source);
+	
+			// Update adjacencyNodes array on each node after edge removal
+			const sourceNode = getNode(source);
+			const targetNode = getNode(target);
+			if (sourceNode && targetNode) {
+				sourceNode.data.adjacencyNodes = sourceNode.data.adjacencyNodes.filter((node) => node.id !== target);
+				targetNode.data.adjacencyNodes = targetNode.data.adjacencyNodes.filter((node) => node.id !== source);
+			}
+	
+			// Update sidebar content to reflect the removal
+			if (selectedNode) {
+				handleSetSelectedNode(selectedNode);  // Call this to refresh sidebar content
+			}
 		}
 	};
 
@@ -189,29 +213,29 @@ const Board = () => {
 			...params,
 		};
 		updateAdjacencyList(params.source, params.target, 'add');
-		getNode(newEdge.source).data.right = getNodesByIds(adjacencyList.current[newEdge.source].right);
-		getNode(newEdge.target).data.left = getNodesByIds(adjacencyList.current[newEdge.target].left);
 		return [...eds, newEdge];
 	};
 
 	const handleEdgeChange = (edges) => {
 		const edge = getEdge(edges[0].id);
 		updateAdjacencyList(edge.source, edge.target, 'remove');
-		getNode(edge.source).data.right = getNodesByIds(adjacencyList.current[edge.source].right);
-		getNode(edge.target).data.left = getNodesByIds(adjacencyList.current[edge.target].left);
 		onEdgesChange(edges);
 	};
 
 	const handleSetSelectedNode = (node) => {
+		console.log("SELECTED NODE: ", node);
+		console.log("Adjacent Node Data: ", node.data.adjacencyNodes); // Logs full data of adjacent nodes
 		setSidebarContent((prevContent) => ({
 			...prevContent,
+			nodeId: node.id,
 			title: node.data.label,
 			nodeType: node.type,
-			additionalContent: node.data.content
+			additionalContent: node.data.content,
+			adjacencyNodes: node.data.adjacencyNodes
 		}));
 		setSelectedNode(node);
-	};
-
+	};	
+	
 	useEffect(() => {
 		const handleTabData = (request) => {
 			if (request.action === 'sendTabData') {
@@ -229,7 +253,10 @@ const Board = () => {
 
 	return (
 		<div className="board-container">
-			<NavBar onAddNode={handleAddNode}/>
+			<NavBar 
+				onAddNode={handleAddNode}
+				content={sidebarContent}
+			/>
 			<div className="board-main">
 				<ReactFlow
 					nodes={nodes}
@@ -244,7 +271,6 @@ const Board = () => {
 				>
 					<Background variant={BackgroundVariant.Dots} />
 				</ReactFlow>
-				<Sidebar content={sidebarContent} />
 			</div>
 			<NodeMenu
 				anchorEl={anchorEl}
