@@ -24,6 +24,9 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useToken } from '../containers/TokenContext';
 import '../stylesheets/CustomDrawer.css';
 
+// Import Services
+import GeminiProService from '../services/GeminiProService';
+
 const CustomDrawer = ({
   open,
   onClose,
@@ -31,14 +34,15 @@ const CustomDrawer = ({
   setPrompt,
   content
 }) => {
-
   const { token, setToken } = useToken();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [storedPrompt, setStoredPrompt] = useState('');
-  const [selectedModels, setSelectedModels] = useState({});
+  const [nodeModelSelections, setNodeModelSelections] = useState({}); // Per-node model selection
+  const [isGeminiProSelected, setIsGeminiProSelected] = useState(false); // Gemini Pro selection state
   const [apiToken, setApiToken] = useState('');
   const [adjacentNodeInputs, setAdjacentNodeInputs] = useState({});
   const [tabNodePrompts, setTabNodePrompts] = useState({});
+  const [promptNodeDetails, setPromptNodeDetails] = useState({}); // New state to track details per PromptNode
   const { nodeId, title, nodeType, additionalContent = "", adjacencyNodes } = content;
 
   useEffect(() => {
@@ -49,13 +53,47 @@ const CustomDrawer = ({
     setApiToken(token);
   }, [token, open]);
 
-  const handleSendInput = (nodeId) => {
+  const handleSendInput = async (nodeId) => {
     const promptText = adjacentNodeInputs[nodeId];
-    setTabNodePrompts(prevPrompts => ({
-      ...prevPrompts,
-      [nodeId]: promptText,
+    const context = adjacencyNodes.find(node => node.id === nodeId)?.data.content || '';
+
+    // Update state for subprompt and context
+    setPromptNodeDetails(prevDetails => ({
+      ...prevDetails,
+      [nodeId]: {
+        ...prevDetails[nodeId],
+        subprompts: {
+          ...(prevDetails[nodeId]?.subprompts || {}),
+          [nodeId]: promptText
+        },
+        contexts: {
+          ...(prevDetails[nodeId]?.contexts || {}),
+          [nodeId]: context
+        }
+      }
     }));
-    console.log("tabNodePrompts: ", tabNodePrompts);
+
+    if (isGeminiProSelected && token) {
+      try {
+        const geminiService = new GeminiProService(token);
+        const response = await geminiService.callModel(`Prompt: ${promptText}\nContext: ${context}`);
+        console.log(`Response for Node ${nodeId}:`, response);
+
+        // Update state for the response
+        setPromptNodeDetails(prevDetails => ({
+          ...prevDetails,
+          [nodeId]: {
+            ...prevDetails[nodeId],
+            responses: {
+              ...(prevDetails[nodeId]?.responses || {}),
+              [nodeId]: response
+            }
+          }
+        }));
+      } catch (error) {
+        console.error(`Error for Node ${nodeId}:`, error.message);
+      }
+    }
   };
 
   const handleAdjacentNodeInputChange = (nodeId, value) => {
@@ -66,8 +104,17 @@ const CustomDrawer = ({
   };
 
   const handleSubmitPrompt = () => {
+    // Consolidate and log the final object
+    const finalObject = {
+      ...promptNodeDetails,
+      [nodeId]: {
+        ...promptNodeDetails[nodeId],
+        finalPrompt: prompt // Add final prompt to the object
+      }
+    };
+
+    console.log("Final PromptNode Details Object:", finalObject);
     setStoredPrompt(prompt);
-    console.log("Prompt submitted:", prompt);
   };
 
   const handleDialogClose = () => {
@@ -84,10 +131,17 @@ const CustomDrawer = ({
   const handleModelChange = (nodeId, event) => {
     console.log("CHECKING NODE ID : ", nodeId);
     const selectedValue = event.target.value;
-    setSelectedModels(prevModels => ({
+    setNodeModelSelections(prevModels => ({
       ...prevModels,
       [nodeId]: selectedValue
     }));
+
+    // Check if any node now has Gemini Pro selected
+    const updatedSelections = { ...nodeModelSelections, [nodeId]: selectedValue };
+    const hasGeminiPro = Object.values(updatedSelections).includes('Gemini Pro');
+    setIsGeminiProSelected(hasGeminiPro);
+
+    // If Gemini Pro is selected and no token, show dialog
     if (selectedValue === "Gemini Pro" && !token) {
       setDialogOpen(true); // Only ask for the token if it's not already set
     }
@@ -201,7 +255,7 @@ const CustomDrawer = ({
                 <Typography variant="body1" sx={{ color: 'white' }}>Model</Typography>
                 <FormControl fullWidth>
                   <Select
-                    value={selectedModels[nodeId] || 'Gemini Nano'}
+                    value={nodeModelSelections[nodeId] || 'Gemini Nano'}
                     onChange={(e) => handleModelChange(nodeId, e)}
                     className="select-border"
                   >
