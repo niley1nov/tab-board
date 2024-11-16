@@ -4,7 +4,7 @@ import IconButton from '@mui/material/IconButton';
 import Divider from '@mui/material/Divider';
 import { Handle, Position } from '@xyflow/react';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import '../stylesheets/OutputNode.css';  // Updated CSS file
+import '../../stylesheets/OutputNode.css';
 
 const OutputNode = ({ data }) => {
 

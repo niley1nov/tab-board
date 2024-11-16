@@ -6,9 +6,9 @@ import TextField from '@mui/material/TextField';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import SendIcon from '@mui/icons-material/Send';
 import { Handle, Position } from '@xyflow/react';
-import GeminiProService from '../services/GeminiProService';
-import {useToken} from '../containers/TokenContext'; // Adjust the path
-import '../stylesheets/PromptNode.css';
+import GeminiProService from '../../services/GeminiProService';
+import {useToken} from '../../containers/TokenContext'; // Adjust the path
+import '../../stylesheets/PromptNode.css';
 
 const PromptNode = ({ data }) => {
 	const [highlighted, setHighlighted] = useState(false);

@@ -7,7 +7,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import AddLinkIcon from '@mui/icons-material/AddLink';
 import PushPinIcon from '@mui/icons-material/PushPin';
 import { Handle, Position } from '@xyflow/react';
-import '../stylesheets/TabNode.css';
+import '../../stylesheets/TabNode.css';
 
 const TabNode = ({ data }) => {
 	return (

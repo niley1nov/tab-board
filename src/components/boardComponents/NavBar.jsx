@@ -9,10 +9,10 @@ import {
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import CustomDrawer from './CustomDrawer'; // Import the new DrawerComponent
+import CustomDrawer from '../drawerComponents/CustomDrawer'; // Import the new DrawerComponent
 
 // Import the CSS file
-import '../stylesheets/NavBar.css';
+import '../../stylesheets/NavBar.css';
 
 const NavBar = ({ onAddNode, content }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
