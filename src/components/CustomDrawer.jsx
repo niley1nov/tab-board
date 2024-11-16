@@ -53,48 +53,42 @@ const CustomDrawer = ({
     setApiToken(token);
   }, [token, open]);
 
-  const handleSendInput = async (nodeId) => {
-    const promptText = adjacentNodeInputs[nodeId];
-    const context = adjacencyNodes.find(node => node.id === nodeId)?.data.content || '';
-
-    // Update state for subprompt and context
-    setPromptNodeDetails(prevDetails => ({
-      ...prevDetails,
-      [nodeId]: {
-        ...prevDetails[nodeId],
-        subprompts: {
-          ...(prevDetails[nodeId]?.subprompts || {}),
-          [nodeId]: promptText
-        },
-        contexts: {
-          ...(prevDetails[nodeId]?.contexts || {}),
-          [nodeId]: context
-        }
-      }
-    }));
-
-    if (isGeminiProSelected && token) {
-      try {
+  const handleSendInput = async (tabNodeId) => {
+    const promptText = adjacentNodeInputs[tabNodeId];
+    const context = adjacencyNodes.find(node => node.id === tabNodeId)?.data.content || '';
+  
+    try {
+      let response = null;
+      if (isGeminiProSelected && token) {
         const geminiService = new GeminiProService(token);
-        const response = await geminiService.callModel(`Prompt: ${promptText}\nContext: ${context}`);
-        console.log(`Response for Node ${nodeId}:`, response);
-
-        // Update state for the response
-        setPromptNodeDetails(prevDetails => ({
-          ...prevDetails,
-          [nodeId]: {
-            ...prevDetails[nodeId],
-            responses: {
-              ...(prevDetails[nodeId]?.responses || {}),
-              [nodeId]: response
-            }
-          }
-        }));
-      } catch (error) {
-        console.error(`Error for Node ${nodeId}:`, error.message);
+        response = await geminiService.callModel(`Prompt: ${promptText}\nContext: ${context}`);
       }
+  
+      setPromptNodeDetails(prevDetails => ({
+        ...prevDetails,
+        [nodeId]: {
+          ...(prevDetails[nodeId] || {}),
+          [tabNodeId]: {
+            [`subprompt`]: promptText,
+            [`context`]: context,
+            [`response`]: response || "No response available"
+          }
+        }
+      }));
+  
+      console.log(`Updated details for TabNode ${tabNodeId}:`, {
+        subprompt: promptText,
+        context,
+        response
+      });
+    } catch (error) {
+      console.error(`Error for TabNode ${tabNodeId}:`, error.message);
     }
   };
+  
+  useEffect(() => {
+    console.log("Current nodeModelSelections:", promptNodeDetails);
+  }, [promptNodeDetails]);  
 
   const handleAdjacentNodeInputChange = (nodeId, value) => {
     setAdjacentNodeInputs(prevState => ({
@@ -104,17 +98,21 @@ const CustomDrawer = ({
   };
 
   const handleSubmitPrompt = () => {
-    // Consolidate and log the final object
-    const finalObject = {
+    setPromptNodeDetails(prevDetails => ({
+      ...prevDetails,
+      [nodeId]: {
+        ...(prevDetails[nodeId] || {}),
+        finalPrompt: prompt
+      }
+    }));
+  
+    console.log("Final PromptNode Details Object:", {
       ...promptNodeDetails,
       [nodeId]: {
-        ...promptNodeDetails[nodeId],
-        finalPrompt: prompt // Add final prompt to the object
+        ...(promptNodeDetails[nodeId] || {}),
+        finalPrompt: prompt
       }
-    };
-
-    console.log("Final PromptNode Details Object:", finalObject);
-    setStoredPrompt(prompt);
+    });
   };
 
   const handleDialogClose = () => {
