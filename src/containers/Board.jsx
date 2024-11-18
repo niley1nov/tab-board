@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import TabNode from '../components/TabNode';
-import PromptNode from '../components/PromptNode';
-import OutputNode from '../components/OutputNode';
-import NavBar from '../components/NavBar';
-import Edge from '../components/Edge';
-import NodeMenu from '../components/NodeMenu';
-import EditDialog from '../components/EditDialog';
+import TabNode from '../components/boardComponents/TabNode';
+import PromptNode from '../components/boardComponents/PromptNode';
+import OutputNode from '../components/boardComponents/OutputNode';
+import NavBar from '../components/boardComponents/NavBar';
+import Edge from '../components/boardComponents/Edge';
+import NodeMenu from '../components/boardComponents/NodeMenu';
+import EditDialog from '../components/boardComponents/EditDialog';
 import {
 	ReactFlow,
 	Background,

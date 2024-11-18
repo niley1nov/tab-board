@@ -1,4 +1,4 @@
-import '../stylesheets/Sidebar.css';
+import '../../stylesheets/Sidebar.css';
 import React, { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import Divider from '@mui/material/Divider';
@@ -20,7 +20,7 @@ import {
     DialogTitle
 } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
-import { useToken } from '../containers/TokenContext';
+import { useToken } from '../../containers/TokenContext';
 
 const SideBar = ({ content, isSidebarVisible, setIsSidebarVisible }) => {
     
