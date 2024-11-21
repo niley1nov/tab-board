@@ -16,7 +16,7 @@ import {
 import '@xyflow/react/dist/style.css';
 import '../stylesheets/Board.css';
 
-const rfStyle = { backgroundColor: '#B8CEFF', flexGrow: 1 };
+const rfStyle = { backgroundColor: '#F1E9FF', flexGrow: 1 };
 const defaultViewport = { x: 0, y: 0, zoom: 1 };
 
 const Board = () => {
