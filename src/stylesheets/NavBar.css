@@ -1,53 +1,13 @@
 /* AppBar styling */
 .app-bar {
-	background-color: #0C0E11 !important;
-	border-bottom: 2px solid #242629 !important;
-}
-  
-/* Drawer styling */
-.drawer-paper {
-	width: 300px !important;
-	padding: 16px !important;
-	background-color: #0C0E11 !important;
-	color: white !important;
-	border-left: 2px solid #242629 !important;
-	z-index: 1300 !important;
-}
-  
-/* Drawer header */
-.drawer-header {
-	display: flex !important;
-	justify-content: space-between !important;
-	align-items: center !important;
-}
-  
-/* Text field input styles */
-.text-field {
-	background-color: #242629 !important;
-	color: white !important;
-}
-  
-.text-field .MuiOutlinedInput-notchedOutline {
-	border-color: #242629 !important;
-}
-  
-/* Select field border color */
-.select-border .MuiOutlinedInput-notchedOutline {
-	border-color: #242629 !important;
+	background-color: #322F35 !important;
+	min-height: 72px !important;
 }
 
-/* Dropdown text and arrow color */
-.select-border .MuiSelect-select, .select-border .MuiSelect-icon {
-	color: white !important; /* Sets both dropdown text and arrow color to white */
+.tool-bar {
+	min-height: 72px !important;
 }
 
-/* Button styling */
-.button {
-	margin-top: 16px !important;
-	color: white !important;
-	background-color: #242629 !important; /* Button background color */
-}
-  
 /* Global override for backdrop styles */
 .css-s0r7el {
 	position: unset !important;
@@ -67,4 +27,29 @@
 /* Run Settings title in Drawer */
 .run-settings-title {
 	color: white !important;
+}
+
+.header-tab {
+	font-weight: 200;
+	font-size: 32px;
+}
+
+.header-board {
+	font-weight: 600;
+	font-size: 32px;
+}
+
+.add-node-button {
+	color: #6750A4 !important;
+	background-color: #D0BCFF !important;
+	border-radius: 9999px !important;
+	padding: 6px 16px !important;
+	display: inline-flex !important;
+	align-items: center !important; 
+	justify-content: center !important; 
+	font-size: 16px !important;
+	font-weight: 500 !important;
+	border: none !important;
+	text-transform: none !important;
+	margin-right: 10px !important;
 }

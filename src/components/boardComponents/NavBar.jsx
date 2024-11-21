@@ -8,7 +8,7 @@ import {
   Button
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
+import AddIcon from '@mui/icons-material/Add';
 import CustomDrawer from '../drawerComponents/CustomDrawer'; // Import the new DrawerComponent
 
 // Import the CSS file
@@ -26,24 +26,22 @@ const NavBar = ({ onAddNode, content }) => {
     <>
       {/* AppBar */}
       <AppBar position="static" className="app-bar">
-        <Toolbar>
+        <Toolbar className='tool-bar'>
           {/* App name on the left */}
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: 'white' }}>
-            Tab Board
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: 'white' }} style={{ fontFamily: 'Poppins, sans-serif' }}>
+            <span className='header-tab'>Tab</span>
+            <span className='header-board'>Board</span>
           </Typography>
 
           {/* Add Prompt Node Button */}
           <Button
             variant="contained"
-            sx={{
-              backgroundColor: '#242629',  // Adjust color here
-              marginRight: '8px',          // Adds space on the right side
-            }}
-            startIcon={<AddCircleIcon />}
+            startIcon={<AddIcon />}
             onClick={onAddNode}
             className="add-node-button"
+            style={{ fontFamily: 'Poppins, sans-serif' }}
           >
-            Add Prompt Node
+          Add Prompt Node
           </Button>
 
           {/* Drawer icon button on the right */}
