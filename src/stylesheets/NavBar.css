@@ -1,6 +1,6 @@
 /* AppBar styling */
 .app-bar {
-	background-color: #322F35 !important;
+	background-color: #322f35 !important;
 	min-height: 72px !important;
 }
 
@@ -13,17 +13,17 @@
 	position: unset !important;
 	inset: unset !important;
 }
-  
+
 /* Drawer close icon styles */
 .close-icon {
 	color: white !important;
 }
-  
+
 /* Menu icon in AppBar */
 .menu-icon {
 	color: white !important;
 }
-  
+
 /* Run Settings title in Drawer */
 .run-settings-title {
 	color: white !important;
@@ -40,13 +40,13 @@
 }
 
 .add-node-button {
-	color: #6750A4 !important;
-	background-color: #D0BCFF !important;
+	color: #6750a4 !important;
+	background-color: #d0bcff !important;
 	border-radius: 9999px !important;
 	padding: 6px 16px !important;
 	display: inline-flex !important;
-	align-items: center !important; 
-	justify-content: center !important; 
+	align-items: center !important;
+	justify-content: center !important;
 	font-size: 16px !important;
 	font-weight: 500 !important;
 	border: none !important;

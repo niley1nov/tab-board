@@ -5,15 +5,14 @@ import {
 	Toolbar,
 	Typography,
 	IconButton,
-	Button
+	Button,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import AddIcon from '@mui/icons-material/Add';
-import {useToken} from '../../containers/TokenContext'; // Adjust the path
+import {useToken} from '../../containers/TokenContext';
 import TokenDialog from '../drawerComponents/TokenDialog';
-import CustomDrawer from '../drawerComponents/CustomDrawer'; // Import the new DrawerComponent
-
-// Import the CSS file
+import CustomDrawer from '../drawerComponents/CustomDrawer';
+import AddNodeMenu from './AddNodeMenu';
 import '../../stylesheets/NavBar.css';
 
 const NavBar = ({ onAddNode, content }) => {
@@ -22,6 +21,7 @@ const NavBar = ({ onAddNode, content }) => {
 	const [apiToken, setApiToken] = useState('');
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const [prompt, setPrompt] = useState('');
+	const [menuAnchor, setMenuAnchor] = useState(null);
 
 	const toggleDrawer = () => () => {
 		setDrawerOpen(!drawerOpen);
@@ -32,9 +32,24 @@ const NavBar = ({ onAddNode, content }) => {
 	};
 
 	useEffect(() => {
-		// Initialize apiToken with the current token value on component mount
 		setApiToken(token);
 	}, [token]);
+
+	// Open dropdown menu
+	const handleMenuOpen = (event) => {
+		setMenuAnchor(event.currentTarget);
+	};
+
+	// Close dropdown menu
+	const handleMenuClose = () => {
+		setMenuAnchor(null);
+	};
+
+	// Handle menu item selection
+	const handleMenuItemClick = (option) => {
+		onAddNode(option);
+		handleMenuClose();
+	};
 
 	return (
 		<>
@@ -60,11 +75,11 @@ const NavBar = ({ onAddNode, content }) => {
 					<Button
 						variant="contained"
 						startIcon={<AddIcon />}
-						onClick={onAddNode}
+						onClick={handleMenuOpen} // Open dropdown menu
 						className="add-node-button"
 						style={{ fontFamily: 'Poppins, sans-serif' }}
 					>
-						Add Prompt Node
+						Add Node
 					</Button>
 
 					{/* Drawer icon button on the right */}
@@ -79,6 +94,13 @@ const NavBar = ({ onAddNode, content }) => {
 					</IconButton>
 				</Toolbar>
 			</AppBar>
+
+			<AddNodeMenu
+				anchorEl={menuAnchor}
+				open={Boolean(menuAnchor)}
+				onClose={handleMenuClose}
+				onSelectOption={handleMenuItemClick}
+			/>
 
 			{/* Drawer Component */}
 			<CustomDrawer
