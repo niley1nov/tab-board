@@ -38,6 +38,7 @@ const Board = () => {
 			position,
 			data: {
 				onOpenMenu: (e) => openMenu(e, node),
+				deleteNode: (e) => handleDeleteNode(e, node),
 				onClick: () => handleSetSelectedNode(node),
 				left: [],
 				right: [],
@@ -179,8 +180,9 @@ const Board = () => {
 		closeEditDialog();
 	};
 
-	const handleDeleteNode = () => {
-		const nodeId = selectedNode.id;
+	const handleDeleteNode = (e, node) => {
+		setSelectedNode(node);
+		const nodeId = node.id;
 		const neighbors = adjacencyList.current[nodeId];
 
 		if (neighbors) {
@@ -224,7 +226,44 @@ const Board = () => {
 
 	const handleSetSelectedNode = (node) => {
 		console.log("SELECTED NODE: ", node);
-		console.log("Adjacent Node Data: ", node.data.adjacencyNodes); // Logs full data of adjacent nodes
+		console.log("Adjacent Node Data: ", node.data.adjacencyNodes);
+	
+		const connectedNodeIds = [
+			...adjacencyList.current[node.id]?.left || [],
+			...adjacencyList.current[node.id]?.right || [],
+		];
+	
+		// Highlight the selected node and its connected nodes
+		setNodes((prevNodes) =>
+			prevNodes.map((n) => {
+				if (n.id === node.id) {
+					return {
+						...n,
+						data: {
+							...n.data,
+							backgroundColor: "#D0BCFF",
+						},
+					};
+				} else if (connectedNodeIds.includes(n.id)) {
+					return {
+						...n,
+						data: {
+							...n.data,
+							backgroundColor: "#D0BCFF",
+						},
+					};
+				} else {
+					return {
+						...n,
+						data: {
+							...n.data,
+							backgroundColor: "#FFF",
+						},
+					};
+				}
+			})
+		);
+	
 		setSidebarContent((prevContent) => ({
 			...prevContent,
 			nodeId: node.id,
@@ -234,7 +273,7 @@ const Board = () => {
 			adjacencyNodes: node.data.adjacencyNodes
 		}));
 		setSelectedNode(node);
-	};	
+	};		
 	
 	useEffect(() => {
 		const handleTabData = (request) => {

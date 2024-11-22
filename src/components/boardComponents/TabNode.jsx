@@ -8,18 +8,13 @@ import '../../stylesheets/TabNode.css';
 
 const TabNode = ({ data }) => {
 	return (
-		<div className="tab-node" onClick={data.onClick}>
+		<div className="tab-node" onClick={data.onClick} style={{ backgroundColor: data.backgroundColor || '#FFF' }}>
 
 			{/* Header Section */}
 			<div className="tab-node-header">
 				<Typography variant="subtitle2" className="tab-node-title" title={data.label} style={{ fontFamily: 'Poppins, sans-serif' }}>
 					{data.label}
 				</Typography>
-				{/* <div className="tab-node-actions">
-					<IconButton aria-label="edit title" onClick={data.onOpenMenu} size="small">
-						<EditIcon fontSize="inherit" />
-					</IconButton>
-				</div> */}
 			</div>
 
 			{/* Divider Line */}

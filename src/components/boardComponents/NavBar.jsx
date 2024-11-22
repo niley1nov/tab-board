@@ -8,7 +8,8 @@ import {
 	Button
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import AddIcon from '@mui/icons-material/Add';
+import AddIcon from '@mui/icons-material/AddCard';
+import TokenIcon from '@mui/icons-material/Token';
 import {useToken} from '../../containers/TokenContext'; // Adjust the path
 import TokenDialog from '../drawerComponents/TokenDialog';
 import CustomDrawer from '../drawerComponents/CustomDrawer'; // Import the new DrawerComponent
@@ -49,6 +50,7 @@ const NavBar = ({ onAddNode, content }) => {
 
 					<Button
 						variant="contained"
+						startIcon={<TokenIcon />}
 						onClick={setGeminiToken}
 						className="add-node-button"
 						style={{ fontFamily: 'Poppins, sans-serif' }}
