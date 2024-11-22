@@ -35,9 +35,6 @@ const OutputNode = ({ data }) => {
 					{'Output will appear on the sidebar'}
 				</Typography>
 			</div>
-
-			{/* Right Handle for Context */}
-			<Handle type="source" position={Position.Right} id="context" style={{ top: '50%' }} />
 		</div>
 	);
 };
