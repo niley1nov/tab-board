@@ -36,9 +36,17 @@ const CustomDrawer = ({ open, onClose, prompt, setPrompt, content }) => {
 		}
 	};
 
+	function closeDialog(openDialog, save)  {
+		setDialogOpen(openDialog);
+		if(!save) {
+			setApiToken(token);
+		}
+	}
+
 	const handleModelChange = (nodeId, event) => {
 		const selectedValue = event.target.value;
 		setNodeModelSelections((prev) => ({ ...prev, [nodeId]: selectedValue }));
+		console.log(token);
 		if (selectedValue === 'Gemini Pro' && !token) setDialogOpen(true);
 	};
 
@@ -92,10 +100,10 @@ const CustomDrawer = ({ open, onClose, prompt, setPrompt, content }) => {
 				open={dialogOpen}
 				apiToken={apiToken}
 				setApiToken={setApiToken}
-				onClose={() => setDialogOpen(false)}
+				onClose={() => closeDialog(false, false)}
 				onSubmit={() => {
 					setToken(apiToken);
-					setDialogOpen(false);
+					closeDialog(false, true);
 				}}
 			/>
 		</>

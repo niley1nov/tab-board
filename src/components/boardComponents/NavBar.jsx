@@ -9,18 +9,35 @@ import {
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import AddIcon from '@mui/icons-material/Add';
+import useToken from '../../helpers/useToken';
+import TokenDialog from '../drawerComponents/TokenDialog';
 import CustomDrawer from '../drawerComponents/CustomDrawer'; // Import the new DrawerComponent
 
 // Import the CSS file
 import '../../stylesheets/NavBar.css';
 
 const NavBar = ({ onAddNode, content }) => {
+	const { token, setToken } = useToken();
 	const [drawerOpen, setDrawerOpen] = useState(false);
+	const [apiToken, setApiToken] = useState('');
+	const [dialogOpen, setDialogOpen] = useState(false);
 	const [prompt, setPrompt] = useState('');
 
 	const toggleDrawer = () => () => {
 		setDrawerOpen(!drawerOpen);
 	};
+
+	const setGeminiToken = () => {
+		console.log('set Token');
+		setDialogOpen(true);
+	};
+
+	function closeDialog(openDialog, save)  {
+		setDialogOpen(openDialog);
+		if(!save) {
+			setApiToken(token);
+		}
+	}
 
 	return (
 		<>
@@ -32,6 +49,15 @@ const NavBar = ({ onAddNode, content }) => {
 						<span className='header-tab'>Tab</span>
 						<span className='header-board'>Board</span>
 					</Typography>
+
+					<Button
+						variant="contained"
+						onClick={setGeminiToken}
+						className="add-node-button"
+						style={{ fontFamily: 'Poppins, sans-serif' }}
+					>
+						Set Token
+					</Button>
 
 					{/* Add Prompt Node Button */}
 					<Button
@@ -64,6 +90,16 @@ const NavBar = ({ onAddNode, content }) => {
 				prompt={prompt}
 				setPrompt={setPrompt}
 				content={content}
+			/>
+			<TokenDialog
+				open={dialogOpen}
+				apiToken={apiToken}
+				setApiToken={setApiToken}
+				onClose={() => closeDialog(false, false)}
+				onSubmit={() => {
+					setToken(apiToken);
+					closeDialog(false, true);
+				}}
 			/>
 		</>
 	);
