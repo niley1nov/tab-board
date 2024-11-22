@@ -1,13 +1,32 @@
 /* Main container for the tab node */
 .tab-node {
-	border: 1px solid #ddd;
-	border-radius: 8px;
-	padding: 8px;
-	background-color: #fafafa;
-	width: 200px; /* Fixed width for consistent sizing */
-	box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
+	border: 1px solid #D0BCFF;
+	border-radius: 12px;
+	padding: 10px;
+	background-color: #fff;
+	width: 180px;
 	position: relative;
+	align-items: stretch;
 	cursor: pointer;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.edit-title-button {
+	color: #322F35 !important;
+	background-color: #F1E9FF !important;
+	border-radius: 9999px !important;
+	padding: 5px 12px !important;
+	display: inline-flex !important;
+	align-items: center !important; 
+	justify-content: center !important; 
+	font-size: 10px !important;
+	font-weight: 500 !important;
+	border: none !important;
+	text-transform: none !important;
+}
+
+.edit-title-button .edit-icon {
+	font-size: 14px !important;
 }
 
 /* Header styling */
@@ -19,9 +38,9 @@
 
 /* Title typography with overflow handling */
 .tab-node-title {
-	font-weight: bold;
-	font-size: 0.9rem;
-	color: #333;
+	font-weight: 400 !important;
+	font-size: 16px;
+	color: #322F35;
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
@@ -30,12 +49,12 @@
 
 /* Action icons styling (MoreVertIcon) */
 .tab-node-actions .MuiIconButton-root {
-	padding: 4px;
+	padding: 2px;
 }
 
 /* Divider line */
 .tab-node-divider {
-	margin: 8px 0;
+	margin: 5px 0;
 	background-color: #e0e0e0;
 }
 

@@ -1,74 +1,108 @@
 // NavBar.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
-  AppBar,
-  Toolbar,
-  Typography,
-  IconButton,
-  Button
+	AppBar,
+	Toolbar,
+	Typography,
+	IconButton,
+	Button
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
+import AddIcon from '@mui/icons-material/Add';
+import {useToken} from '../../containers/TokenContext'; // Adjust the path
+import TokenDialog from '../drawerComponents/TokenDialog';
 import CustomDrawer from '../drawerComponents/CustomDrawer'; // Import the new DrawerComponent
 
 // Import the CSS file
 import '../../stylesheets/NavBar.css';
 
 const NavBar = ({ onAddNode, content }) => {
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const [prompt, setPrompt] = useState('');
+	const [drawerOpen, setDrawerOpen] = useState(false);
+	const { token, setToken } = useToken();
+	const [apiToken, setApiToken] = useState('');
+	const [dialogOpen, setDialogOpen] = useState(false);
+	const [prompt, setPrompt] = useState('');
 
-  const toggleDrawer = (open) => () => {
-    setDrawerOpen(open);
-  };
+	const toggleDrawer = () => () => {
+		setDrawerOpen(!drawerOpen);
+	};
 
-  return (
-    <>
-      {/* AppBar */}
-      <AppBar position="static" className="app-bar">
-        <Toolbar>
-          {/* App name on the left */}
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: 'white' }}>
-            Tab Board
-          </Typography>
+	const setGeminiToken = () => {
+		setDialogOpen(true);
+	};
 
-          {/* Add Prompt Node Button */}
-          <Button
-            variant="contained"
-            sx={{
-              backgroundColor: '#242629',  // Adjust color here
-              marginRight: '8px',          // Adds space on the right side
-            }}
-            startIcon={<AddCircleIcon />}
-            onClick={onAddNode}
-            className="add-node-button"
-          >
-            Add Prompt Node
-          </Button>
+	useEffect(() => {
+		// Initialize apiToken with the current token value on component mount
+		setApiToken(token);
+	}, [token]);
 
-          {/* Drawer icon button on the right */}
-          <IconButton
-            edge="end"
-            color="inherit"
-            aria-label="menu"
-            onClick={toggleDrawer(true)}
-            className="menu-icon"
-          >
-            <MenuIcon />
-          </IconButton>
-        </Toolbar>
-      </AppBar>
+	return (
+		<>
+			{/* AppBar */}
+			<AppBar position="static" className="app-bar">
+				<Toolbar className='tool-bar'>
+					{/* App name on the left */}
+					<Typography variant="h6" component="div" sx={{ flexGrow: 1, color: 'white' }} style={{ fontFamily: 'Poppins, sans-serif' }}>
+						<span className='header-tab'>Tab</span>
+						<span className='header-board'>Board</span>
+					</Typography>
 
-      {/* Drawer Component */}
-      <CustomDrawer
-        open={drawerOpen}
-        onClose={toggleDrawer(false)}
-        prompt={prompt}
-        setPrompt={setPrompt}
-        content={content}
-      />
-    </>
-  );
+					<Button
+						variant="contained"
+						onClick={setGeminiToken}
+						className="add-node-button"
+						style={{ fontFamily: 'Poppins, sans-serif' }}
+					>
+						Set Token
+					</Button>
+
+					{/* Add Prompt Node Button */}
+					<Button
+						variant="contained"
+						startIcon={<AddIcon />}
+						onClick={onAddNode}
+						className="add-node-button"
+						style={{ fontFamily: 'Poppins, sans-serif' }}
+					>
+						Add Prompt Node
+					</Button>
+
+					{/* Drawer icon button on the right */}
+					<IconButton
+						edge="end"
+						color="inherit"
+						aria-label="menu"
+						onClick={toggleDrawer()}
+						className="menu-icon"
+					>
+						<MenuIcon />
+					</IconButton>
+				</Toolbar>
+			</AppBar>
+
+			{/* Drawer Component */}
+			<CustomDrawer
+				open={drawerOpen}
+				onClose={toggleDrawer()}
+				prompt={prompt}
+				setPrompt={setPrompt}
+				content={content}
+			/>
+			<TokenDialog
+				open={dialogOpen}
+				apiToken={apiToken}
+				setApiToken={setApiToken}
+				onClose={() => {
+					setDialogOpen(false);
+					setApiToken(token);
+				}}
+				onSubmit={() => {
+					setToken(apiToken);
+					setDialogOpen(false);
+				}}
+			/>
+		</>
+	);
 };
 
 export default NavBar;
