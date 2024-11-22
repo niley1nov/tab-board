@@ -1,5 +1,5 @@
 // NavBar.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
 	AppBar,
 	Toolbar,
@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import AddIcon from '@mui/icons-material/Add';
-import useToken from '../../helpers/useToken';
+import {useToken} from '../../containers/TokenContext'; // Adjust the path
 import TokenDialog from '../drawerComponents/TokenDialog';
 import CustomDrawer from '../drawerComponents/CustomDrawer'; // Import the new DrawerComponent
 
@@ -17,8 +17,8 @@ import CustomDrawer from '../drawerComponents/CustomDrawer'; // Import the new D
 import '../../stylesheets/NavBar.css';
 
 const NavBar = ({ onAddNode, content }) => {
-	const { token, setToken } = useToken();
 	const [drawerOpen, setDrawerOpen] = useState(false);
+	const { token, setToken } = useToken();
 	const [apiToken, setApiToken] = useState('');
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const [prompt, setPrompt] = useState('');
@@ -28,16 +28,13 @@ const NavBar = ({ onAddNode, content }) => {
 	};
 
 	const setGeminiToken = () => {
-		console.log('set Token');
 		setDialogOpen(true);
 	};
 
-	function closeDialog(openDialog, save)  {
-		setDialogOpen(openDialog);
-		if(!save) {
-			setApiToken(token);
-		}
-	}
+	useEffect(() => {
+		// Initialize apiToken with the current token value on component mount
+		setApiToken(token);
+	}, [token]);
 
 	return (
 		<>
@@ -95,10 +92,13 @@ const NavBar = ({ onAddNode, content }) => {
 				open={dialogOpen}
 				apiToken={apiToken}
 				setApiToken={setApiToken}
-				onClose={() => closeDialog(false, false)}
+				onClose={() => {
+					setDialogOpen(false);
+					setApiToken(token);
+				}}
 				onSubmit={() => {
 					setToken(apiToken);
-					closeDialog(false, true);
+					setDialogOpen(false);
 				}}
 			/>
 		</>

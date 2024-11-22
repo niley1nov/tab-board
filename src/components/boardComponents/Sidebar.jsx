@@ -58,17 +58,9 @@ const SideBar = ({ content, isSidebarVisible, setIsSidebarVisible }) => {
         if (adjacencyNodes && adjacencyNodes.length > 0) {  // Check if adjacencyNodes exists and is not empty
             const updatedPrompts = {};
     
-            console.log('------BEFORE------');
-            console.log('Adjacency Node: ', adjacencyNodes);
-            console.log('Updated Node: ', updatedPrompts);
-    
             adjacencyNodes.forEach(node => {
                 updatedPrompts[node.id] = tabNodePrompts[node.id] || '';
             });
-                
-            console.log('------AFTER------');
-            console.log('Adjacency Node: ', adjacencyNodes);
-            console.log('Updated Node: ', updatedPrompts);
             
             setTabNodePrompts(updatedPrompts);
         }
@@ -83,15 +75,11 @@ const SideBar = ({ content, isSidebarVisible, setIsSidebarVisible }) => {
     const handleSwitchChange = (nodeId) => (event) => {
         const isChecked = event.target.checked;
 
-        console.log("Is Switch On ? BEFORE ===> ",isSwitchOn);
-
         setIsSwitchOn(prevState => ({
             ...prevState,
             [nodeId]: isChecked,  // Update only for the specific node ID
         }));
     
-        console.log("Is Switch On ? BEFORE ===> ",isSwitchOn);
-
         if (isChecked) {
             setOpen(true);  // Only open when the switch is checked (turned on)
         } else {
@@ -130,12 +118,10 @@ const SideBar = ({ content, isSidebarVisible, setIsSidebarVisible }) => {
             ...prevPrompts,
             [nodeId]: promptText,
         }));
-        console.log(`Prompt saved for TabNode ${nodeId}:`, promptText);
     };
 
     const handleSubmitPrompt = () => {
         setStoredPrompt(prompt);
-        console.log("Prompt submitted:", prompt);
         // Add logic to handle submitting the prompt
     };
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Drawer from '@mui/material/Drawer';
 import DrawerHeader from './DrawerHeader';
 import AdjacentNodeInputs from './AdjacentNodeInputs';
@@ -8,7 +8,7 @@ import TokenDialog from './TokenDialog';
 import ScrollableContent from './ScrollableContent';
 import ReactMarkdown from 'react-markdown';
 import { updatePromptNodeDetails, addFinalPrompt } from '../../helpers/CustomDrawerHelper';
-import useToken from '../../helpers/useToken';
+import {useToken} from '../../containers/TokenContext'; // Adjust the path
 import GeminiProService from '../../services/GeminiProService';
 import '../../stylesheets/CustomDrawer.css';
 
@@ -36,24 +36,20 @@ const CustomDrawer = ({ open, onClose, prompt, setPrompt, content }) => {
 		}
 	};
 
-	function closeDialog(openDialog, save)  {
-		setDialogOpen(openDialog);
-		if(!save) {
-			setApiToken(token);
-		}
-	}
-
 	const handleModelChange = (nodeId, event) => {
 		const selectedValue = event.target.value;
 		setNodeModelSelections((prev) => ({ ...prev, [nodeId]: selectedValue }));
-		console.log(token);
 		if (selectedValue === 'Gemini Pro' && !token) setDialogOpen(true);
 	};
 
 	const handleSubmitPrompt = () => {
 		setPromptNodeDetails((prevDetails) => addFinalPrompt(prevDetails, nodeId, prompt));
-		console.log("Final Object: ", promptNodeDetails);
 	};
+
+	useEffect(() => {
+		// Initialize apiToken with the current token value on component mount
+		setApiToken(token);
+	}, [token]);
 
 	return (
 		<>
@@ -100,10 +96,13 @@ const CustomDrawer = ({ open, onClose, prompt, setPrompt, content }) => {
 				open={dialogOpen}
 				apiToken={apiToken}
 				setApiToken={setApiToken}
-				onClose={() => closeDialog(false, false)}
+				onClose={() => {
+					setDialogOpen(false);
+					setApiToken(token);
+				}}
 				onSubmit={() => {
 					setToken(apiToken);
-					closeDialog(false, true);
+					setDialogOpen(false);
 				}}
 			/>
 		</>
