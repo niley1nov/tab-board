@@ -1,50 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import Drawer from '@mui/material/Drawer';
-import DrawerHeader from './DrawerHeader';
-import AdjacentNodeInputs from './AdjacentNodeInputs';
-import ModelSelector from './ModelSelector';
-import PromptInputField from './PromptInputField';
-import TokenDialog from './TokenDialog';
-import ScrollableContent from './ScrollableContent';
-import ReactMarkdown from 'react-markdown';
-import { updatePromptNodeDetails, addFinalPrompt } from '../../helpers/CustomDrawerHelper';
-import {useToken} from '../../containers/TokenContext'; // Adjust the path
-import GeminiProService from '../../services/GeminiProService';
-import '../../stylesheets/CustomDrawer.css';
+import React, { useState, useEffect } from "react";
+import Drawer from "@mui/material/Drawer";
+import DrawerHeader from "./DrawerHeader";
+import TokenDialog from "./TokenDialog";
+import { useToken } from "../../containers/TokenContext";
+import PromptNodeContent from "./PromptNodeContent";
+import TabNodeContent from "./TabNodeContent";
+import "../../stylesheets/CustomDrawer.css";
 
 const CustomDrawer = ({ open, onClose, prompt, setPrompt, content }) => {
 	const { token, setToken } = useToken();
 	const [dialogOpen, setDialogOpen] = useState(false);
-	const [apiToken, setApiToken] = useState('');
-	const [adjacentNodeInputs, setAdjacentNodeInputs] = useState({});
-	const [nodeModelSelections, setNodeModelSelections] = useState({});
-	const [promptNodeDetails, setPromptNodeDetails] = useState({});
-	const { nodeId, title, nodeType, adjacencyNodes, additionalContent } = content;
+	const [apiToken, setApiToken] = useState("");
 
-	const handleSendInput = async (tabNodeId) => {
-		const promptText = adjacentNodeInputs[tabNodeId];
-		const context = adjacencyNodes.find((node) => node.id === tabNodeId)?.data.content || '';
-		try {
-			const geminiService = new GeminiProService(token);
-			const response = token ? await geminiService.callModel(`Prompt: ${promptText}\nContext: ${context}`) : null;
-			console.log("Response: ", response);
-			setPromptNodeDetails((prevDetails) =>
-				updatePromptNodeDetails(prevDetails, nodeId, tabNodeId, promptText, context, response)
-			);
-		} catch (error) {
-			console.error(`Error for TabNode ${tabNodeId}:`, error.message);
-		}
-	};
-
-	const handleModelChange = (nodeId, event) => {
-		const selectedValue = event.target.value;
-		setNodeModelSelections((prev) => ({ ...prev, [nodeId]: selectedValue }));
-		if (selectedValue === 'Gemini Pro' && !token) setDialogOpen(true);
-	};
-
-	const handleSubmitPrompt = () => {
-		setPromptNodeDetails((prevDetails) => addFinalPrompt(prevDetails, nodeId, prompt));
-	};
+	const { nodeId, title, nodeType } = content;
 
 	useEffect(() => {
 		// Initialize apiToken with the current token value on component mount
@@ -58,38 +26,31 @@ const CustomDrawer = ({ open, onClose, prompt, setPrompt, content }) => {
 				open={open}
 				onClose={onClose}
 				PaperProps={{
-					className: 'drawer-paper',
-					sx: { width: '320px', top: '64px', height: 'calc(100vh - 64px)', overflow: 'hidden' },
+					className: "drawer-paper",
+					sx: {
+						width: "320px",
+						top: "64px",
+						height: "calc(100vh - 64px)",
+						overflow: "hidden",
+					},
 				}}
 				ModalProps={{ keepMounted: true }}
 			>
 				<DrawerHeader title={title} onClose={onClose} />
-				{nodeType === 'PromptNode' && (
-					<>
-						<AdjacentNodeInputs
-							adjacencyNodes={adjacencyNodes}
-							adjacentNodeInputs={adjacentNodeInputs}
-							handleInputChange={(id, value) => setAdjacentNodeInputs((prev) => ({ ...prev, [id]: value }))}
-							handleSendInput={handleSendInput}
-						/>
-						<ModelSelector
-							selectedModel={nodeModelSelections[nodeId]}
-							nodeId={nodeId}
-							handleModelChange={handleModelChange}
-						/>
-						<PromptInputField prompt={prompt} setPrompt={setPrompt} handleSubmit={handleSubmitPrompt} />
-					</>
+				{nodeType === "PromptNode" && (
+					<PromptNodeContent
+						content={content}
+						prompt={prompt}
+						setPrompt={setPrompt}
+						token={token}
+						dialogOpen={dialogOpen}
+						setDialogOpen={setDialogOpen}
+					/>
 				)}
-				{nodeType === 'TabNode' && (
-					<ScrollableContent>
-						{additionalContent ? (
-							<div className="tab-content">
-								<ReactMarkdown>{additionalContent}</ReactMarkdown>
-							</div>
-						) : (
-							<div>No content available.</div>
-						)}
-					</ScrollableContent>
+				{nodeType === "TabNode" && (
+					<TabNodeContent
+						additionalContent={content.additionalContent}
+					/>
 				)}
 			</Drawer>
 			<TokenDialog

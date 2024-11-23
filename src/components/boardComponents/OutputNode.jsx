@@ -1,19 +1,21 @@
-import React, { useState } from 'react';
-import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import Divider from '@mui/material/Divider';
-import { Handle, Position } from '@xyflow/react';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import '../../stylesheets/OutputNode.css';
+import React, { useState } from "react";
+import Typography from "@mui/material/Typography";
+import IconButton from "@mui/material/IconButton";
+import Divider from "@mui/material/Divider";
+import { Handle, Position } from "@xyflow/react";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import "../../stylesheets/OutputNode.css";
 
 const OutputNode = ({ data }) => {
-
 	return (
-		<div onClick={data.onClick}
-			className="output-node"
-		>
+		<div onClick={data.onClick} className="output-node">
 			{/* Left Handle for Schema */}
-			<Handle type="target" position={Position.Left} id="schema" style={{ top: '50%' }} />
+			<Handle
+				type="target"
+				position={Position.Left}
+				id="schema"
+				style={{ top: "50%" }}
+			/>
 
 			{/* Header Section */}
 			<div className="output-node-header">
@@ -21,7 +23,11 @@ const OutputNode = ({ data }) => {
 					{data.label}
 				</Typography>
 				<div className="output-node-actions">
-					<IconButton aria-label="settings" onClick={data.onOpenMenu} size="small">
+					<IconButton
+						aria-label="settings"
+						onClick={data.onOpenMenu}
+						size="small"
+					>
 						<MoreVertIcon fontSize="small" />
 					</IconButton>
 				</div>
@@ -32,7 +38,7 @@ const OutputNode = ({ data }) => {
 			{/* Output */}
 			<div className="output-node-response">
 				<Typography variant="body2" color="textSecondary">
-					{'Output will appear on the sidebar'}
+					{"Output will appear on the sidebar"}
 				</Typography>
 			</div>
 		</div>

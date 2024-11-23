@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import React, { createContext, useState, useContext, useEffect } from "react";
 
 const TokenContext = createContext();
 
@@ -7,7 +7,7 @@ export const TokenProvider = ({ children }) => {
 
 	// Load token from localStorage (or sessionStorage) when the app loads
 	useEffect(() => {
-		const storedToken = localStorage.getItem('secureToken');
+		const storedToken = localStorage.getItem("secureToken");
 		if (storedToken) {
 			setToken(storedToken);
 		}
@@ -16,7 +16,7 @@ export const TokenProvider = ({ children }) => {
 	// Save token to localStorage (or sessionStorage) whenever it changes
 	const handleSetToken = (newToken) => {
 		setToken(newToken);
-		localStorage.setItem('secureToken', newToken); // Replace with sessionStorage if preferred
+		localStorage.setItem("secureToken", newToken); // Replace with sessionStorage if preferred
 	};
 
 	return (

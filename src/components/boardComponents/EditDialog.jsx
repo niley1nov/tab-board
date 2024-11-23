@@ -1,6 +1,13 @@
 // src/components/EditDialog.jsx
-import React from 'react';
-import { Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField } from '@mui/material';
+import React from "react";
+import {
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogTitle,
+	Button,
+	TextField,
+} from "@mui/material";
 
 const EditDialog = ({ open, onClose, title, onTitleChange, onSave }) => {
 	return (

@@ -1,88 +1,160 @@
 .drawer-paper {
-  width: 300px !important;
-  padding: 16px !important;
-  background-color: #322f35 !important;
-  color: white !important;
-  border-left: 2px solid #242629 !important;
-  z-index: 1300 !important;
+	width: 300px !important;
+	padding: 16px !important;
+	background-color: #322f35 !important;
+	color: white !important;
+	border-left: 2px solid #242629 !important;
+	z-index: 1300 !important;
 }
 
 /* Drawer header */
 .drawer-header {
-  display: flex !important;
-  justify-content: space-between !important;
-  align-items: center !important;
+	display: flex !important;
+	justify-content: space-between !important;
+	align-items: center !important;
 }
 
 /* Text field input styles */
 .text-field {
-  background-color: #242629 !important;
-  color: white !important;
+	background-color: #242629 !important;
+	color: white !important;
 }
 
 .text-field .MuiOutlinedInput-notchedOutline {
-  border-color: #242629 !important;
+	border-color: #242629 !important;
 }
 
 /* Select field border color */
 .select-border .MuiOutlinedInput-notchedOutline {
-  border-color: #242629 !important;
+	border-color: #242629 !important;
 }
 
 /* Dropdown text and arrow color */
-.select-border .MuiSelect-select, .select-border .MuiSelect-icon {
-  color: white !important;
+.select-border .MuiSelect-select,
+.select-border .MuiSelect-icon {
+	color: white !important;
 }
 
 /* Button styling */
 .button {
-  margin-top: 16px !important;
-  color: white !important;
-  background-color: #242629 !important;
+	margin-top: 16px !important;
+	color: white !important;
+	background-color: #242629 !important;
 }
 
 /* Drawer close icon styles */
 .close-icon {
-  color: white !important;
+	color: white !important;
 }
 
 /* Run Settings title in Drawer */
 .run-settings-title {
-  color: white !important;
+	color: white !important;
 }
 /* Title styling in the sidebar */
 
 .sidebar-title {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: calc(100% - 40px);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-width: calc(100% - 40px);
 }
 
 /* Title of adjacent nodes */
 .adjacent-node-title {
-  white-space: nowrap;        /* Prevents wrapping */
-  overflow: hidden;           /* Ensures text doesn't spill over */
-  text-overflow: ellipsis;    /* Adds ellipsis if text is too long */
-  margin-bottom: 4px;         /* Adds space below the title */
-  font-size: 14px;            /* Adjust font size if necessary */
+	white-space: nowrap; /* Prevents wrapping */
+	overflow: hidden; /* Ensures text doesn't spill over */
+	text-overflow: ellipsis; /* Adds ellipsis if text is too long */
+	margin-bottom: 4px; /* Adds space below the title */
+	font-size: 14px; /* Adjust font size if necessary */
+	color: lightgray; /* Sets text color to light gray */
 }
 
 .text-field-token {
 	--background-color: #333;
 	--label-color: #ffffff;
-  }
-  
-  .text-field-token .MuiInputBase-root {
+}
+
+.text-field-token .MuiInputBase-root {
 	background-color: var(--background-color);
 	color: var(--label-color);
 	border-radius: 8px;
-  }
-  
-  .text-field-token .MuiInputLabel-root {
+}
+
+.text-field-token .MuiInputLabel-root {
 	color: var(--label-color);
-  }
-  
-  .text-field-token .MuiInputLabel-root.Mui-focused {
+}
+
+.text-field-token .MuiInputLabel-root.Mui-focused {
 	color: var(--label-color);
-  }
+}
+
+/* Custom styles for AdjacentNodeInputs component */
+
+/* Style the input text color */
+.custom-text-field .MuiInputBase-input {
+	color: white;
+}
+
+/* Style the outlined border color */
+.custom-text-field .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+	border-color: white;
+}
+
+/* Keep the border color white on hover */
+.custom-text-field
+	.MuiOutlinedInput-root:hover
+	.MuiOutlinedInput-notchedOutline {
+	border-color: white;
+}
+
+/* Keep the border color white when focused */
+.custom-text-field
+	.MuiOutlinedInput-root.Mui-focused
+	.MuiOutlinedInput-notchedOutline {
+	border-color: white;
+}
+
+/* Style the icon button color with increased specificity */
+.adjacent-node-input-container .icon-button.MuiIconButton-root {
+	color: white;
+}
+
+/* If the above doesn't work, target the SVG icon inside the IconButton */
+.adjacent-node-input-container .icon-button .MuiSvgIcon-root {
+	color: white;
+}
+
+/* As a last resort, use !important (not recommended) */
+.icon-button {
+	color: white !important;
+}
+
+/* Custom styling for the Select component */
+
+/* White border for the Select component */
+.custom-select .MuiOutlinedInput-notchedOutline {
+	border-color: white !important; /* Set border color to white */
+}
+
+/* Change border color to white when hovered */
+.custom-select .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+	border-color: white !important;
+}
+
+/* Change border color to white when focused */
+.custom-select
+	.MuiOutlinedInput-root.Mui-focused
+	.MuiOutlinedInput-notchedOutline {
+	border-color: white !important;
+}
+
+/* Ensure the dropdown icon is white */
+.custom-select .MuiSvgIcon-root {
+	color: white;
+}
+
+/* Set text color to white */
+.custom-select .MuiInputBase-input {
+	color: white;
+}

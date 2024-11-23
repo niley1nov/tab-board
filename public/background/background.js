@@ -18,8 +18,13 @@ function queryAndExtractTabContent() {
 
 // Check if the tab is valid for content extraction
 function isValidTab(tab) {
-	const invalidUrls = ['chrome://', 'extension://', 'edge://', 'chrome-extension://'];
-	return tab.url && !invalidUrls.some(prefix => tab.url.startsWith(prefix));
+	const invalidUrls = [
+		"chrome://",
+		"extension://",
+		"edge://",
+		"chrome-extension://",
+	];
+	return tab.url && !invalidUrls.some((prefix) => tab.url.startsWith(prefix));
 }
 
 // Inject inline content extraction function into the tab
@@ -27,7 +32,7 @@ function injectContentScript(tab) {
 	chrome.scripting.executeScript({
 		target: { tabId: tab.id },
 		func: extractContentAndSend,
-		args: [tab.id, tab.title, tab.url]
+		args: [tab.id, tab.title, tab.url],
 	});
 }
 
@@ -35,9 +40,10 @@ function extractContentAndSend(tabId, tabTitle, tabUrl) {
 	// Function to extract metadata from meta tags
 	function getMetaTags() {
 		const metaTags = {};
-		document.querySelectorAll('meta').forEach((meta) => {
-			const name = meta.getAttribute('name') || meta.getAttribute('property');
-			const content = meta.getAttribute('content');
+		document.querySelectorAll("meta").forEach((meta) => {
+			const name =
+				meta.getAttribute("name") || meta.getAttribute("property");
+			const content = meta.getAttribute("content");
 			if (name && content) {
 				metaTags[name] = content;
 			}
@@ -47,7 +53,9 @@ function extractContentAndSend(tabId, tabTitle, tabUrl) {
 
 	// Extract JSON-LD structured data (e.g., Schema.org)
 	function getJSONLD() {
-		const jsonLDScripts = document.querySelectorAll('script[type="application/ld+json"]');
+		const jsonLDScripts = document.querySelectorAll(
+			'script[type="application/ld+json"]',
+		);
 		const jsonLDData = [];
 		jsonLDScripts.forEach((script) => {
 			try {
@@ -64,14 +72,15 @@ function extractContentAndSend(tabId, tabTitle, tabUrl) {
 	function getOpenGraphData() {
 		const openGraphData = {};
 		document.querySelectorAll('meta[property^="og:"]').forEach((meta) => {
-			openGraphData[meta.getAttribute('property')] = meta.getAttribute('content');
+			openGraphData[meta.getAttribute("property")] =
+				meta.getAttribute("content");
 		});
 		return openGraphData;
 	}
 
 	function removeHeaderAndFooter(element) {
 		const children = Array.from(element.childNodes);
-		const excludedTags = ['HEADER', 'FOOTER', 'NAV', 'ASIDE'];
+		const excludedTags = ["HEADER", "FOOTER", "NAV", "ASIDE"];
 		children.forEach((node) => {
 			if (node.nodeType === Node.ELEMENT_NODE) {
 				if (excludedTags.includes(node.tagName)) {
@@ -88,10 +97,10 @@ function extractContentAndSend(tabId, tabTitle, tabUrl) {
 		title: tabTitle,
 		url: tabUrl,
 		tabId: tabId,
-		metaTags: getMetaTags(),         // Extract meta tags
+		metaTags: getMetaTags(), // Extract meta tags
 		content: document.body.innerText, // Structured text content (headings, paragraphs, etc.)
-		jsonLD: getJSONLD(),             // Extract JSON-LD structured data
-		openGraph: getOpenGraphData(),   // Extract OpenGraph metadata
+		jsonLD: getJSONLD(), // Extract JSON-LD structured data
+		openGraph: getOpenGraphData(), // Extract OpenGraph metadata
 	};
 
 	// Send extracted content to background.js
@@ -100,7 +109,7 @@ function extractContentAndSend(tabId, tabTitle, tabUrl) {
 		content: tabData,
 		tabId: tabId,
 		title: tabTitle,
-		url: tabUrl
+		url: tabUrl,
 	});
 }
 
@@ -109,6 +118,6 @@ function handleExtractedContent(request) {
 	const { tabId, title, content, url } = request;
 	chrome.runtime.sendMessage({
 		action: "sendTabData",
-		tabData: { id: tabId, title, content, url }
+		tabData: { id: tabId, title, content, url },
 	});
 }
