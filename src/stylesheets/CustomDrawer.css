@@ -1,10 +1,49 @@
 .drawer-paper {
-	width: 300px !important;
-	padding: 16px !important;
-	background-color: #322f35 !important;
-	color: white !important;
-	border-left: 2px solid #242629 !important;
-	z-index: 1300 !important;
+    margin-top: 20px !important;
+    margin-right: 10px !important;
+    margin-bottom: calc(50px + env(safe-area-inset-bottom, 0)) !important;
+    border-radius: 10px !important;
+    width: 320px !important;
+    padding: 16px !important;
+    background-color: #49454F !important;
+    color: white !important;
+    z-index: 1300 !important;
+
+    /* Prevent scrolling on the entire drawer */
+    overflow: hidden !important;
+}
+
+.drawer-content {
+	margin-bottom: 50px !important;
+    height: calc(100% - 48px) !important;
+    overflow-y: auto !important;
+    padding-right: 8px;
+    padding-left: 8px;
+}
+
+/* Custom scrollbar for WebKit browsers */
+.drawer-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.drawer-content::-webkit-scrollbar-track {
+    background: #3c383e;
+    border-radius: 3px;
+}
+
+.drawer-content::-webkit-scrollbar-thumb {
+    background: #d0bcff;
+    border-radius: 3px;
+}
+
+.drawer-content::-webkit-scrollbar-thumb:hover {
+    background: #b29edd;
+}
+
+/* Custom scrollbar for Firefox */
+.drawer-content {
+    scrollbar-width: thin;
+    scrollbar-color: #d0bcff #3c383e;
 }
 
 /* Drawer header */
@@ -12,16 +51,6 @@
 	display: flex !important;
 	justify-content: space-between !important;
 	align-items: center !important;
-}
-
-/* Text field input styles */
-.text-field {
-	background-color: #242629 !important;
-	color: white !important;
-}
-
-.text-field .MuiOutlinedInput-notchedOutline {
-	border-color: #242629 !important;
 }
 
 /* Select field border color */
@@ -54,20 +83,36 @@
 /* Title styling in the sidebar */
 
 .sidebar-title {
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	max-width: calc(100% - 40px);
+	color: #ffffff;
+	font-weight: 100 !important;
+	font-size: 20px !important;
+	white-space: nowrap !important;
+	overflow: hidden !important;
+	text-overflow: ellipsis !important;
+	max-width: calc(100% - 40px) !important;
 }
 
 /* Title of adjacent nodes */
 .adjacent-node-title {
-	white-space: nowrap; /* Prevents wrapping */
-	overflow: hidden; /* Ensures text doesn't spill over */
-	text-overflow: ellipsis; /* Adds ellipsis if text is too long */
-	margin-bottom: 4px; /* Adds space below the title */
-	font-size: 14px; /* Adjust font size if necessary */
-	color: lightgray; /* Sets text color to light gray */
+	font-weight: 100 !important;
+	white-space: nowrap !important;
+	overflow: hidden !important;
+	text-overflow: ellipsis !important;
+	margin-bottom: 4px !important;
+	margin-top: 4px !important;
+	font-size: 12px !important;
+	color: white !important;
+}
+
+.model-selector-title {
+	font-weight: 100 !important;
+	white-space: nowrap !important;
+	overflow: hidden !important;
+	text-overflow: ellipsis !important;
+	margin-bottom: 4px !important;
+	margin-top: 4px !important;
+	font-size: 14px !important;
+	color: white !important;
 }
 
 .text-field-token {
@@ -90,29 +135,26 @@
 }
 
 /* Custom styles for AdjacentNodeInputs component */
+.custom-text-field {
+	border-bottom: #ffffff !important;
+	border-top-left-radius: 10px !important;
+	border-top-right-radius: 10px !important;
+	background-color: #322f35 !important;
+}
+
+.custom-text-field .MuiOutlinedInput-root {
+	border: none !important;
+    border-bottom: 1px solid white !important;
+    border-radius: 0 !important;
+}
+
+.custom-text-field .MuiOutlinedInput-notchedOutline {
+	border: none !important;
+}
 
 /* Style the input text color */
 .custom-text-field .MuiInputBase-input {
 	color: white;
-}
-
-/* Style the outlined border color */
-.custom-text-field .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
-	border-color: white;
-}
-
-/* Keep the border color white on hover */
-.custom-text-field
-	.MuiOutlinedInput-root:hover
-	.MuiOutlinedInput-notchedOutline {
-	border-color: white;
-}
-
-/* Keep the border color white when focused */
-.custom-text-field
-	.MuiOutlinedInput-root.Mui-focused
-	.MuiOutlinedInput-notchedOutline {
-	border-color: white;
 }
 
 /* Style the icon button color with increased specificity */
@@ -130,31 +172,57 @@
 	color: white !important;
 }
 
-/* Custom styling for the Select component */
+.custom-select {
+	border-bottom: 1px solid white !important;
+    border-top-left-radius: 10px !important;
+    border-top-right-radius: 10px !important;
+    background-color: #322f35 !important;
+	margin-bottom: 10px !important;
+}
 
-/* White border for the Select component */
+.custom-select .MuiOutlinedInput-root {
+    border: none !important;
+    border-bottom: 1px solid white !important;
+    border-radius: 0 !important;
+    background-color: transparent !important;
+}
+
 .custom-select .MuiOutlinedInput-notchedOutline {
-	border-color: white !important; /* Set border color to white */
+    border: none !important;
 }
 
-/* Change border color to white when hovered */
-.custom-select .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
-	border-color: white !important;
+.custom-select .MuiSelect-select {
+	font-weight: 100 !important;
+	margin-left: 12px !important;
+    color: #fff !important;
+    padding: 15px 0 !important;
 }
 
-/* Change border color to white when focused */
-.custom-select
-	.MuiOutlinedInput-root.Mui-focused
-	.MuiOutlinedInput-notchedOutline {
-	border-color: white !important;
-}
-
-/* Ensure the dropdown icon is white */
 .custom-select .MuiSvgIcon-root {
-	color: white;
+    color: white !important; /* Style the dropdown arrow */
 }
 
-/* Set text color to white */
-.custom-select .MuiInputBase-input {
-	color: white;
+/* Focus state for the select field */
+.custom-select .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+    border-bottom: 2px solid #d0bcff !important; /* Highlight color when focused */
 }
+
+/* Disabled state for the select field */
+.custom-select .MuiOutlinedInput-root.Mui-disabled {
+    background-color: #49454f !important; /* Dimmed background for disabled */
+}
+
+.custom-select .MuiSelect-icon {
+    color: white !important; /* Dropdown arrow color */
+}
+
+/* Placeholder text color */
+.custom-select .MuiInputBase-input::placeholder {
+    color: #d0bcff !important; /* Adjust placeholder color */
+}
+
+/* Optional: Add hover effect */
+.custom-select:hover .MuiOutlinedInput-notchedOutline {
+    border-bottom: 1px solid #b29edd !important; /* Slightly lighter hover color */
+}
+

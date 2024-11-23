@@ -1,9 +1,10 @@
 const ScrollableContent = ({ children }) => (
 	<div
 		style={{
-			overflowY: "auto",
-			height: "100%",
-			padding: "8px",
+			background: '#322f35',
+			color: '#fff',
+			height: "100",
+			padding: "5px",
 		}}
 	>
 		{children}

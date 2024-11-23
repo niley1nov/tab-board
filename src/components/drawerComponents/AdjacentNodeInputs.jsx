@@ -16,18 +16,19 @@ const AdjacentNodeInputs = ({
 					mb={2}
 					className="adjacent-node-input-container"
 				>
-					<Typography className="adjacent-node-title" variant="body1">
+					<Typography className="adjacent-node-title" style={{ fontFamily: "Poppins, sans-serif" }}>
 						{node.data.label}
 					</Typography>
 					<TextField
 						fullWidth
 						variant="outlined"
-						placeholder="Enter a prompt about the tab."
+						placeholder="Enter context"
 						value={adjacentNodeInputs[node.id] || ""}
 						onChange={(e) =>
 							handleInputChange(node.id, e.target.value)
 						}
 						className="custom-text-field"
+						autoComplete="off"
 					/>
 				</Box>
 			))}

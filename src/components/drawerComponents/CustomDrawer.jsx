@@ -31,27 +31,29 @@ const CustomDrawer = ({ open, onClose, prompt, setPrompt, content }) => {
 						width: "320px",
 						top: "64px",
 						height: "calc(100vh - 64px)",
-						overflow: "hidden",
+						overflow: "hidden", // Ensure the outer drawer doesn’t scroll.
 					},
 				}}
 				ModalProps={{ keepMounted: true }}
 			>
 				<DrawerHeader title={title} onClose={onClose} />
-				{nodeType === "PromptNode" && (
-					<PromptNodeContent
-						content={content}
-						prompt={prompt}
-						setPrompt={setPrompt}
-						token={token}
-						dialogOpen={dialogOpen}
-						setDialogOpen={setDialogOpen}
-					/>
-				)}
-				{nodeType === "TabNode" && (
-					<TabNodeContent
-						additionalContent={content.additionalContent}
-					/>
-				)}
+				<div className="drawer-content">
+					{nodeType === "PromptNode" && (
+						<PromptNodeContent
+							content={content}
+							prompt={prompt}
+							setPrompt={setPrompt}
+							token={token}
+							dialogOpen={dialogOpen}
+							setDialogOpen={setDialogOpen}
+						/>
+					)}
+					{nodeType === "TabNode" && (
+						<TabNodeContent
+							additionalContent={content.additionalContent}
+						/>
+					)}
+				</div>
 			</Drawer>
 			<TokenDialog
 				open={dialogOpen}
