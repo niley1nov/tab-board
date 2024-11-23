@@ -1,10 +1,10 @@
-import React from 'react';
+import React from "react";
 import {
 	BaseEdge,
 	EdgeLabelRenderer,
 	getBezierPath,
 	useReactFlow,
-} from '@xyflow/react';
+} from "@xyflow/react";
 
 export default function CustomEdge({
 	id,
@@ -62,7 +62,7 @@ export default function CustomEdge({
 					fontSize="14"
 					fill="black"
 					onClick={onDeleteClick} // Handle delete button click
-					style={{ cursor: 'pointer' }}
+					style={{ cursor: "pointer" }}
 				>
 					x
 				</text>
@@ -71,10 +71,10 @@ export default function CustomEdge({
 			<EdgeLabelRenderer>
 				<div
 					style={{
-						position: 'absolute',
+						position: "absolute",
 						transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
 						fontSize: 12,
-						pointerEvents: 'all',
+						pointerEvents: "all",
 					}}
 					className="nodrag nopan"
 				/>

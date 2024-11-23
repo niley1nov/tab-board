@@ -1,4 +1,4 @@
-import AIService from './AIService';
+import AIService from "./AIService";
 import {
 	GoogleGenerativeAI,
 	HarmCategory,

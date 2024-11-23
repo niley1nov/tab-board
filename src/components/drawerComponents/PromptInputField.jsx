@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { Box, TextField, InputAdornment, IconButton } from '@mui/material';
-import SendIcon from '@mui/icons-material/Send';
-import StopCircleIcon from '@mui/icons-material/StopCircle';
-import '../../stylesheets/CustomDrawer.css';
+import React, { useState } from "react";
+import { Box, TextField, InputAdornment, IconButton } from "@mui/material";
+import SendIcon from "@mui/icons-material/Send";
+import StopCircleIcon from "@mui/icons-material/StopCircle";
+import "../../stylesheets/CustomDrawer.css";
 
 const PromptInputField = ({ prompt, setPrompt, handleSubmit }) => {
 	const [loading, setLoading] = useState(false);
@@ -16,8 +16,8 @@ const PromptInputField = ({ prompt, setPrompt, handleSubmit }) => {
 		try {
 			await handleSubmit(controller.signal); // Send the prompt to Gemini API
 		} catch (error) {
-			if (error.name !== 'AbortError') {
-				console.error('Error while sending prompt:', error.message);
+			if (error.name !== "AbortError") {
+				console.error("Error while sending prompt:", error.message);
 			}
 		} finally {
 			setLoading(false);
@@ -44,7 +44,9 @@ const PromptInputField = ({ prompt, setPrompt, handleSubmit }) => {
 					endAdornment: (
 						<InputAdornment position="end">
 							<IconButton
-								onClick={loading ? handleStopClick : handleSendClick}
+								onClick={
+									loading ? handleStopClick : handleSendClick
+								}
 								className="icon-button"
 							>
 								{loading ? <StopCircleIcon /> : <SendIcon />}

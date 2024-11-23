@@ -1,4 +1,11 @@
-export const updatePromptNodeDetails = (prevDetails, nodeId, tabNodeId, promptText, context, response) => ({
+export const updatePromptNodeDetails = (
+	prevDetails,
+	nodeId,
+	tabNodeId,
+	promptText,
+	context,
+	response,
+) => ({
 	...prevDetails,
 	[nodeId]: {
 		...(prevDetails[nodeId] || {}),

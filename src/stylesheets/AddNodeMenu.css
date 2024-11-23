@@ -50,7 +50,9 @@
 	padding: 10px 12px;
 	cursor: pointer;
 	border-radius: 4px;
-	transition: background-color 0.3s ease, color 0.3s ease;
+	transition:
+		background-color 0.3s ease,
+		color 0.3s ease;
 	text-align: left;
 	font-size: 14px;
 }

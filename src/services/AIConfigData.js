@@ -24,7 +24,7 @@ const models = {
 
 function getPrompts(key, replacableText = []) {
 	const prompts = {
-		system_prompt: `You are a helpful assistant.`
+		system_prompt: `You are a helpful assistant.`,
 	};
 	return prompts[key];
 }

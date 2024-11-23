@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import Drawer from '@mui/material/Drawer';
-import DrawerHeader from './DrawerHeader';
-import TokenDialog from './TokenDialog';
-import { useToken } from '../../containers/TokenContext';
-import PromptNodeContent from './PromptNodeContent';
-import TabNodeContent from './TabNodeContent';
-import '../../stylesheets/CustomDrawer.css';
+import React, { useState, useEffect } from "react";
+import Drawer from "@mui/material/Drawer";
+import DrawerHeader from "./DrawerHeader";
+import TokenDialog from "./TokenDialog";
+import { useToken } from "../../containers/TokenContext";
+import PromptNodeContent from "./PromptNodeContent";
+import TabNodeContent from "./TabNodeContent";
+import "../../stylesheets/CustomDrawer.css";
 
 const CustomDrawer = ({ open, onClose, prompt, setPrompt, content }) => {
 	const { token, setToken } = useToken();
 	const [dialogOpen, setDialogOpen] = useState(false);
-	const [apiToken, setApiToken] = useState('');
+	const [apiToken, setApiToken] = useState("");
 
 	const { nodeId, title, nodeType } = content;
 
@@ -26,13 +26,18 @@ const CustomDrawer = ({ open, onClose, prompt, setPrompt, content }) => {
 				open={open}
 				onClose={onClose}
 				PaperProps={{
-					className: 'drawer-paper',
-					sx: { width: '320px', top: '64px', height: 'calc(100vh - 64px)', overflow: 'hidden' },
+					className: "drawer-paper",
+					sx: {
+						width: "320px",
+						top: "64px",
+						height: "calc(100vh - 64px)",
+						overflow: "hidden",
+					},
 				}}
 				ModalProps={{ keepMounted: true }}
 			>
 				<DrawerHeader title={title} onClose={onClose} />
-				{nodeType === 'PromptNode' && (
+				{nodeType === "PromptNode" && (
 					<PromptNodeContent
 						content={content}
 						prompt={prompt}
@@ -42,8 +47,10 @@ const CustomDrawer = ({ open, onClose, prompt, setPrompt, content }) => {
 						setDialogOpen={setDialogOpen}
 					/>
 				)}
-				{nodeType === 'TabNode' && (
-					<TabNodeContent additionalContent={content.additionalContent} />
+				{nodeType === "TabNode" && (
+					<TabNodeContent
+						additionalContent={content.additionalContent}
+					/>
 				)}
 			</Drawer>
 			<TokenDialog

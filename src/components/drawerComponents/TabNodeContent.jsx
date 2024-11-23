@@ -1,6 +1,6 @@
-import React from 'react';
-import ScrollableContent from './ScrollableContent';
-import ReactMarkdown from 'react-markdown';
+import React from "react";
+import ScrollableContent from "./ScrollableContent";
+import ReactMarkdown from "react-markdown";
 
 const TabNodeContent = ({ additionalContent }) => {
 	return (

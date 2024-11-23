@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Button, Typography } from '@mui/material';
+import React, { useState } from "react";
+import { Button, Typography } from "@mui/material";
 
 const OutputNodeContent = () => {
 	const [output, setOutput] = useState(null);
@@ -10,11 +10,19 @@ const OutputNodeContent = () => {
 
 	return (
 		<div>
-			<Button variant="contained" onClick={handleGetOutput} sx={{ marginTop: 2 }}>
+			<Button
+				variant="contained"
+				onClick={handleGetOutput}
+				sx={{ marginTop: 2 }}
+			>
 				Get Output
 			</Button>
 			{output && (
-				<Typography variant="body2" className="sidebar-output" sx={{ marginTop: 2 }}>
+				<Typography
+					variant="body2"
+					className="sidebar-output"
+					sx={{ marginTop: 2 }}
+				>
 					{output}
 				</Typography>
 			)}
