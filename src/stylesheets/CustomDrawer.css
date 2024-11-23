@@ -129,3 +129,32 @@
 .icon-button {
 	color: white !important;
 }
+
+/* Custom styling for the Select component */
+
+/* White border for the Select component */
+.custom-select .MuiOutlinedInput-notchedOutline {
+	border-color: white !important; /* Set border color to white */
+}
+
+/* Change border color to white when hovered */
+.custom-select .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+	border-color: white !important;
+}
+
+/* Change border color to white when focused */
+.custom-select
+	.MuiOutlinedInput-root.Mui-focused
+	.MuiOutlinedInput-notchedOutline {
+	border-color: white !important;
+}
+
+/* Ensure the dropdown icon is white */
+.custom-select .MuiSvgIcon-root {
+	color: white;
+}
+
+/* Set text color to white */
+.custom-select .MuiInputBase-input {
+	color: white;
+}

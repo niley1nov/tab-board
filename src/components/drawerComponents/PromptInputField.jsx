@@ -11,16 +11,17 @@ const PromptInputField = ({ prompt, setPrompt, handleSubmit }) => (
 			placeholder="Type something"
 			value={prompt}
 			onChange={(e) => setPrompt(e.target.value)}
-			InputProps={{
-				disableUnderline: true,
-				className: 'text-field',
-				endAdornment: (
-					<InputAdornment position="end">
-						<IconButton onClick={handleSubmit} sx={{ color: 'white' }}>
-							<ArrowUpwardIcon />
-						</IconButton>
-					</InputAdornment>
-				),
+			slotProps={{
+				input: {
+					className: 'text-field',
+					endAdornment: (
+						<InputAdornment position="end">
+							<IconButton onClick={handleSubmit} sx={{ color: 'white' }}>
+								<ArrowUpwardIcon />
+							</IconButton>
+						</InputAdornment>
+					),
+				},
 			}}
 			sx={{ width: '100%' }}
 		/>
