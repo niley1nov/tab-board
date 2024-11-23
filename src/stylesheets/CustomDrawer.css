@@ -1,7 +1,7 @@
 .drawer-paper {
   width: 300px !important;
   padding: 16px !important;
-  background-color: #0C0E11 !important;
+  background-color: #322f35 !important;
   color: white !important;
   border-left: 2px solid #242629 !important;
   z-index: 1300 !important;
@@ -67,3 +67,22 @@
   margin-bottom: 4px;         /* Adds space below the title */
   font-size: 14px;            /* Adjust font size if necessary */
 }
+
+.text-field-token {
+	--background-color: #333;
+	--label-color: #ffffff;
+  }
+  
+  .text-field-token .MuiInputBase-root {
+	background-color: var(--background-color);
+	color: var(--label-color);
+	border-radius: 8px;
+  }
+  
+  .text-field-token .MuiInputLabel-root {
+	color: var(--label-color);
+  }
+  
+  .text-field-token .MuiInputLabel-root.Mui-focused {
+	color: var(--label-color);
+  }

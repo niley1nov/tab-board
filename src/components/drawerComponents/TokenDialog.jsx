@@ -29,12 +29,7 @@ const TokenDialog = ({ open, apiToken, setApiToken, onSubmit, onClose }) => (
 				fullWidth
 				value={apiToken}
 				onChange={(e) => setApiToken(e.target.value)}
-				sx={{
-					'& .MuiInputBase-root': {
-						backgroundColor: '#333',
-						borderRadius: '8px',
-					},
-				}}
+				className="text-field-token"
 			/>
 		</DialogContent>
 		<DialogActions>
