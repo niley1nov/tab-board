@@ -1,0 +1,69 @@
+/* Popover Styling */
+.custom-popover .MuiPaper-root {
+	background-color: transparent !important; /* Ensure no background for the popover */
+	box-shadow: none !important; /* Remove default shadows */
+	overflow: visible; /* Allow the arrow to be visible outside the box */
+  }
+  
+  /* Menu Box Styling */
+  .menu-box {
+	position: relative;
+	background-color: #333;
+	border: 1px solid #555;
+	border-radius: 8px;
+	padding: 8px;
+	color: white;
+	min-width: 200px;
+	box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
+	z-index: 1;
+	margin-top: 8px; /* Space for the arrow */
+  }
+  
+  /* Arrow Styling */
+.menu-arrow {
+	position: absolute;
+	top: -11px; /* Slightly higher for the border effect */
+	left: 50%; /* Center horizontally */
+	transform: translateX(-50%); /* Adjust for the arrow's width */
+	width: 0;
+	height: 0;
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;
+	border-bottom: 10px solid #555; /* Border color */
+	z-index: 2;
+  }
+  
+  .menu-arrow::after {
+	content: '';
+	position: absolute;
+	top: 1px; /* Inner arrow inset */
+	left: -9px;
+	width: 0;
+	height: 0;
+	border-left: 9px solid transparent;
+	border-right: 9px solid transparent;
+	border-bottom: 9px solid #333; /* Matches menu box background */
+  }
+  
+  /* Menu Option Styling */
+  .menu-option {
+	padding: 10px 12px;
+	cursor: pointer;
+	border-radius: 4px;
+	transition: background-color 0.3s ease, color 0.3s ease;
+	text-align: left;
+	font-size: 14px;
+  }
+  
+  .menu-option:hover {
+	background-color: #555;
+	color: #ddd;
+  }
+  
+  /* Divider Styling */
+  .menu-divider {
+	border: none;
+	border-top: 1px solid #555;
+	margin: 6px 0;
+  }
+  
