@@ -42,7 +42,7 @@ export default function CustomEdge({
 				className="custom-edge" // Custom class for additional styling
 			/>
 			{/* No longer need the large transparent clickable path for the edge */}
-			
+
 			{/* Always show the delete button */}
 			<g>
 				<circle

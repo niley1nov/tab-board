@@ -1,6 +1,6 @@
 /* Main container for the tab node */
 .tab-node {
-	border: 1px solid #D0BCFF;
+	border: 1px solid #d0bcff;
 	border-radius: 12px;
 	padding: 10px;
 	background-color: #fff;
@@ -12,13 +12,13 @@
 }
 
 .edit-title-button {
-	color: #322F35 !important;
-	background-color: #F1E9FF !important;
+	color: #322f35 !important;
+	background-color: #f1e9ff !important;
 	border-radius: 9999px !important;
 	padding: 5px 12px !important;
 	display: inline-flex !important;
-	align-items: center !important; 
-	justify-content: center !important; 
+	align-items: center !important;
+	justify-content: center !important;
 	font-size: 10px !important;
 	font-weight: 500 !important;
 	border: none !important;
@@ -40,7 +40,7 @@
 .tab-node-title {
 	font-weight: 400 !important;
 	font-size: 16px;
-	color: #322F35;
+	color: #322f35;
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;

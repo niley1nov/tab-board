@@ -29,18 +29,18 @@ const PromptNode = ({ data }) => {
 
 			{/* Action Icons Section */}
 			<div className="prompt-node-actions-container">
-				<Button 
+				<Button
 					className='edit-title-button'
-					variant="outlined" 
-					startIcon={<EditIcon className='edit-icon' fontSize="inherit"/>} 
+					variant="outlined"
+					startIcon={<EditIcon className='edit-icon' fontSize="inherit" />}
 				>
 					Edit
 				</Button>
-				<Button 
+				<Button
 					className='delete-node-button'
-					variant="outlined" 
+					variant="outlined"
 					onClick={data.deleteNode}
-					startIcon={<DeleteOutlineIcon className='delete-icon' fontSize="inherit"/>} 
+					startIcon={<DeleteOutlineIcon className='delete-icon' fontSize="inherit" />}
 				>
 					Delete
 				</Button>

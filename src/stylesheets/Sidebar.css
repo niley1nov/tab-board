@@ -1,141 +1,141 @@
 /* Main container for the popup */
 .popup-container {
-  position: fixed;
-  top: 50%;
-  right: 20px;
-  transform: translateY(-50%);
-  width: 100%;
-  max-width: 340px; /* Sets the max width */
-  height: 70vh; /* Responsive height */
-  transition: all 0.3s ease;
-  z-index: 1000; /* Ensures it stays on top */
+	position: fixed;
+	top: 50%;
+	right: 20px;
+	transform: translateY(-50%);
+	width: 100%;
+	max-width: 340px; /* Sets the max width */
+	height: 70vh; /* Responsive height */
+	transition: all 0.3s ease;
+	z-index: 1000; /* Ensures it stays on top */
 }
 
 .popup-container.minimized {
-  width: 50px;
-  height: 50px;
-  top: auto;
-  bottom: 20px;
-  transform: none;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+	width: 50px;
+	height: 50px;
+	top: auto;
+	bottom: 20px;
+	transform: none;
+	border-radius: 50%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .sidebar-content {
-  padding: 16px;
-  height: 100%;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
+	padding: 16px;
+	height: 100%;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
 }
 
 .sidebar-scrollable-content {
-  flex-grow: 1;
-  overflow-y: auto;
-  margin-top: 8px;
+	flex-grow: 1;
+	overflow-y: auto;
+	margin-top: 8px;
 }
 
 .sidebar-description {
-  margin: 8px 0;
+	margin: 8px 0;
 }
 
 .read-more-button {
-  padding: 4px;
-  font-size: 12px;
+	padding: 4px;
+	font-size: 12px;
 }
 
 .sidebar-markdown {
-  padding: 8px;
-  background-color: #242629;
-  border-radius: 4px;
-  color:#f4f4f4
+	padding: 8px;
+	background-color: #242629;
+	border-radius: 4px;
+	color: #f4f4f4;
 }
 
 .sidebar-output {
-  margin-top: 16px;
-  padding: 8px;
-  background-color: #f4f4f4;
-  border-radius: 4px;
+	margin-top: 16px;
+	padding: 8px;
+	background-color: #f4f4f4;
+	border-radius: 4px;
 }
 
 .minimized-icon {
-  background-color: #007bff;
-  color: #fff;
-  border-radius: 50%;
-  padding: 4px;
+	background-color: #007bff;
+	color: #fff;
+	border-radius: 50%;
+	padding: 4px;
 }
 
 /* Responsive styles for smaller screens */
 @media (max-width: 768px) {
-  .popup-container {
-    width: 90%; 
-    right: 5%;
-  }
+	.popup-container {
+		width: 90%;
+		right: 5%;
+	}
 }
 
 @media (max-width: 480px) {
-  .popup-container {
-    width: 100%;
-    right: 0;
-    height: 60vh;
-  }
+	.popup-container {
+		width: 100%;
+		right: 0;
+		height: 60vh;
+	}
 }
 
 /* Title styling in the sidebar */
 .sidebar-title {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: calc(100% - 40px);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-width: calc(100% - 40px);
 }
 
 /* Styling for adjacent node input container */
 .adjacent-node-input-container {
-  margin-top: 10px;
-  width: 100%;
+	margin-top: 10px;
+	width: 100%;
 }
 
 /* Title of adjacent nodes */
 .adjacent-node-title {
-  white-space: nowrap;        /* Prevents wrapping */
-  overflow: hidden;           /* Ensures text doesn't spill over */
-  text-overflow: ellipsis;    /* Adds ellipsis if text is too long */
-  margin-bottom: 4px;         /* Adds space below the title */
-  font-size: 14px;            /* Adjust font size if necessary */
+	white-space: nowrap; /* Prevents wrapping */
+	overflow: hidden; /* Ensures text doesn't spill over */
+	text-overflow: ellipsis; /* Adds ellipsis if text is too long */
+	margin-bottom: 4px; /* Adds space below the title */
+	font-size: 14px; /* Adjust font size if necessary */
 }
 
 /* Flex container to align input and button horizontally */
 .input-send-container {
-  display: flex;               /* Aligns input and button horizontally */
-  align-items: center;         /* Centers them vertically */
-  gap: 8px;                    /* Adds spacing between input and button */
-  width: 100%;
+	display: flex; /* Aligns input and button horizontally */
+	align-items: center; /* Centers them vertically */
+	gap: 8px; /* Adds spacing between input and button */
+	width: 100%;
 }
 
 /* Input field takes remaining space */
 .adjacent-node-input-container .MuiTextField-root {
-  flex-grow: 1;                /* Input takes up available space */
-  margin-right: 8px;           /* Adds space between input and button */
+	flex-grow: 1; /* Input takes up available space */
+	margin-right: 8px; /* Adds space between input and button */
 }
 
 /* Styling for send button */
 .adjacent-node-input-container .MuiIconButton-root {
-  padding: 4px;                /* Adjust padding around the send icon */
+	padding: 4px; /* Adjust padding around the send icon */
 }
 
 /* Styling for minimize icon */
 .minimized-icon {
-  background-color: #007bff;
-  color: #fff;
-  border-radius: 50%;
-  padding: 4px;
+	background-color: #007bff;
+	color: #fff;
+	border-radius: 50%;
+	padding: 4px;
 }
 
 /* Responsive styles for font size */
 @media (max-width: 480px) {
-  .adjacent-node-input-container .MuiTypography-root {
-    font-size: 12px;
-  }
+	.adjacent-node-input-container .MuiTypography-root {
+		font-size: 12px;
+	}
 }

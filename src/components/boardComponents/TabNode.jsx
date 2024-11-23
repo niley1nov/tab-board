@@ -22,10 +22,10 @@ const TabNode = ({ data }) => {
 
 			{/* Action Icons Section */}
 			<div className="tab-node-actions-container">
-				<Button 
+				<Button
 					className='edit-title-button'
-					variant="outlined" 
-					startIcon={<EditIcon className='edit-icon' fontSize="inherit"/>} 
+					variant="outlined"
+					startIcon={<EditIcon className='edit-icon' fontSize="inherit" />}
 				>
 					Edit
 				</Button>
