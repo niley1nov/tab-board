@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import AdjacentNodeInputs from "./AdjacentNodeInputs";
+import { Divider } from "@mui/material";
 import ModelSelector from "./ModelSelector";
 import PromptInputField from "./PromptInputField";
 import {

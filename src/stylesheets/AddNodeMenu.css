@@ -8,7 +8,7 @@
 /* Menu Box Styling */
 .menu-box {
 	position: relative;
-	background-color: #333;
+	background-color: #322f35;
 	border: 1px solid #555;
 	border-radius: 8px;
 	padding: 8px;
@@ -42,7 +42,7 @@
 	height: 0;
 	border-left: 9px solid transparent;
 	border-right: 9px solid transparent;
-	border-bottom: 9px solid #333; /* Matches menu box background */
+	border-bottom: 9px solid #322f35; /* Matches menu box background */
 }
 
 /* Menu Option Styling */
