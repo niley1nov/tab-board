@@ -36,7 +36,7 @@ const PromptInputField = ({ prompt, setPrompt, handleSubmit }) => {
 			<TextField
 				fullWidth
 				variant="outlined"
-				placeholder="Type something"
+				placeholder="Submit Prompt Here..."
 				value={prompt}
 				onChange={(e) => setPrompt(e.target.value)}
 				className="custom-text-field"
