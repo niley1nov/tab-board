@@ -7,7 +7,7 @@ import PromptNodeContent from "./PromptNodeContent";
 import TabNodeContent from "./TabNodeContent";
 import "../../stylesheets/CustomDrawer.css";
 
-const CustomDrawer = ({ open, onClose, prompt, setPrompt, content }) => {
+const CustomDrawer = ({ open, onClose, prompt, setPrompt, content, selectedNode }) => {
 	const { token, setToken } = useToken();
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const [apiToken, setApiToken] = useState("");
@@ -44,8 +44,8 @@ const CustomDrawer = ({ open, onClose, prompt, setPrompt, content }) => {
 							prompt={prompt}
 							setPrompt={setPrompt}
 							token={token}
-							dialogOpen={dialogOpen}
 							setDialogOpen={setDialogOpen}
+							node={selectedNode}
 						/>
 					)}
 					{nodeType === "TabNode" && (

@@ -14,44 +14,15 @@ const PromptNodeContent = ({
 	prompt,
 	setPrompt,
 	token,
-	dialogOpen,
 	setDialogOpen,
+	node
 }) => {
 	const [adjacentNodeInputs, setAdjacentNodeInputs] = useState({});
 	const [nodeModelSelections, setNodeModelSelections] = useState({});
 	const [promptNodeDetails, setPromptNodeDetails] = useState({});
 	const { nodeId, adjacencyNodes } = content;
 
-	const handleSendInput = async (tabNodeId, promptText) => {
-		const context =
-			adjacencyNodes.find((node) => node.id === tabNodeId)?.data
-				.content || "";
-		try {
-			const geminiService = new GeminiProService(token);
-			const response = token
-				? await geminiService.callModel(
-						`Prompt: ${promptText}\nContext: ${context}`,
-					)
-				: null;
-			console.log("Response: ", response);
-			setPromptNodeDetails((prevDetails) =>
-				updatePromptNodeDetails(
-					prevDetails,
-					nodeId,
-					tabNodeId,
-					promptText,
-					context,
-					response,
-				),
-			);
-		} catch (error) {
-			console.error(`Error for TabNode ${tabNodeId}:`, error.message);
-		}
-	};
-
 	const handleSubmitPrompt = async () => {
-		console.log(adjacencyNodes);
-		console.log(adjacentNodeInputs);
 		let inputNodes = adjacencyNodes.filter((node) => node.type==='TabNode');
 		let context = "";
 		for(let node of inputNodes) {
@@ -68,9 +39,11 @@ const PromptNodeContent = ({
 				? await geminiService.callModel(`Prompt: ${prompt}\n\nContext: ${context}`)
 				: null;
 			console.log("Response:", response);
+			node.data.content = response;
 			setPromptNodeDetails((prevDetails) =>
 				addFinalPrompt(prevDetails, nodeId, prompt),
-			);
+			); //what is this doing?
+			console.log(node);
 		} catch (error) {
 			console.error("Error while submitting prompt:", error.message);
 		}

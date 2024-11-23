@@ -10,7 +10,7 @@ import CustomDrawer from "../drawerComponents/CustomDrawer";
 import AddNodeMenu from "./AddNodeMenu";
 import "../../stylesheets/NavBar.css";
 
-const NavBar = ({ onAddNode, content }) => {
+const NavBar = ({ onAddNode, content, selectedNode  }) => {
 	const [drawerOpen, setDrawerOpen] = useState(false);
 	const { token, setToken } = useToken();
 	const [apiToken, setApiToken] = useState("");
@@ -110,6 +110,7 @@ const NavBar = ({ onAddNode, content }) => {
 				prompt={prompt}
 				setPrompt={setPrompt}
 				content={content}
+				selectedNode={selectedNode}
 			/>
 			<TokenDialog
 				open={dialogOpen}

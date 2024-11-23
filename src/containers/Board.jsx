@@ -44,8 +44,6 @@ const Board = () => {
 				onOpenMenu: (e) => openMenu(e, node),
 				deleteNode: (e) => handleDeleteNode(e, node),
 				onClick: () => handleSetSelectedNode(node),
-				left: [],
-				right: [],
 				adjacencyNodes: [], // Store the full node data here
 				...data,
 			},
@@ -99,7 +97,7 @@ const Board = () => {
 		id: "",
 		title: "Dynamic Sidebar",
 		nodeType: "",
-		additionalContent: "",
+		additionalContent: ""
 	});
 
 	const [nodes, setNodes, onNodesChange] = useNodesState(() => {
@@ -336,7 +334,7 @@ const Board = () => {
 
 	return (
 		<div className="board-container">
-			<NavBar onAddNode={handleAddNode} content={sidebarContent} />
+			<NavBar onAddNode={handleAddNode} content={sidebarContent} selectedNode={selectedNode}/>
 			<div className="board-main">
 				<ReactFlow
 					nodes={nodes}
