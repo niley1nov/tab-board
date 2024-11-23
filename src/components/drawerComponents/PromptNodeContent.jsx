@@ -49,10 +49,22 @@ const PromptNodeContent = ({
 	};
 
 	const handleSubmitPrompt = async () => {
+		console.log(adjacencyNodes);
+		console.log(adjacentNodeInputs);
+		let inputNodes = adjacencyNodes.filter((node) => node.type==='TabNode');
+		let context = "";
+		for(let node of inputNodes) {
+			let name = adjacentNodeInputs[node.id];
+			if(!!name) {
+				context += (name + '\n\n');
+			}
+			context += (node.data.content + '\n\n' + '----------' + '\n\n');
+		}
+
 		try {
 			const geminiService = new GeminiProService(token);
 			const response = token
-				? await geminiService.callModel(prompt)
+				? await geminiService.callModel(`Prompt: ${prompt}\n\nContext: ${context}`)
 				: null;
 			console.log("Response:", response);
 			setPromptNodeDetails((prevDetails) =>
