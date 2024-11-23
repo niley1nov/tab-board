@@ -1,7 +1,10 @@
-# General rules for all files
 [*]
 end_of_line = lf
 insert_final_newline = false 
 charset = utf-8
+indent_style = tab
+indent_size = 4
+
+[*.jsx]
 indent_style = tab
 indent_size = 4
