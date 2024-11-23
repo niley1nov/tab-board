@@ -40,19 +40,23 @@ const PromptInputField = ({ prompt, setPrompt, handleSubmit }) => {
 				value={prompt}
 				onChange={(e) => setPrompt(e.target.value)}
 				className="custom-text-field"
-				InputProps={{
-					endAdornment: (
-						<InputAdornment position="end">
-							<IconButton
-								onClick={
-									loading ? handleStopClick : handleSendClick
-								}
-								className="icon-button"
-							>
-								{loading ? <StopCircleIcon /> : <SendIcon />}
-							</IconButton>
-						</InputAdornment>
-					),
+				slotProps={{
+					input: {
+						endAdornment: (
+							<InputAdornment position="end">
+								<IconButton
+									onClick={
+										loading
+											? handleStopClick
+											: handleSendClick
+									}
+									className="icon-button"
+								>
+									{loading ? <StopCircleIcon /> : <SendIcon />}
+								</IconButton>
+							</InputAdornment>
+						),
+					},
 				}}
 			/>
 		</Box>
