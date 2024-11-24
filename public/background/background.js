@@ -92,13 +92,41 @@ function extractContentAndSend(tabId, tabTitle, tabUrl) {
 		});
 	}
 
+	function extractReadableContent() {
+		const excludedTags = ['script', 'style', 'noscript', 'footer', 'header', 'aside', 'nav'];
+		let content = '';
+	
+		// Recursive function to traverse elements
+		function extractFromElement(element) {
+			if (excludedTags.includes(element.tagName.toLowerCase())) {
+				return; // Skip excluded tags
+			}
+	
+			// Append text from relevant tags with proper spacing
+			if (['h1', 'h2', 'h3'].includes(element.tagName.toLowerCase())) {
+				content += '\n\n' + element.innerText.trim() + '\n' + '='.repeat(element.innerText.trim().length) + '\n';
+			} else if (['p', 'li'].includes(element.tagName.toLowerCase())) {
+				content += '\n' + element.innerText.trim() + '\n';
+			}
+	
+			// Recursively process child nodes
+			element.childNodes.forEach(child => {
+				if (child.nodeType === Node.ELEMENT_NODE) {
+					extractFromElement(child);
+				}
+			});
+		}
+		extractFromElement(document.body);
+		return content.trim();
+	}
+
 	// Build the structured data to send
 	const tabData = {
 		title: tabTitle,
 		url: tabUrl,
 		tabId: tabId,
 		metaTags: getMetaTags(), // Extract meta tags
-		content: document.body.innerText, // Structured text content (headings, paragraphs, etc.)
+		content: extractReadableContent(),
 		jsonLD: getJSONLD(), // Extract JSON-LD structured data
 		openGraph: getOpenGraphData(), // Extract OpenGraph metadata
 	};
