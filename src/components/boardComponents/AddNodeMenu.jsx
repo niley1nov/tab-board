@@ -23,30 +23,44 @@ const AddNodeMenu = ({ anchorEl, open, onClose, onSelectOption }) => {
 				<div className="menu-arrow"></div>
 				<div
 					className="menu-option"
-					onClick={() => onSelectOption("Option 1")}
+					onClick={() => onSelectOption("prompt")}
 				>
 					Prompt Node
 				</div>
 				<hr className="menu-divider" />
 				<div
 					className="menu-option"
-					onClick={() => onSelectOption("Option 2")}
+					onClick={() => onSelectOption("summary")}
 				>
 					Summarization Node
 				</div>
 				<hr className="menu-divider" />
 				<div
 					className="menu-option"
-					onClick={() => onSelectOption("Option 3")}
+					onClick={() => onSelectOption("rewrite")}
 				>
 					Rewrite Node
 				</div>
 				<hr className="menu-divider" />
 				<div
 					className="menu-option"
-					onClick={() => onSelectOption("Option 4")}
+					onClick={() => onSelectOption("translate")}
 				>
 					Translate Node
+				</div>
+				<hr className="menu-divider" />
+				<div
+					className="menu-option"
+					onClick={() => onSelectOption("chat")}
+				>
+					Chat Node
+				</div>
+				<hr className="menu-divider" />
+				<div
+					className="menu-option"
+					onClick={() => onSelectOption("agent")}
+				>
+					Agent Node
 				</div>
 			</Box>
 		</Popover>

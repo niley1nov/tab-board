@@ -8,7 +8,7 @@ const GraphContext = createContext();
 
 export const GraphProvider = ({ children }) => {
 	const xCustPosRef = useRef(700);
-	const yCustPosRef = useRef(100);	
+	const yCustPosRef = useRef(100);
 	const adjacencyList = useRef({});
 	const [sidebarContent, setSidebarContent] = useState({
 		id: "",
@@ -72,6 +72,21 @@ export const GraphProvider = ({ children }) => {
 			{ x, y },
 			{
 				label: "Prompt Node",
+				content: "",
+				prompt: ""
+			},
+		);
+	};
+
+	const createChatNode = (x, y) => {
+		const id = generateRandomID();
+		addNodeToAdjacencyList(id);
+		return createNode(
+			id,
+			"ChatNode",
+			{ x, y },
+			{
+				label: "Chat Node",
 				content: "",
 				prompt: ""
 			},
@@ -191,13 +206,24 @@ export const GraphProvider = ({ children }) => {
 		}
 	};
 
-	const handleAddNode = () => {
-		const newNode = createPromptNode(
-			xCustPosRef.current,
-			yCustPosRef.current,
-		);
-		setNodes((prevNodes) => [...prevNodes, newNode]);
-		yCustPosRef.current += 250;
+	const handleAddNode = (option) => {
+		let newNode;
+		if (option === "prompt") {
+			newNode = createPromptNode(
+				xCustPosRef.current,
+				yCustPosRef.current,
+			);
+		} else if(option === "chat") {
+			newNode = createChatNode(
+				xCustPosRef.current,
+				yCustPosRef.current,
+			);
+		}
+
+		if(!!newNode) {
+			setNodes((prevNodes) => [...prevNodes, newNode]);
+			yCustPosRef.current += 250;
+		}
 	};
 
 	const addEdge = (params, eds) => {
@@ -247,6 +273,7 @@ export const GraphProvider = ({ children }) => {
 				createNode,
 				createTabNode,
 				createPromptNode,
+				createChatNode,
 				createOutputNode,
 				nodes,
 				setNodes,
