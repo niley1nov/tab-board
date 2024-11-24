@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Drawer from "@mui/material/Drawer";
 import DrawerHeader from "./DrawerHeader";
+import { Divider, Button } from "@mui/material";
 import TokenDialog from "./TokenDialog";
 import { useGraph } from "../../containers/GraphContext";
 import { useToken } from "../../containers/TokenContext";
@@ -39,19 +40,24 @@ const CustomDrawer = ({ open, onClose }) => {
 				ModalProps={{ keepMounted: true }}
 			>
 				<DrawerHeader title={title} onClose={onClose} />
-				<div className="drawer-content">
-					{nodeType === "PromptNode" && (
-						<PromptNodeContent
-							token={token}
-							setDialogOpen={setDialogOpen}
-						/>
-					)}
-					{nodeType === "TabNode" && (
+				{nodeType === "PromptNode" && (
+					<Divider sx={{ marginY: 2, borderColor: "#F1E9FF" }} />
+				)}
+				<div className="drawer-wrapper" style={{ background: nodeType === "TabNode" ? "#2d2a30" : "#49454F"}}>
+					<div className="drawer-content">
+						{nodeType === "PromptNode" && (
+							<PromptNodeContent
+								token={token}
+								setDialogOpen={setDialogOpen}
+							/>
+						)}
+						{nodeType === "TabNode" && (
 						<TabNodeContent />
-					)}
-					{nodeType === "OutputNode" && (
-						<OutputNodeContent />
-					)}
+						)}
+						{nodeType === "OutputNode" && (
+							<OutputNodeContent />
+						)}
+					</div>
 				</div>
 			</Drawer>
 			<TokenDialog

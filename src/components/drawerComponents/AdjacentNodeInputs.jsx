@@ -7,7 +7,7 @@ const AdjacentNodeInputs = ({
 	adjacentNodeInputs,
 	handleInputChange,
 }) => (
-	<Box>
+	<Box className='adjacent-tabnode-input-container'>
 		{adjacencyNodes
 			.filter((node) => node.type === "TabNode")
 			.map((node) => (

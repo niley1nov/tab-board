@@ -7,15 +7,17 @@ const TabNodeContent = () => {
 	const graph = useGraph();
 
 	return (
-		<ScrollableContent>
-			{graph.sidebarContent.additionalContent ? (
-				<div className="tab-content">
-					<ReactMarkdown>{graph.sidebarContent.additionalContent}</ReactMarkdown>
-				</div>
-			) : (
-				<div>No content available.</div>
-			)}
-		</ScrollableContent>
+		<div className="tabnode-container">
+			<ScrollableContent>
+				{graph.sidebarContent.additionalContent ? (
+					<div className="tab-content">
+						<ReactMarkdown>{graph.sidebarContent.additionalContent}</ReactMarkdown>
+					</div>
+				) : (
+					<div>No content available.</div>
+				)}
+			</ScrollableContent>
+		</div>
 	);
 };
 

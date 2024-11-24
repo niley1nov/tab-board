@@ -58,6 +58,13 @@ const PromptNodeContent = ({
 
 	return (
 		<>
+			<ModelSelector
+				selectedModel={nodeModelSelections[nodeId]}
+				nodeId={nodeId}
+				handleModelChange={handleModelChange}
+			/>
+			<Divider sx={{ marginY: 2, borderColor: "#F1E9FF" }} />
+			<br/>
 			<AdjacentNodeInputs
 				adjacencyNodes={adjacencyNodes}
 				adjacentNodeInputs={adjacentNodeInputs}
@@ -65,11 +72,7 @@ const PromptNodeContent = ({
 					setAdjacentNodeInputs((prev) => ({ ...prev, [id]: value }))
 				}
 			/>
-			<ModelSelector
-				selectedModel={nodeModelSelections[nodeId]}
-				nodeId={nodeId}
-				handleModelChange={handleModelChange}
-			/>
+			<br/>
 			<PromptInputField
 				handleSubmit={handleSubmitPrompt} // Updated to pass handleSubmitPrompt
 			/>

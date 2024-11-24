@@ -55,6 +55,7 @@ const Board = () => {
 
 	useEffect(() => {
 		const handleTabData = (request) => {
+			console.log("TabData: ", request.tabData);
 			if (request.action === "sendTabData") {
 				const newNode = graph.createTabNode(
 					xPosRef.current,

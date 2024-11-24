@@ -13,12 +13,22 @@
     overflow: hidden !important;
 }
 
-.drawer-content {
+.drawer-wrapper {
+	margin-top: 12px !important;
 	margin-bottom: 50px !important;
+    padding: 8px; /* Add padding inside the wrapper */
+    border-radius: 20px; /* Round the corners */
+    height: 100%; /* Ensure it occupies the full height of the parent */
+    box-sizing: border-box; /* Include padding in height/width calculations */
+}
+
+.drawer-content {
+    margin-bottom: 50px !important;
     height: calc(100% - 48px) !important;
     overflow-y: auto !important;
-    padding-right: 8px;
     padding-left: 8px;
+	padding-right: 8px;
+    border-radius: 8px; /* Round inner content corners slightly */
 }
 
 /* Custom scrollbar for WebKit browsers */
@@ -27,7 +37,7 @@
 }
 
 .drawer-content::-webkit-scrollbar-track {
-    background: #3c383e;
+    background: #2d2a30;
     border-radius: 3px;
 }
 
@@ -43,7 +53,7 @@
 /* Custom scrollbar for Firefox */
 .drawer-content {
     scrollbar-width: thin;
-    scrollbar-color: #d0bcff #3c383e;
+    scrollbar-color: #d0bcff #2d2a30;
 }
 
 /* Drawer header */
@@ -226,3 +236,40 @@
     border-bottom: 1px solid #b29edd !important; /* Slightly lighter hover color */
 }
 
+.send-button {
+	color: #6750a4 !important;
+	background-color: #d0bcff !important;
+	border-radius: 9999px !important;
+	padding: 6px 16px !important;
+	display: inline-flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	font-size: 16px !important;
+	font-weight: 500 !important;
+	border: none !important;
+	text-transform: none !important;
+	margin-right: 10px !important;
+}
+
+.button-container {
+	display: flex;
+	justify-content: flex-end; /* Align the button to the right */
+	width: 100%;
+	margin-top: 10px; /* Ensure there's space between input and button */
+}
+
+.prompt-container {
+	display: flex;
+	flex-direction: column; /* Stack the input and button vertically */
+	width: 100%;
+}
+
+.custom-text-field {
+	width: 100%; /* Ensure text field takes the full width */
+}
+
+.box-container {
+	display: flex;
+	flex-direction: column;
+	padding-bottom: 20px; /* Add space at the bottom to avoid overlap */
+}

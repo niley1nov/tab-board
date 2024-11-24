@@ -1,7 +1,7 @@
 const ScrollableContent = ({ children }) => (
 	<div
 		style={{
-			background: '#322f35',
+			background: '#2d2a30',
 			color: '#fff',
 			height: "100",
 			padding: "5px",
