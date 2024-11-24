@@ -244,6 +244,14 @@ const Board = () => {
 	};
 
 	const addEdge = (params, eds) => {
+		const targetNode = getNode(params.target);
+		if (targetNode?.type === "OutputNode") {
+			const connectedEdges = eds.filter((edge) => edge.target === params.target);
+			if (connectedEdges.length >= 1) {
+				console.warn("OutputNode can only have one edge connected.");
+				return eds;
+			}
+		}
 		const newEdge = {
 			id: `e${params.source}-${params.target}`,
 			source: params.source,
@@ -265,42 +273,6 @@ const Board = () => {
 	const handleSetSelectedNode = (node) => {
 		console.log("SELECTED NODE: ", node);
 		console.log("Adjacent Node Data: ", node.data.adjacencyNodes);
-
-		// const connectedNodeIds = [
-		// 	...(adjacencyList.current[node.id]?.left || []),
-		// 	...(adjacencyList.current[node.id]?.right || []),
-		// ];
-
-		// // Highlight the selected node and its connected nodes
-		// setNodes((prevNodes) =>
-		// 	prevNodes.map((n) => {
-		// 		if (n.id === node.id) {
-		// 			return {
-		// 				...n,
-		// 				data: {
-		// 					...n.data,
-		// 					backgroundColor: "#D0BCFF",
-		// 				},
-		// 			};
-		// 		} else if (connectedNodeIds.includes(n.id)) {
-		// 			return {
-		// 				...n,
-		// 				data: {
-		// 					...n.data,
-		// 					backgroundColor: "#D0BCFF",
-		// 				},
-		// 			};
-		// 		} else {
-		// 			return {
-		// 				...n,
-		// 				data: {
-		// 					...n.data,
-		// 					backgroundColor: "#FFF",
-		// 				},
-		// 			};
-		// 		}
-		// 	}),
-		// );
 
 		setSidebarContent((prevContent) => ({
 			...prevContent,
