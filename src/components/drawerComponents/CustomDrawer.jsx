@@ -5,6 +5,7 @@ import TokenDialog from "./TokenDialog";
 import { useGraph } from "../../containers/GraphContext";
 import { useToken } from "../../containers/TokenContext";
 import PromptNodeContent from "./PromptNodeContent";
+import ChatNodeContent from "./ChatNodeContent";
 import TabNodeContent from "./TabNodeContent";
 import OutputNodeContent from "./OutputNodeContent";
 import "../../stylesheets/CustomDrawer.css";
@@ -51,6 +52,9 @@ const CustomDrawer = ({ open, onClose }) => {
 					)}
 					{nodeType === "OutputNode" && (
 						<OutputNodeContent />
+					)}
+					{nodeType === "ChatNode" && (
+						<ChatNodeContent />
 					)}
 				</div>
 			</Drawer>
