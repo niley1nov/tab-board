@@ -74,7 +74,7 @@ const Board = () => {
 
 	return (
 		<div className="board-container">
-			<NavBar onAddNode={graph.handleAddNode} content={graph.sidebarContent} selectedNode={graph.selectedNode} />
+			<NavBar/>
 			<div className="board-main">
 				<ReactFlow
 					nodes={graph.nodes}
@@ -93,11 +93,7 @@ const Board = () => {
 				</ReactFlow>
 			</div>
 			<NodeMenu
-				anchorEl={graph.anchorEl}
-				onClose={graph.closeMenu}
 				onEdit={openEditDialog}
-				onDelete={graph.handleDeleteNode}
-				nodeType={graph.selectedNode?.type}
 			/>
 			<EditDialog
 				open={editDialogOpen}

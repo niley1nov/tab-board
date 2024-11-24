@@ -2,15 +2,17 @@
 import React, { useState, useEffect } from "react";
 import { AppBar, Toolbar, Typography, IconButton, Button } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import { useGraph } from "../../containers/GraphContext";
 import AddIcon from "@mui/icons-material/AddCard";
 import TokenIcon from "@mui/icons-material/Token";
-import { useToken } from "../../containers/TokenContext"; // Adjust the path
+import { useToken } from "../../containers/TokenContext";
 import TokenDialog from "../drawerComponents/TokenDialog";
 import CustomDrawer from "../drawerComponents/CustomDrawer";
 import AddNodeMenu from "./AddNodeMenu";
 import "../../stylesheets/NavBar.css";
 
-const NavBar = ({ onAddNode, content, selectedNode  }) => {
+const NavBar = () => {
+	const graph = useGraph();
 	const [drawerOpen, setDrawerOpen] = useState(false);
 	const { token, setToken } = useToken();
 	const [apiToken, setApiToken] = useState("");
@@ -42,7 +44,7 @@ const NavBar = ({ onAddNode, content, selectedNode  }) => {
 
 	// Handle menu item selection
 	const handleMenuItemClick = (option) => {
-		onAddNode(option);
+		graph.handleAddNode(option);
 		handleMenuClose();
 	};
 
@@ -109,8 +111,6 @@ const NavBar = ({ onAddNode, content, selectedNode  }) => {
 				onClose={toggleDrawer()}
 				prompt={prompt}
 				setPrompt={setPrompt}
-				content={content}
-				selectedNode={selectedNode}
 			/>
 			<TokenDialog
 				open={dialogOpen}

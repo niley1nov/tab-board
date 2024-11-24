@@ -2,18 +2,19 @@ import React, { useState, useEffect } from "react";
 import Drawer from "@mui/material/Drawer";
 import DrawerHeader from "./DrawerHeader";
 import TokenDialog from "./TokenDialog";
+import { useGraph } from "../../containers/GraphContext";
 import { useToken } from "../../containers/TokenContext";
 import PromptNodeContent from "./PromptNodeContent";
 import TabNodeContent from "./TabNodeContent";
 import OutputNodeContent from "./OutputNodeContent";
 import "../../stylesheets/CustomDrawer.css";
 
-const CustomDrawer = ({ open, onClose, prompt, setPrompt, content, selectedNode }) => {
+const CustomDrawer = ({ open, onClose, prompt, setPrompt }) => {
+	const graph = useGraph();
 	const { token, setToken } = useToken();
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const [apiToken, setApiToken] = useState("");
-
-	const { nodeId, title, nodeType } = content;
+	const { nodeId, title, nodeType } = graph.sidebarContent;
 
 	useEffect(() => {
 		// Initialize apiToken with the current token value on component mount
@@ -41,21 +42,17 @@ const CustomDrawer = ({ open, onClose, prompt, setPrompt, content, selectedNode 
 				<div className="drawer-content">
 					{nodeType === "PromptNode" && (
 						<PromptNodeContent
-							content={content}
 							prompt={prompt}
 							setPrompt={setPrompt}
 							token={token}
 							setDialogOpen={setDialogOpen}
-							node={selectedNode}
 						/>
 					)}
 					{nodeType === "TabNode" && (
-						<TabNodeContent
-							additionalContent={content.additionalContent}
-						/>
+						<TabNodeContent />
 					)}
 					{nodeType === "OutputNode" && (
-						<OutputNodeContent selectedNode={selectedNode}/>
+						<OutputNodeContent />
 					)}
 				</div>
 			</Drawer>

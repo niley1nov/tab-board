@@ -3,6 +3,7 @@ import AdjacentNodeInputs from "./AdjacentNodeInputs";
 import { Divider } from "@mui/material";
 import ModelSelector from "./ModelSelector";
 import PromptInputField from "./PromptInputField";
+import { useGraph } from "../../containers/GraphContext";
 import {
 	updatePromptNodeDetails,
 	addFinalPrompt,
@@ -10,24 +11,23 @@ import {
 import GeminiProService from "../../services/GeminiProService";
 
 const PromptNodeContent = ({
-	content,
 	prompt,
 	setPrompt,
 	token,
-	setDialogOpen,
-	node
+	setDialogOpen
 }) => {
+	const graph = useGraph();
 	const [adjacentNodeInputs, setAdjacentNodeInputs] = useState({});
 	const [nodeModelSelections, setNodeModelSelections] = useState({});
 	const [promptNodeDetails, setPromptNodeDetails] = useState({});
-	const { nodeId, adjacencyNodes } = content;
+	const { nodeId, adjacencyNodes } = graph.sidebarContent;
 
 	const handleSubmitPrompt = async () => {
-		let inputNodes = adjacencyNodes.filter((node) => node.type==='TabNode');
+		let inputNodes = adjacencyNodes.filter((node) => node.type === 'TabNode');
 		let context = "";
-		for(let node of inputNodes) {
+		for (let node of inputNodes) {
 			let name = adjacentNodeInputs[node.id];
-			if(!!name) {
+			if (!!name) {
 				context += (name + '\n\n');
 			}
 			context += (node.data.content + '\n\n' + '----------' + '\n\n');
@@ -39,11 +39,11 @@ const PromptNodeContent = ({
 				? await geminiService.callModel(`Prompt: ${prompt}\n\nContext: ${context}`)
 				: null;
 			console.log("Response:", response);
-			node.data.content = response;
+			graph.selectedNode.data.content = response;
 			setPromptNodeDetails((prevDetails) =>
 				addFinalPrompt(prevDetails, nodeId, prompt),
 			); //what is this doing?
-			console.log(node);
+			console.log(graph.selectedNode);
 		} catch (error) {
 			console.error("Error while submitting prompt:", error.message);
 		}
