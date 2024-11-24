@@ -4,6 +4,7 @@ import { Divider } from "@mui/material";
 import ModelSelector from "./ModelSelector";
 import PromptInputField from "./PromptInputField";
 import { useGraph } from "../../containers/GraphContext";
+import ChatWindow from "./ChatWindow";
 import {
 	updatePromptNodeDetails,
 	addFinalPrompt,
@@ -70,9 +71,7 @@ const ChatNodeContent = ({
 				nodeId={nodeId}
 				handleModelChange={handleModelChange}
 			/>
-			<PromptInputField
-				handleSubmit={handleSubmitPrompt} // Updated to pass handleSubmitPrompt
-			/>
+			<ChatWindow />
 		</>
 	);
 };
