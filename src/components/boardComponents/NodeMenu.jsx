@@ -1,13 +1,16 @@
 // src/components/NodeMenu.jsx
 import React from "react";
 import { Menu, MenuItem } from "@mui/material";
+import { useGraph } from "../../containers/GraphContext";
 
-const NodeMenu = ({ anchorEl, onClose, onEdit, onDelete, nodeType }) => {
+const NodeMenu = ({ onEdit }) => {
+	const graph = useGraph();
+	
 	return (
-		<Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={onClose}>
+		<Menu anchorEl={graph.anchorEl} open={Boolean(graph.anchorEl)} onClose={graph.closeMenu}>
 			<MenuItem onClick={onEdit}>Edit</MenuItem>
-			{nodeType === "PromptNode" && (
-				<MenuItem onClick={onDelete}>Delete</MenuItem>
+			{graph.selectedNode?.type === "PromptNode" && (
+				<MenuItem onClick={graph.handleDeleteNode}>Delete</MenuItem>
 			)}
 		</Menu>
 	);

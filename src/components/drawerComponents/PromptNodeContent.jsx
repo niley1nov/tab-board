@@ -3,6 +3,7 @@ import AdjacentNodeInputs from "./AdjacentNodeInputs";
 import { Divider } from "@mui/material";
 import ModelSelector from "./ModelSelector";
 import PromptInputField from "./PromptInputField";
+import { useGraph } from "../../containers/GraphContext";
 import {
 	updatePromptNodeDetails,
 	addFinalPrompt,
@@ -10,55 +11,37 @@ import {
 import GeminiProService from "../../services/GeminiProService";
 
 const PromptNodeContent = ({
-	content,
-	prompt,
-	setPrompt,
 	token,
-	dialogOpen,
-	setDialogOpen,
+	setDialogOpen
 }) => {
+	const graph = useGraph();
 	const [adjacentNodeInputs, setAdjacentNodeInputs] = useState({});
 	const [nodeModelSelections, setNodeModelSelections] = useState({});
 	const [promptNodeDetails, setPromptNodeDetails] = useState({});
-	const { nodeId, adjacencyNodes } = content;
-
-	const handleSendInput = async (tabNodeId, promptText) => {
-		const context =
-			adjacencyNodes.find((node) => node.id === tabNodeId)?.data
-				.content || "";
-		try {
-			const geminiService = new GeminiProService(token);
-			const response = token
-				? await geminiService.callModel(
-						`Prompt: ${promptText}\nContext: ${context}`,
-					)
-				: null;
-			console.log("Response: ", response);
-			setPromptNodeDetails((prevDetails) =>
-				updatePromptNodeDetails(
-					prevDetails,
-					nodeId,
-					tabNodeId,
-					promptText,
-					context,
-					response,
-				),
-			);
-		} catch (error) {
-			console.error(`Error for TabNode ${tabNodeId}:`, error.message);
-		}
-	};
+	const { nodeId, adjacencyNodes } = graph.sidebarContent;
 
 	const handleSubmitPrompt = async () => {
+		let inputNodes = adjacencyNodes.filter((node) => node.type === 'TabNode');
+		let context = "";
+		for (let node of inputNodes) {
+			let name = adjacentNodeInputs[node.id];
+			if (!!name) {
+				context += (name + '\n\n');
+			}
+			context += (node.data.content + '\n\n' + '----------' + '\n\n');
+		}
+
 		try {
 			const geminiService = new GeminiProService(token);
 			const response = token
-				? await geminiService.callModel(prompt)
+				? await geminiService.callModel(`Prompt: ${graph.selectedNode.data.prompt}\n\nContext: ${context}`)
 				: null;
 			console.log("Response:", response);
+			graph.selectedNode.data.content = response;
 			setPromptNodeDetails((prevDetails) =>
-				addFinalPrompt(prevDetails, nodeId, prompt),
-			);
+				addFinalPrompt(prevDetails, nodeId, graph.selectedNode.data.prompt),
+			); //what is this doing?
+			console.log(graph.selectedNode);
 		} catch (error) {
 			console.error("Error while submitting prompt:", error.message);
 		}
@@ -88,8 +71,6 @@ const PromptNodeContent = ({
 				handleModelChange={handleModelChange}
 			/>
 			<PromptInputField
-				prompt={prompt}
-				setPrompt={setPrompt}
 				handleSubmit={handleSubmitPrompt} // Updated to pass handleSubmitPrompt
 			/>
 		</>

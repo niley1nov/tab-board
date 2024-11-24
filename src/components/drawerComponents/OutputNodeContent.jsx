@@ -1,32 +1,26 @@
-import React, { useState } from "react";
-import { Button, Typography } from "@mui/material";
+import React from "react";
+import ScrollableContent from "./ScrollableContent";
+import ReactMarkdown from "react-markdown";
+import { useGraph } from "../../containers/GraphContext";
 
 const OutputNodeContent = () => {
-	const [output, setOutput] = useState(null);
+	const graph = useGraph();
 
-	const handleGetOutput = () => {
-		setOutput("Generated output text goes here.");
-	};
+	// Extract the first connected node's content from `selectedNode`
+	const connectedNodes = graph.selectedNode?.data?.adjacencyNodes || [];
+	const connectedContent =
+		connectedNodes.length > 0 ? connectedNodes[0]?.data?.content : null;
 
 	return (
-		<div>
-			<Button
-				variant="contained"
-				onClick={handleGetOutput}
-				sx={{ marginTop: 2 }}
-			>
-				Get Output
-			</Button>
-			{output && (
-				<Typography
-					variant="body2"
-					className="sidebar-output"
-					sx={{ marginTop: 2 }}
-				>
-					{output}
-				</Typography>
+		<ScrollableContent>
+			{connectedContent ? (
+				<div className="output-content">
+					<ReactMarkdown>{connectedContent}</ReactMarkdown>
+				</div>
+			) : (
+				<div>No content available.</div>
 			)}
-		</div>
+		</ScrollableContent>
 	);
 };
 
