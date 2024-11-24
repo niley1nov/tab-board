@@ -9,7 +9,6 @@ const DrawerHeader = ({ title, onClose }) => (
 				{title}
 			</Typography>
 		</Box>
-		<Divider sx={{ marginY: 2, borderColor: "#fff" }} />
 	</>
 );
 

@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box, TextField, InputAdornment, IconButton } from "@mui/material";
-import SendIcon from "@mui/icons-material/Send";
-import StopCircleIcon from "@mui/icons-material/StopCircle";
+import { Box, TextField, Button } from "@mui/material";
 import { useGraph } from "../../containers/GraphContext";
 import "../../stylesheets/CustomDrawer.css";
 
@@ -58,32 +56,29 @@ const PromptInputField = ({ handleSubmit }) => {
 
 	return (
 		<Box mb={2}>
-			<TextField
-				fullWidth
-				variant="outlined"
-				placeholder="Submit Prompt Here..."
-				value={prompt}
-				onChange={handlePromptChange}
-				className="custom-text-field"
-				slotProps={{
-					input: {
-						endAdornment: (
-							<InputAdornment position="end">
-								<IconButton
-									onClick={
-										loading
-											? handleStopClick
-											: handleSendClick
-									}
-									className="icon-button"
-								>
-									{loading ? <StopCircleIcon /> : <SendIcon />}
-								</IconButton>
-							</InputAdornment>
-						),
-					},
-				}}
-			/>
+			<div className="prompt-container">
+				<TextField
+					fullWidth
+					variant="outlined"
+					placeholder="Submit Prompt Here..."
+					value={prompt}
+					onChange={handlePromptChange}
+					className="custom-text-field"
+					multiline
+					rows={4}
+				/>
+				<div className="button-container">
+					<Button
+						variant="contained"
+						color="primary"
+						onClick={loading ? handleStopClick : handleSendClick}
+						disabled={loading}
+						className="send-button"
+					>
+						{loading ? "Sending..." : "Send"}
+					</Button>
+				</div>
+			</div>
 		</Box>
 	);
 };
