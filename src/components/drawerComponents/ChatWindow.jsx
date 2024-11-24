@@ -1,19 +1,21 @@
 import React, { useState } from "react";
 import { TextField, Paper, List, ListItem, ListItemText, Button, Divider, Box } from "@mui/material";
 
-const ChatWindow = ({ handleSubmitPrompt }) => {
-	const [messages, setMessages] = useState([]); // Store chat messages
-	const [input, setInput] = useState(""); // User input
+const ChatWindow = ({ handleSendMessage }) => {
+	const [messages, setMessages] = useState([]);
+	const [input, setInput] = useState("");
 
-	const handleSend = () => {
+	const handleSend = async () => {
 		if (!input.trim()) return;
 
 		// Add user message
 		setMessages((prev) => [...prev, { sender: "user", text: input }]);
 
-		// Dummy Gemini response
-		const dummyResponse = "This is a dummy response from Gemini!";
-		setMessages((prev) => [...prev, { sender: "gemini", text: dummyResponse }]);
+		// Get AI response
+		const response = await handleSendMessage(input);
+
+		// Add AI response
+		setMessages((prev) => [...prev, { sender: "gemini", text: response }]);
 
 		// Clear input
 		setInput("");
@@ -21,7 +23,6 @@ const ChatWindow = ({ handleSubmitPrompt }) => {
 
 	return (
 		<Paper style={{ padding: "16px", height: "400px", display: "flex", flexDirection: "column" }}>
-			{/* Chat Display */}
 			<List style={{ flex: 1, overflow: "auto" }}>
 				{messages.map((message, index) => (
 					<ListItem key={index} style={{ textAlign: message.sender === "user" ? "right" : "left" }}>
@@ -37,11 +38,7 @@ const ChatWindow = ({ handleSubmitPrompt }) => {
 					</ListItem>
 				))}
 			</List>
-
-			{/* Divider */}
 			<Divider style={{ margin: "8px 0" }} />
-
-			{/* Input and Send Button */}
 			<Box display="flex" gap="8px">
 				<TextField
 					variant="outlined"

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AdjacentNodeInputs from "./AdjacentNodeInputs";
 import { Divider } from "@mui/material";
 import ModelSelector from "./ModelSelector";
@@ -19,6 +19,7 @@ const ChatNodeContent = ({
 	const [adjacentNodeInputs, setAdjacentNodeInputs] = useState({});
 	const [nodeModelSelections, setNodeModelSelections] = useState({});
 	const [promptNodeDetails, setPromptNodeDetails] = useState({});
+	const geminiService = new GeminiProService(token);
 	const { nodeId, adjacencyNodes } = graph.sidebarContent;
 
 	const handleSubmitPrompt = async () => {
@@ -57,6 +58,29 @@ const ChatNodeContent = ({
 		if (selectedValue === "Gemini Pro" && !token) setDialogOpen(true);
 	};
 
+	useEffect(() => {
+		// Initialize AI session on mount
+		console.log(token);
+		if (token) {
+			geminiService.initializeSession(nodeId);
+		}
+		return () => {
+			// Cleanup session on unmount (optional)
+			geminiService.clearSession(nodeId);
+		};
+	}, [nodeId, token, geminiService]);
+
+	const handleSendMessage = async (message) => {
+		try {
+			// Call the model with the message
+			const response = await geminiService.callModel(nodeId, message);
+			return response;
+		} catch (error) {
+			console.error("Error sending message:", error.message);
+			return "Failed to get a response.";
+		}
+	};
+
 	return (
 		<>
 			<AdjacentNodeInputs
@@ -71,7 +95,7 @@ const ChatNodeContent = ({
 				nodeId={nodeId}
 				handleModelChange={handleModelChange}
 			/>
-			<ChatWindow />
+			<ChatWindow handleSendMessage={handleSendMessage} />
 		</>
 	);
 };
