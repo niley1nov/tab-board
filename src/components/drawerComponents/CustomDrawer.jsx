@@ -9,7 +9,7 @@ import TabNodeContent from "./TabNodeContent";
 import OutputNodeContent from "./OutputNodeContent";
 import "../../stylesheets/CustomDrawer.css";
 
-const CustomDrawer = ({ open, onClose, prompt, setPrompt }) => {
+const CustomDrawer = ({ open, onClose }) => {
 	const graph = useGraph();
 	const { token, setToken } = useToken();
 	const [dialogOpen, setDialogOpen] = useState(false);
@@ -42,8 +42,6 @@ const CustomDrawer = ({ open, onClose, prompt, setPrompt }) => {
 				<div className="drawer-content">
 					{nodeType === "PromptNode" && (
 						<PromptNodeContent
-							prompt={prompt}
-							setPrompt={setPrompt}
 							token={token}
 							setDialogOpen={setDialogOpen}
 						/>

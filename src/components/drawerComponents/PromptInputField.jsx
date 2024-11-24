@@ -2,11 +2,14 @@ import React, { useState } from "react";
 import { Box, TextField, InputAdornment, IconButton } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import StopCircleIcon from "@mui/icons-material/StopCircle";
+import { useGraph } from "../../containers/GraphContext";
 import "../../stylesheets/CustomDrawer.css";
 
-const PromptInputField = ({ prompt, setPrompt, handleSubmit }) => {
+const PromptInputField = ({handleSubmit }) => {
+	const graph = useGraph();
 	const [loading, setLoading] = useState(false);
 	const [abortController, setAbortController] = useState(null);
+	const [prompt, setPrompt] = useState("");
 
 	const handleSendClick = async () => {
 		const controller = new AbortController();
@@ -38,7 +41,9 @@ const PromptInputField = ({ prompt, setPrompt, handleSubmit }) => {
 				variant="outlined"
 				placeholder="Submit Prompt Here..."
 				value={prompt}
-				onChange={(e) => setPrompt(e.target.value)}
+				onChange={(e) =>
+					setPrompt(e.target.value)
+				}
 				className="custom-text-field"
 				slotProps={{
 					input: {

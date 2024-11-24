@@ -17,7 +17,6 @@ const NavBar = () => {
 	const { token, setToken } = useToken();
 	const [apiToken, setApiToken] = useState("");
 	const [dialogOpen, setDialogOpen] = useState(false);
-	const [prompt, setPrompt] = useState("");
 	const [menuAnchor, setMenuAnchor] = useState(null);
 
 	const toggleDrawer = () => () => {
@@ -109,8 +108,6 @@ const NavBar = () => {
 			<CustomDrawer
 				open={drawerOpen}
 				onClose={toggleDrawer()}
-				prompt={prompt}
-				setPrompt={setPrompt}
 			/>
 			<TokenDialog
 				open={dialogOpen}

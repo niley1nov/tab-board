@@ -73,6 +73,7 @@ export const GraphProvider = ({ children }) => {
 			{
 				label: "Prompt Node",
 				content: "",
+				prompt: ""
 			},
 		);
 	};
@@ -233,7 +234,7 @@ export const GraphProvider = ({ children }) => {
 	return (
 		<GraphContext.Provider
 			value={{
-				adjacencyList,
+				adjacencyList: adjacencyList.current,
 				sidebarContent,
 				setSidebarContent,
 				selectedNode,

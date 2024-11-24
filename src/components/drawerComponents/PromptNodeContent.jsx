@@ -11,8 +11,6 @@ import {
 import GeminiProService from "../../services/GeminiProService";
 
 const PromptNodeContent = ({
-	prompt,
-	setPrompt,
 	token,
 	setDialogOpen
 }) => {
@@ -36,12 +34,12 @@ const PromptNodeContent = ({
 		try {
 			const geminiService = new GeminiProService(token);
 			const response = token
-				? await geminiService.callModel(`Prompt: ${prompt}\n\nContext: ${context}`)
+				? await geminiService.callModel(`Prompt: ${graph.selectedNode.data.prompt}\n\nContext: ${context}`)
 				: null;
 			console.log("Response:", response);
 			graph.selectedNode.data.content = response;
 			setPromptNodeDetails((prevDetails) =>
-				addFinalPrompt(prevDetails, nodeId, prompt),
+				addFinalPrompt(prevDetails, nodeId, graph.selectedNode.data.prompt),
 			); //what is this doing?
 			console.log(graph.selectedNode);
 		} catch (error) {
@@ -73,8 +71,6 @@ const PromptNodeContent = ({
 				handleModelChange={handleModelChange}
 			/>
 			<PromptInputField
-				prompt={prompt}
-				setPrompt={setPrompt}
 				handleSubmit={handleSubmitPrompt} // Updated to pass handleSubmitPrompt
 			/>
 		</>

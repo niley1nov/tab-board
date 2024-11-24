@@ -26,7 +26,7 @@ const Board = () => {
 		OutputNode: OutputNode,
 	};
 	const edgeTypes = { Edge: Edge };
-	
+
 	const [editDialogOpen, setEditDialogOpen] = useState(false);
 	const [newTitle, setNewTitle] = useState("");
 	const xPosRef = useRef(100);
@@ -74,7 +74,7 @@ const Board = () => {
 
 	return (
 		<div className="board-container">
-			<NavBar/>
+			<NavBar />
 			<div className="board-main">
 				<ReactFlow
 					nodes={graph.nodes}
