@@ -53,14 +53,15 @@ const CustomDrawer = ({ open, onClose }) => {
 							/>
 						)}
 						{nodeType === "TabNode" && (
-              <TabNodeContent />
-            )}
-            {nodeType === "OutputNode" && (
-              <OutputNodeContent />
-            )}
-            {nodeType === "ChatNode" && (
-              <ChatNodeContent />
-            )}
+							<TabNodeContent />
+						)}
+						{nodeType === "OutputNode" && (
+							<OutputNodeContent />
+						)}
+						{nodeType === "ChatNode" && (
+							<ChatNodeContent />
+						)}
+					</div>	
 				</div>
 			</Drawer>
 			<TokenDialog
