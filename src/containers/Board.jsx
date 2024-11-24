@@ -3,6 +3,7 @@ import { useGraph } from "./GraphContext";
 import TabNode from "../components/boardComponents/TabNode";
 import PromptNode from "../components/boardComponents/PromptNode";
 import OutputNode from "../components/boardComponents/OutputNode";
+import ChatNode from "../components/boardComponents/ChatNode";
 import NavBar from "../components/boardComponents/NavBar";
 import Edge from "../components/boardComponents/Edge";
 import NodeMenu from "../components/boardComponents/NodeMenu";
@@ -24,6 +25,7 @@ const Board = () => {
 		TabNode: TabNode,
 		PromptNode: PromptNode,
 		OutputNode: OutputNode,
+		ChatNode: ChatNode,
 	};
 	const edgeTypes = { Edge: Edge };
 
