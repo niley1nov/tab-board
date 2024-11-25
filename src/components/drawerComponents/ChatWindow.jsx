@@ -1,24 +1,45 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { TextField, Paper, List, ListItem, ListItemText, Button, Divider, Box, CircularProgress } from "@mui/material";
+import { useGraph } from "../../containers/GraphContext";
 import "../../stylesheets/ChatWindow.css";
 
 const ChatWindow = ({ handleSendMessage }) => {
-	const [messages, setMessages] = useState([]);
+	const graph = useGraph();
+	const selectedNode = graph.selectedNode;
+
+	// Initialize state for the selected node
+	const [messages, setMessages] = useState(selectedNode.data.chatHistory || []);
 	const [input, setInput] = useState("");
 	const [loading, setLoading] = useState(false);
+
+	// Update messages when the selectedNode changes
+	useEffect(() => {
+		if (!selectedNode.data.chatHistory) {
+			selectedNode.data.chatHistory = []; // Initialize chatHistory if it doesn't exist
+		}
+		setMessages(selectedNode.data.chatHistory);
+	}, [selectedNode]);
+
+	// Sync messages to selectedNode.data
+	useEffect(() => {
+		selectedNode.data.chatHistory = messages;
+	}, [messages, selectedNode]);
 
 	const handleSend = async () => {
 		if (!input.trim() || loading) return;
 		setLoading(true);
+
 		// Add user message
 		setMessages((prev) => [...prev, { sender: "user", text: input }]);
+
 		// Clear input
 		setInput("");
+
 		// Get AI response
 		try {
 			const response = await handleSendMessage(input);
 			// Add AI response
-			setMessages((prev) => [...prev, { sender: "gemini", text: response }]);
+			setMessages((prev) => [...prev, { sender: "gemini", text: response.text }]);
 		} catch (error) {
 			console.error("Error fetching response:", error);
 		} finally {
@@ -32,8 +53,7 @@ const ChatWindow = ({ handleSendMessage }) => {
 				{messages.map((message, index) => (
 					<ListItem
 						key={index}
-						className={`message-item ${message.sender === "user" ? "user-message" : "gemini-message"
-							}`}
+						className={`message-item ${message.sender === "user" ? "user-message" : "gemini-message"}`}
 					>
 						<ListItemText
 							primary={message.text}
@@ -51,7 +71,7 @@ const ChatWindow = ({ handleSendMessage }) => {
 					value={input}
 					onChange={(e) => setInput(e.target.value)}
 					onKeyDown={(e) => {
-						if (e.key === "Enter" && !loading) handleSend(); // Use onKeyDown instead of onKeyPress
+						if (e.key === "Enter" && !loading) handleSend();
 					}}
 					disabled={loading}
 				/>

@@ -47,7 +47,10 @@ export default class GeminiProService extends AIService {
 			}
 			const chatSession = this.sessions[nodeId];
 			const result = await chatSession.sendMessage(prompt);
-			return result.response.text();
+			return {
+				id: nodeId,
+				text: result.response.text()
+			};
 		} catch (error) {
 			console.error("Error in GeminiProService callModel:", error);
 			throw new Error("Failed to fetch response from Gemini Pro model");
