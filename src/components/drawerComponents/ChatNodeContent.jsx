@@ -18,7 +18,6 @@ const ChatNodeContent = ({
 	const graph = useGraph();
 	const [adjacentNodeInputs, setAdjacentNodeInputs] = useState({});
 	const [nodeModelSelections, setNodeModelSelections] = useState({});
-	const [promptNodeDetails, setPromptNodeDetails] = useState({});
 	const geminiService = new GeminiProService(token);
 	const { nodeId, adjacencyNodes } = graph.sidebarContent;
 
