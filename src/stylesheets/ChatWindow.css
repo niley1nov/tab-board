@@ -1,0 +1,62 @@
+/* Main chat window styles */
+.chat-window {
+    padding: 16px;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Message list styles */
+.message-list {
+    flex: 1;
+    overflow: auto;
+}
+
+/* Message item styles */
+.message-item {
+    display: flex;
+    margin-bottom: 8px;
+}
+
+.user-message {
+    justify-content: flex-end;
+    text-align: right;
+}
+
+.gemini-message {
+    justify-content: flex-start;
+    text-align: left;
+}
+
+/* Message text bubble styles */
+.message-text {
+    background-color: #f1f1f1;
+    border-radius: 12px;
+    padding: 8px 12px;
+    display: inline-block;
+}
+
+.user-message .message-text {
+    background-color: #d1f1ff;
+}
+
+/* Divider between messages and input field */
+.divider {
+    margin: 8px 0;
+}
+
+/* Input container styles */
+.input-container {
+    display: flex;
+    gap: 8px;
+}
+
+/* Send button */
+.send-button {
+    min-width: 64px;
+}
+
+/* Loading spinner inside button */
+.loading-spinner {
+    color: white;
+}

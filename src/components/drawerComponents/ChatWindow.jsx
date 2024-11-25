@@ -1,57 +1,67 @@
 import React, { useState } from "react";
-import { TextField, Paper, List, ListItem, ListItemText, Button, Divider, Box } from "@mui/material";
+import { TextField, Paper, List, ListItem, ListItemText, Button, Divider, Box, CircularProgress } from "@mui/material";
+import "../../stylesheets/ChatWindow.css";
 
 const ChatWindow = ({ handleSendMessage }) => {
 	const [messages, setMessages] = useState([]);
 	const [input, setInput] = useState("");
+	const [loading, setLoading] = useState(false);
 
 	const handleSend = async () => {
-		if (!input.trim()) return;
-
+		if (!input.trim() || loading) return;
+		setLoading(true);
 		// Add user message
 		setMessages((prev) => [...prev, { sender: "user", text: input }]);
-
-		// Get AI response
-		const response = await handleSendMessage(input);
-
-		// Add AI response
-		setMessages((prev) => [...prev, { sender: "gemini", text: response }]);
-
 		// Clear input
 		setInput("");
+		// Get AI response
+		try {
+			const response = await handleSendMessage(input);
+			// Add AI response
+			setMessages((prev) => [...prev, { sender: "gemini", text: response }]);
+		} catch (error) {
+			console.error("Error fetching response:", error);
+		} finally {
+			setLoading(false);
+		}
 	};
 
 	return (
-		<Paper style={{ padding: "16px", height: "400px", display: "flex", flexDirection: "column" }}>
-			<List style={{ flex: 1, overflow: "auto" }}>
+		<Paper className="chat-window">
+			<List className="message-list">
 				{messages.map((message, index) => (
-					<ListItem key={index} style={{ textAlign: message.sender === "user" ? "right" : "left" }}>
+					<ListItem
+						key={index}
+						className={`message-item ${message.sender === "user" ? "user-message" : "gemini-message"
+							}`}
+					>
 						<ListItemText
 							primary={message.text}
-							style={{
-								backgroundColor: message.sender === "user" ? "#d1f1ff" : "#f1f1f1",
-								borderRadius: "12px",
-								padding: "8px 12px",
-								display: "inline-block",
-							}}
+							className="message-text"
 						/>
 					</ListItem>
 				))}
 			</List>
-			<Divider style={{ margin: "8px 0" }} />
-			<Box display="flex" gap="8px">
+			<Divider className="divider" />
+			<Box className="input-container">
 				<TextField
 					variant="outlined"
 					fullWidth
 					placeholder="Type your message here..."
 					value={input}
 					onChange={(e) => setInput(e.target.value)}
-					onKeyPress={(e) => {
-						if (e.key === "Enter") handleSend();
+					onKeyDown={(e) => {
+						if (e.key === "Enter" && !loading) handleSend(); // Use onKeyDown instead of onKeyPress
 					}}
+					disabled={loading}
 				/>
-				<Button variant="contained" onClick={handleSend}>
-					Send
+				<Button
+					variant="contained"
+					onClick={handleSend}
+					disabled={loading || !input.trim()}
+					className="send-button"
+				>
+					{loading ? <CircularProgress size={24} className="loading-spinner" /> : "Send"}
 				</Button>
 			</Box>
 		</Paper>
