@@ -90,6 +90,7 @@ export const GraphProvider = ({ children }) => {
 				content: "",
 				prompt: "",
 				chatHistory: [],
+				processing: false,
 			},
 		);
 	};

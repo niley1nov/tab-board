@@ -10,37 +10,32 @@ const ChatWindow = ({ handleSendMessage }) => {
 	// Initialize state for the selected node
 	const [messages, setMessages] = useState(selectedNode.data.chatHistory || []);
 	const [input, setInput] = useState("");
-	const [loading, setLoading] = useState(false);
-
-	// Update messages when the selectedNode changes
-	useEffect(() => {
-		if (!selectedNode.data.chatHistory) {
-			selectedNode.data.chatHistory = []; // Initialize chatHistory if it doesn't exist
-		}
-		setMessages(selectedNode.data.chatHistory);
-	}, [selectedNode]);
+	const [loading, setLoading] = useState(selectedNode.data.processing || false);
 
 	// Sync messages to selectedNode.data
 	useEffect(() => {
 		setMessages(selectedNode.data.chatHistory);
+		setLoading(selectedNode.data.processing);
 	}, [messages, selectedNode, selectedNode.data.chatHistory]);
 
 	const handleSend = async () => {
 		if (!input.trim() || loading) return;
-		setLoading(true);
+		selectedNode.data.processing = true;
 		// Add user message
 		selectedNode.data.chatHistory = [...selectedNode.data.chatHistory, { sender: "user", text: input }];
+		selectedNode.data.processing = true;
 		// Clear input
 		setInput("");
 		// Get AI response
 		try {
 			const response = await handleSendMessage(input);
 			// Add AI response
-			selectedNode.data.chatHistory = [...selectedNode.data.chatHistory, { sender: "gemini", text: response.text }];
+			graph.getNode(response.id).data.chatHistory = [...selectedNode.data.chatHistory, { sender: "gemini", text: response.text }];
+			graph.getNode(response.id).data.processing = false;
 		} catch (error) {
 			console.error("Error fetching response:", error);
 		} finally {
-			setLoading(false);
+			selectedNode.data.processing = false; //?
 		}
 	};
 
