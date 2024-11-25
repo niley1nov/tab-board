@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AdjacentNodeInputs from "./AdjacentNodeInputs";
 import { Divider } from "@mui/material";
 import ModelSelector from "./ModelSelector";
@@ -18,6 +18,7 @@ const PromptNodeContent = ({
 	const [adjacentNodeInputs, setAdjacentNodeInputs] = useState({});
 	const [nodeModelSelections, setNodeModelSelections] = useState({});
 	const [promptNodeDetails, setPromptNodeDetails] = useState({});
+	const geminiService = new GeminiProService(token);
 	const { nodeId, adjacencyNodes } = graph.sidebarContent;
 
 	const handleSubmitPrompt = async () => {
@@ -32,9 +33,8 @@ const PromptNodeContent = ({
 		}
 
 		try {
-			const geminiService = new GeminiProService(token);
 			const response = token
-				? await geminiService.callModel(`Prompt: ${graph.selectedNode.data.prompt}\n\nContext: ${context}`)
+				? await geminiService.callModel(nodeId, `Prompt: ${graph.selectedNode.data.prompt}\n\nContext: ${context}`)
 				: null;
 			console.log("Response:", response);
 			graph.selectedNode.data.content = response;
@@ -55,6 +55,17 @@ const PromptNodeContent = ({
 		}));
 		if (selectedValue === "Gemini Pro" && !token) setDialogOpen(true);
 	};
+
+	useEffect(() => {
+		// Initialize AI session on mount
+		if (token) {
+			geminiService.initializeSession(nodeId);
+		}
+		return () => {
+			// Cleanup session on unmount (optional)
+			geminiService.clearSession(nodeId);
+		};
+	}, [nodeId, token, geminiService]);
 
 	return (
 		<>

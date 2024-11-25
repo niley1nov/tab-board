@@ -34,9 +34,8 @@ const ChatNodeContent = ({
 		}
 
 		try {
-			const geminiService = new GeminiProService(token);
 			const response = token
-				? await geminiService.callModel(`Prompt: ${graph.selectedNode.data.prompt}\n\nContext: ${context}`)
+				? await geminiService.callModel(nodeId, `Prompt: ${graph.selectedNode.data.prompt}\n\nContext: ${context}`)
 				: null;
 			console.log("Response:", response);
 			graph.selectedNode.data.content = response;
@@ -60,7 +59,6 @@ const ChatNodeContent = ({
 
 	useEffect(() => {
 		// Initialize AI session on mount
-		console.log(token);
 		if (token) {
 			geminiService.initializeSession(nodeId);
 		}

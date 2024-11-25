@@ -47,8 +47,6 @@ export default class GeminiProService extends AIService {
 			}
 			const chatSession = this.sessions[nodeId];
 			const result = await chatSession.sendMessage(prompt);
-			chatSession.history.push({ role: "user", content: prompt }); // Add user message to history
-			chatSession.history.push({ role: "ai", content: result.response.text() }); // Add AI response to history
 			return result.response.text();
 		} catch (error) {
 			console.error("Error in GeminiProService callModel:", error);
