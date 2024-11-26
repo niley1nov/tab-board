@@ -37,7 +37,7 @@ const PromptNodeContent = ({
 				? await geminiService.callModel(nodeId, `Prompt: ${graph.selectedNode.data.prompt}\n\nContext: ${context}`)
 				: null;
 			console.log("Response:", response);
-			graph.selectedNode.data.content = response;
+			graph.selectedNode.data.content = response.text;
 			setPromptNodeDetails((prevDetails) =>
 				addFinalPrompt(prevDetails, nodeId, graph.selectedNode.data.prompt),
 			); //what is this doing?
