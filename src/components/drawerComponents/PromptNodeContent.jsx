@@ -63,7 +63,7 @@ const PromptNodeContent = ({
 		}
 		return () => {
 			// Cleanup session on unmount (optional)
-			geminiService.clearSession(nodeId);
+			geminiService.clearSession(nodeId); //ensure proper cleaning
 		};
 	}, [nodeId, token, geminiService]);
 
