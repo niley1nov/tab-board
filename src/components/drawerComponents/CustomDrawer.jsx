@@ -44,7 +44,7 @@ const CustomDrawer = ({ open, onClose }) => {
 				{nodeType === "PromptNode" && (
 					<Divider sx={{ marginY: 2, borderColor: "#F1E9FF" }} />
 				)}
-				<div className="drawer-wrapper" style={{ background: nodeType === "TabNode" ? "#2d2a30" : "#49454F"}}>
+				<div className="drawer-wrapper" style={{ background: nodeType === "TabNode" ? "#2d2a30" : "#49454F" }}>
 					<div className="drawer-content">
 						{nodeType === "PromptNode" && (
 							<PromptNodeContent
@@ -59,9 +59,12 @@ const CustomDrawer = ({ open, onClose }) => {
 							<OutputNodeContent />
 						)}
 						{nodeType === "ChatNode" && (
-							<ChatNodeContent />
+							<ChatNodeContent
+								token={token}
+								setDialogOpen={setDialogOpen}
+							/>
 						)}
-					</div>	
+					</div>
 				</div>
 			</Drawer>
 			<TokenDialog

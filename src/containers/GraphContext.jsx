@@ -88,7 +88,9 @@ export const GraphProvider = ({ children }) => {
 			{
 				label: "Chat Node",
 				content: "",
-				prompt: ""
+				prompt: "",
+				chatHistory: [],
+				processing: false,
 			},
 		);
 	};

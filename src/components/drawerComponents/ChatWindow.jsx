@@ -1,60 +1,79 @@
-import React, { useState } from "react";
-import { TextField, Paper, List, ListItem, ListItemText, Button, Divider, Box } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import { TextField, Paper, List, ListItem, ListItemText, Button, Divider, Box, CircularProgress } from "@mui/material";
+import { useGraph } from "../../containers/GraphContext";
+import "../../stylesheets/ChatWindow.css";
 
-const ChatWindow = ({ handleSubmitPrompt }) => {
-	const [messages, setMessages] = useState([]); // Store chat messages
-	const [input, setInput] = useState(""); // User input
+const ChatWindow = ({ handleSendMessage }) => {
+	const graph = useGraph();
+	const selectedNode = graph.selectedNode;
 
-	const handleSend = () => {
-		if (!input.trim()) return;
+	// Initialize state for the selected node
+	const [messages, setMessages] = useState(selectedNode.data.chatHistory || []);
+	const [input, setInput] = useState("");
+	const [loading, setLoading] = useState(selectedNode.data.processing || false);
 
+	// Sync messages to selectedNode.data
+	useEffect(() => {
+		setMessages(selectedNode.data.chatHistory);
+		setLoading(selectedNode.data.processing);
+	}, [messages, selectedNode, selectedNode.data.chatHistory]);
+
+	const handleSend = async () => {
+		if (!input.trim() || loading) return;
+		selectedNode.data.processing = true;
 		// Add user message
-		setMessages((prev) => [...prev, { sender: "user", text: input }]);
-
-		// Dummy Gemini response
-		const dummyResponse = "This is a dummy response from Gemini!";
-		setMessages((prev) => [...prev, { sender: "gemini", text: dummyResponse }]);
-
+		selectedNode.data.chatHistory = [...selectedNode.data.chatHistory, { sender: "user", text: input }];
+		selectedNode.data.processing = true;
 		// Clear input
 		setInput("");
+		// Get AI response
+		try {
+			const response = await handleSendMessage(input);
+			// Add AI response
+			graph.getNode(response.id).data.chatHistory = [...selectedNode.data.chatHistory, { sender: "gemini", text: response.text }];
+			graph.getNode(response.id).data.processing = false;
+		} catch (error) {
+			console.error("Error fetching response:", error);
+		} finally {
+			selectedNode.data.processing = false; //?
+		}
 	};
 
 	return (
-		<Paper style={{ padding: "16px", height: "400px", display: "flex", flexDirection: "column" }}>
-			{/* Chat Display */}
-			<List style={{ flex: 1, overflow: "auto" }}>
+		<Paper className="chat-window">
+			<List className="message-list">
 				{messages.map((message, index) => (
-					<ListItem key={index} style={{ textAlign: message.sender === "user" ? "right" : "left" }}>
+					<ListItem
+						key={index}
+						className={`message-item ${message.sender === "user" ? "user-message" : "gemini-message"}`}
+					>
 						<ListItemText
 							primary={message.text}
-							style={{
-								backgroundColor: message.sender === "user" ? "#d1f1ff" : "#f1f1f1",
-								borderRadius: "12px",
-								padding: "8px 12px",
-								display: "inline-block",
-							}}
+							className="message-text"
 						/>
 					</ListItem>
 				))}
 			</List>
-
-			{/* Divider */}
-			<Divider style={{ margin: "8px 0" }} />
-
-			{/* Input and Send Button */}
-			<Box display="flex" gap="8px">
+			<Divider className="divider" />
+			<Box className="input-container">
 				<TextField
 					variant="outlined"
 					fullWidth
 					placeholder="Type your message here..."
 					value={input}
 					onChange={(e) => setInput(e.target.value)}
-					onKeyPress={(e) => {
-						if (e.key === "Enter") handleSend();
+					onKeyDown={(e) => {
+						if (e.key === "Enter" && !loading) handleSend();
 					}}
+					disabled={loading}
 				/>
-				<Button variant="contained" onClick={handleSend}>
-					Send
+				<Button
+					variant="contained"
+					onClick={handleSend}
+					disabled={loading || !input.trim()}
+					className="send-button"
+				>
+					{loading ? <CircularProgress size={24} className="loading-spinner" /> : "Send"}
 				</Button>
 			</Box>
 		</Paper>
