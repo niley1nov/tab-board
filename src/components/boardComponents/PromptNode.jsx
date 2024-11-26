@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
@@ -43,6 +43,7 @@ const PromptNode = ({ data }) => {
 				<Button
 					className="edit-title-button"
 					variant="outlined"
+					onClick={data.editTitle}
 					startIcon={
 						<EditIcon className="edit-icon" fontSize="inherit" />
 					}

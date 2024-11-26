@@ -1,15 +1,17 @@
-import React, { useState } from "react";
+import React from "react";
 import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
 import Divider from "@mui/material/Divider";
 import { Handle, Position } from "@xyflow/react";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import "../../stylesheets/OutputNode.css";
 
 const OutputNode = ({ data }) => {
 	return (
-		<div onClick={data.onClick} className="output-node">
-			{/* Left Handle for Schema */}
+		<div 
+			onClick={data.onClick} 
+			className="output-node"
+			style={{ backgroundColor: data.backgroundColor || "#FFF" }}
+		>
+			{/* Left Handle */}
 			<Handle
 				type="target"
 				position={Position.Left}
@@ -19,26 +21,23 @@ const OutputNode = ({ data }) => {
 
 			{/* Header Section */}
 			<div className="output-node-header">
-				<Typography variant="subtitle2" className="output-node-title">
+				<Typography  
+					className="output-node-title"
+					style={{ fontFamily: "Poppins, sans-serif" }}
+				>
 					{data.label}
 				</Typography>
-				<div className="output-node-actions">
-					<IconButton
-						aria-label="settings"
-						onClick={data.onOpenMenu}
-						size="small"
-					>
-						<MoreVertIcon fontSize="small" />
-					</IconButton>
-				</div>
 			</div>
 
-			<Divider className="output-node-divider" />
+			<Divider className="output-node-divider" sx={{ margin: "8px 0" }} />
 
 			{/* Output */}
-			<div className="output-node-response">
-				<Typography variant="body2" color="textSecondary">
-					{"Output will appear on the sidebar"}
+			<div className="output-node-resp-container">
+				<Typography
+					className="output-node-response"
+					style={{ fontFamily: "Poppins, sans-serif" }}
+				>
+					{"Output will appear on sidebar"}
 				</Typography>
 			</div>
 		</div>

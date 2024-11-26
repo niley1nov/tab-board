@@ -1,33 +1,38 @@
 .output-node {
-	position: relative;
-	width: 200px;
-	padding: 8px;
-	border: 1px solid #d3d3d3;
-	border-radius: 8px;
+	border: 1px solid #d0bcff;
+	border-radius: 12px;
+	padding: 10px;
 	background-color: #fff;
-	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+	width: 180px;
+	position: relative;
+	align-items: stretch;
 	cursor: pointer;
-	transition: border 0.2s ease;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .output-node-header {
 	display: flex;
-	justify-content: space-between;
 	align-items: center;
-	padding: 4px 0;
+	justify-content: space-between;
 }
 
 .output-node-title {
-	font-size: 0.875rem;
-	font-weight: 500;
+	font-weight: 400 !important;
+	font-size: 16px;
+	color: #322f35;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	max-width: 200px;
 }
 
 .output-node-actions .MuiIconButton-root {
-	padding: 4px;
+	padding: 2px;
 }
 
 .output-node-divider {
-	margin: 4px 0;
+	margin: 5px 0;
+	background-color: #e0e0e0;
 }
 
 .output-node-content {
@@ -38,16 +43,29 @@
 	padding-bottom: 4px;
 }
 
-.output-node-response {
-	padding-top: 4px;
-	font-size: 0.875rem;
-	color: #555;
-}
-
-.output-node-content {
-	margin-top: 5px;
+.output-node-resp-container {
 	display: flex;
 	align-items: center;
-	gap: 4px;
-	/* Optional: spacing between input and button */
+	text-align: center;
+	padding-left: 20px !important;
+	padding-right: 20px !important;
+	justify-content: space-between;
+}
+
+.output-node-response {
+	word-break: break-word !important;
+	font-weight: 200 !important;
+	font-size: 12px !important;
+	color: #322f35 !important;
+	overflow: hidden !important;
+	text-overflow: ellipsis !important;
+	max-width: 200px !important;
+}
+
+/* Handle positioning */
+.output-node .react-flow__handle {
+	width: 8px;
+	height: 8px;
+	background: #666;
+	border-radius: 50%;
 }
