@@ -4,6 +4,7 @@ import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import { useToken } from "../../containers/TokenContext";
 import { useGraph } from "../../containers/GraphContext";
 import { Handle, Position } from "@xyflow/react";
 import "../../stylesheets/PromptNode.css";
@@ -11,14 +12,22 @@ import "../../stylesheets/PromptNode.css";
 const ChatNode = ({ data }) => {
 	const graph = useGraph();
 	const nodeRef = useRef(null);
+	const { token, setToken } = useToken();
 	const [session, setSession] = useState(null);
 
 	useEffect(() => {
-		if(!session) {
-			setSession("new session");
+		if (session === null) {
+			console.log("clear session");
+			setSession(""); // Clear session
+		} else if (session === "") {
 			console.log("set new session");
+			setSession("new session"); // Set new session after clearing
 		}
-	}, []);
+	}, [session, token]); // Add session to dependencies
+	
+	useEffect(() => {
+		console.log("Token changed:", token);
+	}, [token]);
 
 	return (
 		<div
@@ -62,7 +71,10 @@ const ChatNode = ({ data }) => {
 				<Button
 					className="delete-node-button"
 					variant="outlined"
-					onClick={data.deleteNode}
+					onClick={(e) => {
+						console.log("session delete");
+						data.deleteNode(e);
+					}}
 					startIcon={
 						<DeleteOutlineIcon
 							className="delete-icon"
