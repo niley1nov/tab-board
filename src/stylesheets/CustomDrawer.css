@@ -252,6 +252,7 @@
 }
 
 .button-container {
+	margin-bottom: 50px;
 	display: flex;
 	justify-content: flex-end; /* Align the button to the right */
 	width: 100%;
@@ -272,4 +273,12 @@
 	display: flex;
 	flex-direction: column;
 	padding-bottom: 20px; /* Add space at the bottom to avoid overlap */
+}
+
+.tabnode-container {
+	margin-bottom: 20px !important;
+}
+
+.react-markdown {
+	color: white !important;
 }

@@ -44,7 +44,16 @@ const CustomDrawer = ({ open, onClose }) => {
 				{nodeType === "PromptNode" && (
 					<Divider sx={{ marginY: 2, borderColor: "#F1E9FF" }} />
 				)}
-				<div className="drawer-wrapper" style={{ background: nodeType === "TabNode" ? "#2d2a30" : "#49454F" }}>
+				<div className="drawer-wrapper" 
+					style={{
+						background:
+						  nodeType === "TabNode"
+							? "#2d2a30"
+							: nodeType === "OutputNode"
+							? "#2d2a30"
+							: "#49454F",
+					  }}
+				>
 					<div className="drawer-content">
 						{nodeType === "PromptNode" && (
 							<PromptNodeContent
