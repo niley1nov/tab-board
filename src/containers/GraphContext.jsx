@@ -92,6 +92,7 @@ export const GraphProvider = ({ children }) => {
 				context: "",
 				chatHistory: [],
 				processing: false,
+				session: null,
 			},
 		);
 	};

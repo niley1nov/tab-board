@@ -12,7 +12,7 @@ import "../../stylesheets/PromptNode.css";
 const ChatNode = ({ data }) => {
 	const graph = useGraph();
 	const nodeRef = useRef(null);
-	const { token, setToken } = useToken();
+	const { token } = useToken();
 	const [session, setSession] = useState(null);
 
 	// Initialize or reinitialize session
@@ -30,7 +30,8 @@ const ChatNode = ({ data }) => {
 
 		// Create a new session
 		console.log("Initializing new session for ChatNode.");
-		setSession(`session-${Date.now()}`); // Simulate session creation
+		const newSession = `session-${Date.now()}`; // Simulate session creation
+		setSession(newSession);
 
 		// Clean up session on unmount
 		return () => {
@@ -38,6 +39,14 @@ const ChatNode = ({ data }) => {
 			setSession(null); // Clear session on unmount
 		};
 	}, [token]); // Reinitialize session when the token changes
+
+	// Sync session state with data.session
+	useEffect(() => {
+		if (session !== data.session) {
+			console.log("Syncing session to data.session");
+			data.session = session; // Update data.session to reflect the current session state
+		}
+	}, [session]); // Sync whenever session or data changes
 
 
 	return (
@@ -84,6 +93,7 @@ const ChatNode = ({ data }) => {
 					variant="outlined"
 					onClick={(e) => {
 						console.log("session delete");
+						setSession(null);
 						data.deleteNode(e);
 					}}
 					startIcon={
