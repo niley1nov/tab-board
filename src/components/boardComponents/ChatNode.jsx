@@ -15,19 +15,30 @@ const ChatNode = ({ data }) => {
 	const { token, setToken } = useToken();
 	const [session, setSession] = useState(null);
 
+	// Initialize or reinitialize session
 	useEffect(() => {
-		if (session === null) {
-			console.log("clear session");
-			setSession(""); // Clear session
-		} else if (session === "") {
-			console.log("set new session");
-			setSession("new session"); // Set new session after clearing
+		if (!token) {
+			console.warn("No token available to create a session.");
+			return;
 		}
-	}, [session, token]); // Add session to dependencies
-	
-	useEffect(() => {
-		console.log("Token changed:", token);
-	}, [token]);
+
+		// Clear session if already initialized
+		if (session !== null) {
+			console.log("Reinitializing session due to token change.");
+			setSession(null); // Clear the existing session
+		}
+
+		// Create a new session
+		console.log("Initializing new session for ChatNode.");
+		setSession(`session-${Date.now()}`); // Simulate session creation
+
+		// Clean up session on unmount
+		return () => {
+			console.log("Cleaning up session for ChatNode.");
+			setSession(null); // Clear session on unmount
+		};
+	}, [token]); // Reinitialize session when the token changes
+
 
 	return (
 		<div
