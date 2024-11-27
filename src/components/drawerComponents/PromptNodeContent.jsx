@@ -41,7 +41,6 @@ const PromptNodeContent = ({
 			setPromptNodeDetails((prevDetails) =>
 				addFinalPrompt(prevDetails, nodeId, graph.selectedNode.data.prompt),
 			); //what is this doing?
-			console.log(graph.selectedNode);
 		} catch (error) {
 			console.error("Error while submitting prompt:", error.message);
 		}

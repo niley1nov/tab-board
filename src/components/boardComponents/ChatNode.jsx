@@ -4,11 +4,21 @@ import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import { useGraph } from "../../containers/GraphContext";
 import { Handle, Position } from "@xyflow/react";
 import "../../stylesheets/PromptNode.css";
 
 const ChatNode = ({ data }) => {
+	const graph = useGraph();
 	const nodeRef = useRef(null);
+	const [session, setSession] = useState(null);
+
+	useEffect(() => {
+		if(!session) {
+			setSession("new session");
+			console.log("set new session");
+		}
+	}, []);
 
 	return (
 		<div

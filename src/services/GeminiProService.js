@@ -86,6 +86,7 @@ export default class GeminiProService extends AIService {
 	clearSession(nodeId) {
 		if (this.sessions[nodeId]) {
 			delete this.sessions[nodeId];
+			console.log('session cleared');
 		}
 	}
 }
