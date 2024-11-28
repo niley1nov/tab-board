@@ -122,7 +122,7 @@ export const GraphProvider = ({ children }) => {
 
 	const handleSetSelectedNode = (node) => {
 		console.log("SELECTED NODE: ", node);
-		console.log("Adjacent Node Data: ", node.data.adjacencyNodes);
+		console.log("Adjacent Node Data: ", adjacencyList.current[node.id]);
 
 		setSidebarContent((prevContent) => ({
 			...prevContent,
