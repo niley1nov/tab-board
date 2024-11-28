@@ -11,16 +11,11 @@ export default class GeminiProService extends AIService {
 	constructor(token) {
 		super();
 		this.genAI = new GoogleGenerativeAI(token);
-		this.sessions = {}; // Store sessions for each node
 	}
 
 	// Initialize a session for a specific node
 	initializeSession(nodeId) {
 		console.log('initializeSession');
-		if (this.sessions[nodeId]) {
-			// Session already exists
-			return;
-		}
 
 		try {
 			let model = this.genAI.getGenerativeModel({
@@ -32,7 +27,7 @@ export default class GeminiProService extends AIService {
 				safetySettings: safety_settings,
 				history: [], // Empty history initially
 			});
-			this.sessions[nodeId] = chatSession;
+			return chatSession;
 		} catch (error) {
 			console.error("Error initializing AI session:", error);
 			throw new Error("Failed to initialize AI session");
@@ -42,22 +37,18 @@ export default class GeminiProService extends AIService {
 	// Initialize a session for a specific node
 	initializeSession(nodeId, context) {
 		console.log('initializeSession');
-		if (this.sessions[nodeId]) {
-			// Session already exists
-			return;
-		}
 
 		try {
 			let model = this.genAI.getGenerativeModel({
 				model: models["pro"],
 				systemInstruction: getPrompts("system_prompt") + `\n\nContext:\n\n` + context,
 			});
-			let chatSession = model.startChat({
+			const chatSession = model.startChat({
 				generationConfig: getGenConfig(1, "text/plain"),
 				safetySettings: safety_settings,
 				history: [], // Empty history initially
 			});
-			this.sessions[nodeId] = chatSession;
+			return chatSession;
 		} catch (error) {
 			console.error("Error initializing AI session:", error);
 			throw new Error("Failed to initialize AI session");
@@ -79,14 +70,6 @@ export default class GeminiProService extends AIService {
 		} catch (error) {
 			console.error("Error in GeminiProService callModel:", error);
 			throw new Error("Failed to fetch response from Gemini Pro model");
-		}
-	}
-
-	// Clear a session for a specific node (optional, for cleanup)
-	clearSession(nodeId) {
-		if (this.sessions[nodeId]) {
-			delete this.sessions[nodeId];
-			console.log('session cleared');
 		}
 	}
 }

@@ -39,6 +39,7 @@ export const GraphProvider = ({ children }) => {
 			type,
 			position,
 			data: {
+				id: id,
 				onOpenMenu: (e) => openMenu(e, node),
 				deleteNode: (e) => handleDeleteNode(e, node),
 				onClick: () => handleSetSelectedNode(node),
@@ -252,6 +253,7 @@ export const GraphProvider = ({ children }) => {
 	};
 
 	const handleEdgeChange = (edges) => {
+		console.log('handleEdgeChange');
 		const edge = getEdge(edges[0].id);
 		updateAdjacencyList(edge.source, edge.target, "remove");
 		onEdgesChange(edges);

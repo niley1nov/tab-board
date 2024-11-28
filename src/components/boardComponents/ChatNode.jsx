@@ -8,12 +8,21 @@ import { useToken } from "../../containers/TokenContext";
 import { useGraph } from "../../containers/GraphContext";
 import { Handle, Position } from "@xyflow/react";
 import "../../stylesheets/PromptNode.css";
+import GeminiProService from "../../services/GeminiProService";
 
 const ChatNode = ({ data }) => {
 	const graph = useGraph();
 	const nodeRef = useRef(null);
 	const { token } = useToken();
 	const [session, setSession] = useState(null);
+	const geminiService = new GeminiProService(token);
+
+	useEffect(() => {
+		console.log('adjacencyList changed');
+		console.log(data);
+		console.log(graph.adjacencyList);
+		console.log(graph.adjacencyList[data.id].left);
+	}, [graph.adjacencyList[data.id].left.length]);
 
 	// Initialize or reinitialize session
 	useEffect(() => {
@@ -25,12 +34,13 @@ const ChatNode = ({ data }) => {
 		// Clear session if already initialized
 		if (session !== null) {
 			console.log("Reinitializing session due to token change.");
+			
 			setSession(null); // Clear the existing session
 		}
 
 		// Create a new session
 		console.log("Initializing new session for ChatNode.");
-		const newSession = `session-${Date.now()}`; // Simulate session creation
+		const newSession = geminiService.initializeSession(data.id);
 		setSession(newSession);
 
 		// Clean up session on unmount
