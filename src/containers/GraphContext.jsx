@@ -252,11 +252,12 @@ export const GraphProvider = ({ children }) => {
 		return [...eds, newEdge];
 	};
 
-	const handleEdgeChange = (edges) => {
-		console.log('handleEdgeChange');
-		const edge = getEdge(edges[0].id);
-		updateAdjacencyList(edge.source, edge.target, "remove");
-		onEdgesChange(edges);
+	const handleEdgeChange = (updatedEdges) => {
+		if(updatedEdges[0].type === "remove") {
+			const edge = getEdge(updatedEdges[0].id);
+			updateAdjacencyList(edge.source, edge.target, "remove");
+		}
+		onEdgesChange(updatedEdges);
 	};
 
 	// Utility functions for managing graph
