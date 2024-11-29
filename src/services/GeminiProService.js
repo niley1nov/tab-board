@@ -15,7 +15,7 @@ export default class GeminiProService extends AIService {
 
 	// Initialize a session for a specific node
 	initializeSession(nodeId) {
-		console.log('initializeSession');
+		console.log('initializeSession 1');
 
 		try {
 			let model = this.genAI.getGenerativeModel({
@@ -35,8 +35,8 @@ export default class GeminiProService extends AIService {
 	}
 
 	// Initialize a session for a specific node
-	initializeSession(nodeId, context) {
-		console.log('initializeSession');
+	initializeSessionWithContext(context) {
+		console.log('initializeSession 2');
 
 		try {
 			let model = this.genAI.getGenerativeModel({
@@ -56,12 +56,13 @@ export default class GeminiProService extends AIService {
 	}
 
 	// Call the model with a prompt for a specific node
-	async callModel(nodeId, prompt) {
+	async callModel(node, prompt) {
 		try {
-			if (!this.sessions[nodeId]) {
-				throw new Error(`Session not initialized for node ${nodeId}`);
+			const chatSession = node.data.session;
+			const nodeId = node.data.id;
+			if (!chatSession) {
+				throw new Error(`Session not initialized`);
 			}
-			const chatSession = this.sessions[nodeId];
 			const result = await chatSession.sendMessage(prompt);
 			return {
 				id: nodeId,
