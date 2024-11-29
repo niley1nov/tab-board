@@ -14,7 +14,7 @@ const ChatWindow = ({ handleSendMessage }) => {
 
 	// Sync messages to selectedNode.data
 	useEffect(() => {
-		setMessages(selectedNode.data.chatHistory);
+		// setMessages(selectedNode.data.chatHistory);
 		setLoading(selectedNode.data.processing);
 	}, [messages, selectedNode, selectedNode.data.chatHistory]);
 
@@ -23,15 +23,18 @@ const ChatWindow = ({ handleSendMessage }) => {
 		selectedNode.data.processing = true;
 		// Add user message
 		selectedNode.data.chatHistory = [...selectedNode.data.chatHistory, { sender: "user", text: input }];
+		setMessages(selectedNode.data.chatHistory);
 		selectedNode.data.processing = true;
 		// Clear input
 		setInput("");
 		// Get AI response
 		try {
 			const response = await handleSendMessage(input);
+			const node = graph.getNode(response.id);
 			// Add AI response
-			graph.getNode(response.id).data.chatHistory = [...selectedNode.data.chatHistory, { sender: "gemini", text: response.text }];
-			graph.getNode(response.id).data.processing = false;
+			selectedNode.data.chatHistory = [...selectedNode.data.chatHistory, { sender: "gemini", text: response.text }];
+			setMessages(selectedNode.data.chatHistory);
+			selectedNode.data.processing = false;
 		} catch (error) {
 			console.error("Error fetching response:", error);
 		} finally {
