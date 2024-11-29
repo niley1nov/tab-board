@@ -1,62 +1,89 @@
-/* Main chat window styles */
+.chat-container {
+    background-color: #2d2a30;
+    color: #fff;
+    padding: 10px;
+    border-radius: 10px;
+    height: 400px;
+    margin-bottom: 50px;
+}
+
 .chat-window {
-    padding: 16px;
     height: 400px;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 }
 
-/* Message list styles */
 .message-list {
     flex: 1;
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 10px;
+    background-color: #322f35;
 }
 
-/* Message item styles */
+.message-list::-webkit-scrollbar {
+    width: 6px !important;
+}
+
+.message-list::-webkit-scrollbar-track {
+    background: #2d2a30 !important;
+    border-radius: 3px !important;
+}
+
+.message-list::-webkit-scrollbar-thumb {
+    background: #d0bcff !important;
+    border-radius: 3px !important;
+}
+
 .message-item {
     display: flex;
     margin-bottom: 8px;
 }
 
 .user-message {
-    justify-content: flex-end;
-    text-align: right;
-}
-
-.gemini-message {
     justify-content: flex-start;
     text-align: left;
+    margin-left: 10px;
 }
 
-/* Message text bubble styles */
-.message-text {
-    background-color: #f1f1f1;
+.user-message .message-text {
+    background-color: #d0bcff;
+    color: #6750a4;
+    font-size: 14px;
     border-radius: 12px;
     padding: 8px 12px;
     display: inline-block;
 }
 
-.user-message .message-text {
-    background-color: #d1f1ff;
+.gemini-message {
+    justify-content: flex-end;
+    text-align: right;
+    margin-right: 10px;
 }
 
-/* Divider between messages and input field */
+.gemini-message .message-text {
+    background-color: #49454F;
+    color: #d0bcff;
+    font-size: 14px;
+    border-radius: 12px;
+    padding: 8px 12px;
+    display: inline-block;
+}
+
 .divider {
     margin: 8px 0;
 }
 
-/* Input container styles */
 .input-container {
     display: flex;
     gap: 8px;
 }
 
-/* Send button */
 .send-button {
     min-width: 64px;
 }
 
-/* Loading spinner inside button */
 .loading-spinner {
     color: white;
 }

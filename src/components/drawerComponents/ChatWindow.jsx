@@ -40,43 +40,45 @@ const ChatWindow = ({ handleSendMessage }) => {
 	};
 
 	return (
-		<Paper className="chat-window">
-			<List className="message-list">
-				{messages.map((message, index) => (
-					<ListItem
-						key={index}
-						className={`message-item ${message.sender === "user" ? "user-message" : "gemini-message"}`}
+		<div className="chat-container">
+			<div className="chat-window">
+				<List className="message-list">
+					{messages.map((message, index) => (
+						<ListItem
+							key={index}
+							className={`message-item ${message.sender === "user" ? "user-message" : "gemini-message"}`}
+						>
+							<ListItemText
+								primary={message.text}
+								className="message-text"
+							/>
+						</ListItem>
+					))}
+				</List>
+				<Divider className="divider" />
+				<Box className="input-container">
+					<TextField
+						variant="outlined"
+						fullWidth
+						placeholder="Type your message here..."
+						value={input}
+						onChange={(e) => setInput(e.target.value)}
+						onKeyDown={(e) => {
+							if (e.key === "Enter" && !loading) handleSend();
+						}}
+						disabled={loading}
+					/>
+					<Button
+						variant="contained"
+						onClick={handleSend}
+						disabled={loading || !input.trim()}
+						className="send-button"
 					>
-						<ListItemText
-							primary={message.text}
-							className="message-text"
-						/>
-					</ListItem>
-				))}
-			</List>
-			<Divider className="divider" />
-			<Box className="input-container">
-				<TextField
-					variant="outlined"
-					fullWidth
-					placeholder="Type your message here..."
-					value={input}
-					onChange={(e) => setInput(e.target.value)}
-					onKeyDown={(e) => {
-						if (e.key === "Enter" && !loading) handleSend();
-					}}
-					disabled={loading}
-				/>
-				<Button
-					variant="contained"
-					onClick={handleSend}
-					disabled={loading || !input.trim()}
-					className="send-button"
-				>
-					{loading ? <CircularProgress size={24} className="loading-spinner" /> : "Send"}
-				</Button>
-			</Box>
-		</Paper>
+						{loading ? <CircularProgress size={24} className="loading-spinner" /> : "Send"}
+					</Button>
+				</Box>
+			</div>
+		</div>
 	);
 };
 

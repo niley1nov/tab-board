@@ -8,45 +8,46 @@ import {
 	Button,
 	TextField,
 } from "@mui/material";
-import "../../stylesheets/CustomDrawer.css";
+import "../../stylesheets/TokenDialog.css";
 
 const TokenDialog = ({ open, apiToken, setApiToken, onSubmit, onClose }) => (
 	<Dialog
 		open={open}
 		onClose={onClose}
 		PaperProps={{
-			sx: {
-				backgroundColor: "#0C0E11",
-				color: "white",
-				padding: "20px",
-				borderRadius: "8px",
-				minWidth: "400px",
-			},
+			className: "dialog",
 		}}
 	>
-		<DialogTitle
-			sx={{ color: "#ffffff", fontWeight: "bold", fontSize: "1.25rem" }}
-		>
-			Enter API Token
-		</DialogTitle>
+		<DialogTitle className="dialog-title">Enter API Token</DialogTitle>
 		<DialogContent>
-			<DialogContentText sx={{ color: "#b3b3b3", mb: 2 }}>
-				Please enter your API token to proceed.
-			</DialogContentText>
+			{/* <DialogContentText className="dialog-content-text">
+				Access GEMINI APIs with your token.
+			</DialogContentText> */}
 			<TextField
-				label="API Token"
-				variant="outlined"
 				fullWidth
+				variant="outlined"
+				placeholder="e.g., 8JpWjL-lDv8L-aItwmp-a0QSr...."
 				value={apiToken}
 				onChange={(e) => setApiToken(e.target.value)}
-				className="text-field-token"
+				className="custom-text-field"
+				autoComplete="off"
 			/>
 		</DialogContent>
-		<DialogActions>
-			<Button onClick={onClose} sx={{ color: "#ffffff" }}>
+		<DialogActions className="dialog-actions">
+			<Button
+				variant="contained"
+				color="primary"
+				onClick={onClose}
+				className="cancel-button"
+			>
 				Cancel
 			</Button>
-			<Button onClick={onSubmit} sx={{ color: "#ffffff" }}>
+			<Button
+				variant="contained"
+				color="primary"
+				onClick={onSubmit}
+				className="submit-button"
+			>
 				Submit
 			</Button>
 		</DialogActions>
