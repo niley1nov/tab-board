@@ -9,9 +9,15 @@
 }
 
 /* Global override for backdrop styles */
-.css-s0r7el {
+.css-14dl35y {
 	position: unset !important;
 	inset: unset !important;
+}
+
+.css-s0r7el {
+    position: unset !important;
+    inset: 0px !important;
+    z-index: 1200 !important;
 }
 
 /* Drawer close icon styles */
@@ -31,12 +37,14 @@
 
 .header-tab {
 	font-weight: 200;
-	font-size: 32px;
+    font-size: 32px;
+    color: #d0bcff;
 }
 
 .header-board {
 	font-weight: 600;
-	font-size: 32px;
+    font-size: 32px;
+    color: #6750a4;
 }
 
 .add-node-button {

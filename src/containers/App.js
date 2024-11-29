@@ -1,4 +1,5 @@
 import React from "react";
+import { AppBar, Toolbar, Typography, IconButton, Button } from "@mui/material";
 import "../stylesheets/App.css";
 
 function App() {
@@ -46,10 +47,35 @@ function App() {
 	};
 
 	return (
-		<div className="App">
+		<div className="App-container">
 			<header className="App-header">
-				<h1>Welcome to TabBoard</h1>
-				<p>Organize your browser tabs with ease and efficiency.</p>
+				<Typography
+					className="welcome-header"
+					component="div"	
+					sx={{ flexGrow: 1 }}
+					style={{ fontFamily: "Poppins, sans-serif" }}
+				>Welcome</Typography>
+				<Typography
+					className="to-header"
+					component="div"	
+					sx={{ flexGrow: 1 }}
+					style={{ fontFamily: "Poppins, sans-serif" }}
+				>To</Typography>
+				<Typography
+					component="div"
+					sx={{ flexGrow: 1 }}
+					style={{ fontFamily: "Poppins, sans-serif" }}
+				>
+					<span className="header-tab">Tab</span>
+					<span className="header-board">Board</span>
+				</Typography>
+				<Typography
+					className="highlight-text"
+					sx={{ flexGrow: 1 }}
+					style={{ fontFamily: "Poppins, sans-serif" }}
+				>"Transform your browsing experience with our Chrome extension! Visualize your open tabs as an interactive graph, connect and organize them effortlessly — unlocking smarter, faster workflows like never before!"
+				</Typography>
+				<br/>
 				<button className="open-board-btn" onClick={handleOpenBoard}>
 					Open Board
 				</button>
