@@ -17,59 +17,6 @@ const ChatNode = ({ data }) => {
 	const [session, setSession] = useState(null);
 	const geminiService = new GeminiProService(token);
 
-	// useEffect(() => {
-	// 	console.log('adjacencyList changed');
-	// 	console.log(graph.adjacencyList[data.id].left);
-	// 	// Create a new session
-	// 	let context = "";
-	// 	// for (let nodeId of graph.adjacencyList[data.id].left) {
-	// 	// 	const node = graph.getNode(nodeId);
-	// 	// 	let name = adjacentNodeInputs[node.id];//?
-	// 	// 	if (!!name) {
-	// 	// 		context += (name + '\n\n');
-	// 	// 	}
-	// 	// 	context += (node.data.content + '\n\n' + '----------' + '\n\n');
-	// 	// }
-	// 	// console.log("Initializing new session for ChatNode.");
-	// 	const newSession = geminiService.initializeSession(data.id, context);
-	// 	setSession(newSession);
-	// }, [graph.adjacencyList[data.id].left.length]);
-
-	// // Initialize or reinitialize session
-	// useEffect(() => {
-	// 	if (!token) {
-	// 		console.warn("No token available to create a session.");
-	// 		return;
-	// 	}
-
-	// 	// Clear session if already initialized
-	// 	if (session !== null) {
-	// 		console.log("Reinitializing session due to token change.");
-			
-	// 		setSession(null); // Clear the existing session
-	// 	}
-
-	// 	// Create a new session
-	// 	console.log("Initializing new session for ChatNode.");
-	// 	const newSession = geminiService.initializeSession(data.id);
-	// 	setSession(newSession);
-
-	// 	// Clean up session on unmount
-	// 	return () => {
-	// 		console.log("Cleaning up session for ChatNode.");
-	// 		setSession(null); // Clear session on unmount
-	// 	};
-	// }, [token]); // Reinitialize session when the token changes
-
-	// // Sync session state with data.session
-	// useEffect(() => {
-	// 	if (session !== data.session) {
-	// 		console.log("Syncing session to data.session");
-	// 		data.session = session; // Update data.session to reflect the current session state
-	// 	}
-	// }, [session]); // Sync whenever session or data changes
-
-
 	return (
 		<div
 			onClick={data.onClick}
