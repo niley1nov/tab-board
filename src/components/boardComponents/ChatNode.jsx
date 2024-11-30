@@ -1,21 +1,14 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import { useToken } from "../../containers/TokenContext";
-import { useGraph } from "../../containers/GraphContext";
 import { Handle, Position } from "@xyflow/react";
 import "../../stylesheets/PromptNode.css";
-import GeminiProService from "../../services/GeminiProService";
 
 const ChatNode = ({ data }) => {
-	const graph = useGraph();
 	const nodeRef = useRef(null);
-	const { token } = useToken();
-	const [session, setSession] = useState(null);
-	const geminiService = new GeminiProService(token);
 
 	return (
 		<div
@@ -60,8 +53,6 @@ const ChatNode = ({ data }) => {
 					className="delete-node-button"
 					variant="outlined"
 					onClick={(e) => {
-						console.log("session delete");
-						setSession(null);
 						data.deleteNode(e);
 					}}
 					startIcon={

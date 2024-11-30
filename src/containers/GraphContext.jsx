@@ -74,7 +74,12 @@ export const GraphProvider = ({ children }) => {
 			{
 				label: "Prompt Node",
 				content: "",
-				prompt: ""
+				prompt: "",
+				context: "",
+				processing: false,
+				session: null,
+				ready: false,
+				adjacentNodeInputs: {},
 			},
 		);
 	};

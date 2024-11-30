@@ -2,13 +2,8 @@ import React, { useState, useEffect } from "react";
 import AdjacentNodeInputs from "./AdjacentNodeInputs";
 import { Button, Box } from "@mui/material";
 import ModelSelector from "./ModelSelector";
-import PromptInputField from "./PromptInputField";
 import { useGraph } from "../../containers/GraphContext";
 import ChatWindow from "./ChatWindow";
-import {
-	updatePromptNodeDetails,
-	addFinalPrompt,
-} from "../../helpers/CustomDrawerHelper";
 import "../../stylesheets/ChatNodeContent.css"
 import GeminiProService from "../../services/GeminiProService";
 
@@ -67,9 +62,7 @@ const ChatNodeContent = ({
 			node.data.context = context;
 			node.data.chatHistory = [];
 			node.data.processing = false;
-			node.data.session = geminiService.initializeSessionWithContext(context);
-			console.log('session initialized');
-			console.log(node.data.session);
+			node.data.session = geminiService.initializeSession(context);
 		}
 		node.data.ready = true;
 		setChatVisible(true);
