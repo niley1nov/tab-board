@@ -39,6 +39,7 @@ export const GraphProvider = ({ children }) => {
 			type,
 			position,
 			data: {
+				id: id,
 				onOpenMenu: (e) => openMenu(e, node),
 				deleteNode: (e) => handleDeleteNode(e, node),
 				onClick: () => handleSetSelectedNode(node),
@@ -73,7 +74,12 @@ export const GraphProvider = ({ children }) => {
 			{
 				label: "Prompt Node",
 				content: "",
-				prompt: ""
+				prompt: "",
+				context: "",
+				processing: false,
+				session: null,
+				ready: false,
+				adjacentNodeInputs: {},
 			},
 		);
 	};
@@ -89,8 +95,12 @@ export const GraphProvider = ({ children }) => {
 				label: "Chat Node",
 				content: "",
 				prompt: "",
+				context: "",
 				chatHistory: [],
 				processing: false,
+				session: null,
+				ready: false,
+				adjacentNodeInputs: {},
 			},
 		);
 	};
@@ -119,7 +129,7 @@ export const GraphProvider = ({ children }) => {
 
 	const handleSetSelectedNode = (node) => {
 		console.log("SELECTED NODE: ", node);
-		console.log("Adjacent Node Data: ", node.data.adjacencyNodes);
+		console.log("Adjacent Node Data: ", adjacencyList.current[node.id]);
 
 		setSidebarContent((prevContent) => ({
 			...prevContent,
@@ -249,10 +259,12 @@ export const GraphProvider = ({ children }) => {
 		return [...eds, newEdge];
 	};
 
-	const handleEdgeChange = (edges) => {
-		const edge = getEdge(edges[0].id);
-		updateAdjacencyList(edge.source, edge.target, "remove");
-		onEdgesChange(edges);
+	const handleEdgeChange = (updatedEdges) => {
+		if(updatedEdges[0].type === "remove") {
+			const edge = getEdge(updatedEdges[0].id);
+			updateAdjacencyList(edge.source, edge.target, "remove");
+		}
+		onEdgesChange(updatedEdges);
 	};
 
 	// Utility functions for managing graph

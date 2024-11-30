@@ -1,0 +1,5 @@
+.centered-button {
+    display: flex;
+    justify-content: center;
+    margin: 16px; /* Adjust spacing as needed */
+}

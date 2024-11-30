@@ -37,10 +37,16 @@
 }
 
 .message-item {
-    display: flex;
-    margin-bottom: 8px;
+	margin: 8px 0;
+	padding: 8px 12px;
+	border-radius: 12px;
+	display: inline-block;
+	max-width: 80%;
+	word-break: break-word;
+	overflow-wrap: break-word; /* Ensure long words break */
 }
 
+/* User message styling */
 .user-message {
     justify-content: flex-start;
     text-align: left;
@@ -69,6 +75,26 @@
     border-radius: 12px;
     padding: 8px 12px;
     display: inline-block;
+}
+
+/* Gemini message styling */
+.gemini-message {
+	text-align: left;
+	background-color: #f1f1f1;
+	align-self: flex-start;
+}
+
+/* Error message styling */
+.error-message {
+	color: red;
+	background-color: #ffe5e5;
+}
+
+/* Error message styling */
+.error-message .message-text {
+	color: red; /* Set the text color to red */
+	background-color: #ffe5e5; /* Optional: Light red background for visibility */
+	border: 1px solid #ffcccc; /* Optional: Border for emphasis */
 }
 
 .divider {
