@@ -70,7 +70,7 @@ export default class GeminiProService extends AIService {
 			};
 		} catch (error) {
 			console.error("Error in GeminiProService callModel:", error);
-			throw new Error("Failed to fetch response from Gemini Pro model");
+			throw error;
 		}
 	}
 }

@@ -38,37 +38,6 @@ const ChatNodeContent = ({
 		if (selectedValue === "Gemini Pro" && !token) setDialogOpen(true);
 	};
 
-	// useEffect(() => {
-	// 	// Initialize AI session on mount
-	// 	if (token) {
-	// 		geminiService.initializeSession(nodeId);
-	// 	}
-	// 	return () => {
-	// 		// Cleanup session on unmount (optional)
-	// 		geminiService.clearSession(nodeId);
-	// 	};
-	// }, [nodeId, token]);
-
-	// useEffect(() => {
-	// 	let inputNodes = adjacencyNodes.filter((node) => node.type === 'TabNode');
-	// 	let context = "";
-	// 	for (let node of inputNodes) {
-	// 		let name = adjacentNodeInputs[node.id];
-	// 		if (!!name) {
-	// 			context += (name + '\n\n');
-	// 		}
-	// 		context += (node.data.content + '\n\n' + '----------' + '\n\n');
-	// 	}
-	// 	console.log(context);
-	// 	if(graph.selectedNode.data.context !== context) {
-	// 		graph.selectedNode.data.context = context;
-	// 		geminiService.clearSession(nodeId);
-	// 		graph.getNode(nodeId).data.chatHistory = [];
-	// 		graph.getNode(nodeId).data.processing = false;
-	// 		geminiService.initializeSession(nodeId, context);
-	// 	}
-	// }, [adjacencyNodes.length]);
-
 	const handleSendMessage = async (message) => {
 		try {
 			// Call the model with the message
@@ -77,7 +46,7 @@ const ChatNodeContent = ({
 			return response;
 		} catch (error) {
 			console.error("Error sending message:", error.message);
-			return "Failed to get a response.";
+			throw error;
 		}
 	};
 

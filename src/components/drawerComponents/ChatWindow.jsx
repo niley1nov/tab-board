@@ -19,28 +19,45 @@ const ChatWindow = ({ handleSendMessage }) => {
 	}, [messages, selectedNode, selectedNode.data.chatHistory]);
 
 	const handleSend = async () => {
-		if (!input.trim() || loading) return;
+		if (!input.trim() || loading) return; // Avoid empty inputs or duplicate sends
 		selectedNode.data.processing = true;
-		// Add user message
-		selectedNode.data.chatHistory = [...selectedNode.data.chatHistory, { sender: "user", text: input }];
-		setMessages(selectedNode.data.chatHistory);
-		selectedNode.data.processing = true;
-		// Clear input
+
+		// Add user message to chat history
+		selectedNode.data.chatHistory = [
+			...selectedNode.data.chatHistory,
+			{ sender: "user", text: input },
+		];
+		setMessages([...selectedNode.data.chatHistory]);
+
+		// Clear input field
 		setInput("");
-		// Get AI response
+
 		try {
+			// Get AI response
 			const response = await handleSendMessage(input);
-			const node = graph.getNode(response.id);
-			// Add AI response
-			selectedNode.data.chatHistory = [...selectedNode.data.chatHistory, { sender: "gemini", text: response.text }];
-			setMessages(selectedNode.data.chatHistory);
-			selectedNode.data.processing = false;
+
+			// Add AI response to chat history
+			selectedNode.data.chatHistory = [
+				...selectedNode.data.chatHistory,
+				{ sender: "gemini", text: response.text || "No response" },
+			];
+			setMessages([...selectedNode.data.chatHistory]);
 		} catch (error) {
-			console.error("Error fetching response:", error);
+			// Format the error message by introducing breaks on commas, periods, and slashes
+			const formattedError = String(error.message).replace(/[,./]/g, (match) => `${match} `);
+
+			// Add error message to chat history with isError flag
+			selectedNode.data.chatHistory = [
+				...selectedNode.data.chatHistory,
+				{ sender: "gemini", text: formattedError, isError: true },
+			];
+			setMessages([...selectedNode.data.chatHistory]);
 		} finally {
-			selectedNode.data.processing = false; //?
+			// Mark processing as complete
+			selectedNode.data.processing = false;
 		}
 	};
+
 
 	return (
 		<Paper className="chat-window">
@@ -48,7 +65,9 @@ const ChatWindow = ({ handleSendMessage }) => {
 				{messages.map((message, index) => (
 					<ListItem
 						key={index}
-						className={`message-item ${message.sender === "user" ? "user-message" : "gemini-message"}`}
+						className={`message-item 
+                ${message.sender === "user" ? "user-message" : "gemini-message"} 
+                ${message.isError ? "error-message" : ""}`}
 					>
 						<ListItemText
 							primary={message.text}

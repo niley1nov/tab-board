@@ -1,40 +1,69 @@
-/* Main chat window styles */
+/* Chat window container */
 .chat-window {
-    padding: 16px;
-    height: 400px;
-    display: flex;
-    flex-direction: column;
+	padding: 16px;
+	height: 400px;
+	display: flex;
+	flex-direction: column;
+	overflow: auto;
+	background-color: #f9f9f9;
+	border-radius: 8px;
+	border: 1px solid #ddd;
 }
 
-/* Message list styles */
+/* List of messages */
 .message-list {
-    flex: 1;
-    overflow: auto;
+	flex: 1;
+	overflow: auto;
+	margin: 0;
+	padding: 0;
+	list-style: none;
 }
 
-/* Message item styles */
+/* Individual message item */
 .message-item {
-    display: flex;
-    margin-bottom: 8px;
+	margin: 8px 0;
+	padding: 8px 12px;
+	border-radius: 12px;
+	display: inline-block;
+	max-width: 80%;
+	word-break: break-word;
+	overflow-wrap: break-word; /* Ensure long words break */
 }
 
+/* User message styling */
 .user-message {
-    justify-content: flex-end;
-    text-align: right;
+	text-align: right;
+	background-color: #d1f1ff;
+	align-self: flex-end;
 }
 
+/* Gemini message styling */
 .gemini-message {
-    justify-content: flex-start;
-    text-align: left;
+	text-align: left;
+	background-color: #f1f1f1;
+	align-self: flex-start;
 }
 
-/* Message text bubble styles */
-.message-text {
-    background-color: #f1f1f1;
-    border-radius: 12px;
-    padding: 8px 12px;
-    display: inline-block;
+/* Error message styling */
+.error-message {
+	color: red;
+	background-color: #ffe5e5;
 }
+
+/* Ensure long strings break on specific characters */
+.message-text {
+	word-break: break-word;
+	overflow-wrap: break-word; /* Break long unbroken words */
+	white-space: pre-wrap; /* Preserve formatting and line breaks */
+}
+
+/* Error message styling */
+.error-message .message-text {
+	color: red; /* Set the text color to red */
+	background-color: #ffe5e5; /* Optional: Light red background for visibility */
+	border: 1px solid #ffcccc; /* Optional: Border for emphasis */
+}
+
 
 .user-message .message-text {
     background-color: #d1f1ff;
