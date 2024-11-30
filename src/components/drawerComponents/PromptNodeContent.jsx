@@ -76,7 +76,6 @@ const PromptNodeContent = ({
 				handleModelChange={handleModelChange}
 			/>
 			<Divider sx={{ marginY: 2, borderColor: "#F1E9FF" }} />
-			<br />
 			<AdjacentNodeInputs
 				adjacencyNodes={adjacencyNodes}
 				adjacentNodeInputs={adjacentNodeInputs}
@@ -84,9 +83,13 @@ const PromptNodeContent = ({
 					setAdjacentNodeInputs((prev) => ({ ...prev, [id]: value }))
 				}
 			/>
-			<br />
 			<Box className="centered-button">
-				<Button variant="contained" color="primary" onClick={initializeChat}>
+				<Button
+					variant="contained"
+					color="primary"
+					onClick={initializeChat}
+					className="send-button"
+				>
 					Initialize
 				</Button>
 			</Box>

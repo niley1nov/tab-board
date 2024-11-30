@@ -46,10 +46,9 @@ const CustomDrawer = ({ open, onClose }) => {
 				disableEnforceFocus
 			>
 				<DrawerHeader title={title} onClose={onClose} />
-				{nodeType === "PromptNode" && (
-					<Divider sx={{ marginY: 2, borderColor: "#F1E9FF" }} />
-				)}
-				<div className="drawer-wrapper"
+				<Divider sx={{ marginY: 2, borderColor: "#F1E9FF" }} />
+				<div className={`drawer-wrapper ${
+					nodeType === "PromptNode" || nodeType === "ChatNode" ? "no-padding" : ""}`}
 					style={{
 						background:
 							nodeType === "TabNode"
@@ -59,7 +58,8 @@ const CustomDrawer = ({ open, onClose }) => {
 									: "#49454F",
 					}}
 				>
-					<div className="drawer-content">
+					<div className={`drawer-content ${
+						nodeType === "PromptNode" || nodeType === "ChatNode" ? "no-padding-content" : ""}`}>
 						{nodeType === "PromptNode" && (
 							<PromptNodeContent
 								token={token}

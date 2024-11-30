@@ -85,7 +85,12 @@ const ChatNodeContent = ({
 				handleModelChange={handleModelChange}
 			/>
 			<Box className="centered-button">
-				<Button variant="contained" color="primary" onClick={initializeChat}>
+				<Button
+					variant="contained"
+					color="primary"
+					onClick={initializeChat}
+					className="send-button"
+				>
 					Initialize
 				</Button>
 			</Box>
