@@ -5,10 +5,27 @@ import Button from "@mui/material/Button";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { Handle, Position } from "@xyflow/react";
+import { useGraph } from "../../containers/GraphContext";
 import "../../stylesheets/PromptNode.css";
 
 const ChatNode = ({ data }) => {
 	const nodeRef = useRef(null);
+	const graph = useGraph();
+	const { nodeId, adjacencyNodes } = graph.sidebarContent;
+
+	const handleDelete = (e) => {
+		e.stopPropagation(); // Prevent event bubbling
+
+		if (data.id === nodeId) {
+			graph.setSidebarContent({
+				id: "",
+				title: "Dynamic Sidebar",
+				nodeType: "",
+				additionalContent: ""
+			});
+		}
+		data.deleteNode(e);
+	};
 
 	return (
 		<div
@@ -52,9 +69,7 @@ const ChatNode = ({ data }) => {
 				<Button
 					className="delete-node-button"
 					variant="outlined"
-					onClick={(e) => {
-						data.deleteNode(e);
-					}}
+					onClick={handleDelete}
 					startIcon={
 						<DeleteOutlineIcon
 							className="delete-icon"
