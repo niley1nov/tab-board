@@ -14,7 +14,7 @@ export default class GeminiNanoService extends AIService {
 			});
 			return chatSession;
 		} catch (error) {
-			console.error("Error initializing AI session:", error);
+			console.error(error);
 			throw new Error("Failed to initialize AI session");
 		}
 	}
