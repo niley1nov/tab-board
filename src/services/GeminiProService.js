@@ -14,10 +14,10 @@ export default class GeminiProService extends AIService {
 	}
 
 	// Initialize a session for a specific node
-	initializeSession(context) {
+	async initializeSession(context) {
 		console.log('Initialize Session');
 		try {
-			let model = this.genAI.getGenerativeModel({
+			const model = this.genAI.getGenerativeModel({
 				model: models["pro"],
 				systemInstruction: getPrompts("system_prompt") + `\n\nContext:\n\n` + context,
 			});
