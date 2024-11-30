@@ -17,16 +17,17 @@ const ChatNodeContent = ({
 	setDialogOpen
 }) => {
 	const graph = useGraph();
-	const [adjacentNodeInputs, setAdjacentNodeInputs] = useState({});
 	const [nodeModelSelections, setNodeModelSelections] = useState({});
 	const geminiService = new GeminiProService(token);
 	const { nodeId, adjacencyNodes } = graph.sidebarContent;
+	const [adjacentNodeInputs, setAdjacentNodeInputs] = useState(graph.getNode(nodeId)?.data?.adjacentNodeInputs ?? {});
 	const [chatVisible, setChatVisible] = useState(
 		graph.getNode(nodeId)?.data?.ready ?? false
 	);
 
 	useEffect(() => {
 		setChatVisible(graph.getNode(nodeId).data.ready);
+		setAdjacentNodeInputs(graph.getNode(nodeId).data.adjacentNodeInputs);
 	}, [nodeId]);
 
 	const handleModelChange = (nodeId, event) => {
@@ -79,8 +80,10 @@ const ChatNodeContent = ({
 			<AdjacentNodeInputs
 				adjacencyNodes={adjacencyNodes}
 				adjacentNodeInputs={adjacentNodeInputs}
-				handleInputChange={(id, value) =>
-					setAdjacentNodeInputs((prev) => ({ ...prev, [id]: value }))
+				handleInputChange={(id, value) => {
+						graph.getNode(nodeId).data.adjacentNodeInputs = { ...graph.getNode(nodeId).data.adjacentNodeInputs, [id]: value };
+						setAdjacentNodeInputs((prev) => ({ ...prev, [id]: value }));
+					}
 				}
 			/>
 			<ModelSelector

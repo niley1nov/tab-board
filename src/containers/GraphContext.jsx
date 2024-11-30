@@ -95,6 +95,7 @@ export const GraphProvider = ({ children }) => {
 				processing: false,
 				session: null,
 				ready: false,
+				adjacentNodeInputs: {},
 			},
 		);
 	};
