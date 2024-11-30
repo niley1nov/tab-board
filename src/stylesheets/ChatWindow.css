@@ -1,25 +1,41 @@
-/* Chat window container */
+.chat-container {
+    background-color: #2d2a30;
+    color: #fff;
+    padding: 10px;
+    border-radius: 10px;
+    height: 400px;
+    margin-bottom: 50px;
+}
+
 .chat-window {
-	padding: 16px;
-	height: 400px;
-	display: flex;
-	flex-direction: column;
-	overflow: auto;
-	background-color: #f9f9f9;
-	border-radius: 8px;
-	border: 1px solid #ddd;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
 
-/* List of messages */
 .message-list {
-	flex: 1;
-	overflow: auto;
-	margin: 0;
-	padding: 0;
-	list-style: none;
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 10px;
+    background-color: #322f35;
 }
 
-/* Individual message item */
+.message-list::-webkit-scrollbar {
+    width: 6px !important;
+}
+
+.message-list::-webkit-scrollbar-track {
+    background: #2d2a30 !important;
+    border-radius: 3px !important;
+}
+
+.message-list::-webkit-scrollbar-thumb {
+    background: #d0bcff !important;
+    border-radius: 3px !important;
+}
+
 .message-item {
 	margin: 8px 0;
 	padding: 8px 12px;
@@ -32,9 +48,33 @@
 
 /* User message styling */
 .user-message {
-	text-align: right;
-	background-color: #d1f1ff;
-	align-self: flex-end;
+    justify-content: flex-start;
+    text-align: left;
+    margin-left: 10px;
+}
+
+.user-message .message-text {
+    background-color: #d0bcff;
+    color: #6750a4;
+    font-size: 14px;
+    border-radius: 12px;
+    padding: 8px 12px;
+    display: inline-block;
+}
+
+.gemini-message {
+    justify-content: flex-end;
+    text-align: right;
+    margin-right: 10px;
+}
+
+.gemini-message .message-text {
+    background-color: #49454F;
+    color: #d0bcff;
+    font-size: 14px;
+    border-radius: 12px;
+    padding: 8px 12px;
+    display: inline-block;
 }
 
 /* Gemini message styling */
@@ -50,13 +90,6 @@
 	background-color: #ffe5e5;
 }
 
-/* Ensure long strings break on specific characters */
-.message-text {
-	word-break: break-word;
-	overflow-wrap: break-word; /* Break long unbroken words */
-	white-space: pre-wrap; /* Preserve formatting and line breaks */
-}
-
 /* Error message styling */
 .error-message .message-text {
 	color: red; /* Set the text color to red */
@@ -64,28 +97,19 @@
 	border: 1px solid #ffcccc; /* Optional: Border for emphasis */
 }
 
-
-.user-message .message-text {
-    background-color: #d1f1ff;
-}
-
-/* Divider between messages and input field */
 .divider {
     margin: 8px 0;
 }
 
-/* Input container styles */
 .input-container {
     display: flex;
     gap: 8px;
 }
 
-/* Send button */
 .send-button {
     min-width: 64px;
 }
 
-/* Loading spinner inside button */
 .loading-spinner {
     color: white;
 }

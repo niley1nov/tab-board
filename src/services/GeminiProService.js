@@ -24,7 +24,7 @@ export default class GeminiProService extends AIService {
 			const chatSession = model.startChat({
 				generationConfig: getGenConfig(1, "text/plain"),
 				safetySettings: safety_settings,
-				history: [], // Empty history initially
+				history: [],
 			});
 			return chatSession;
 		} catch (error) {

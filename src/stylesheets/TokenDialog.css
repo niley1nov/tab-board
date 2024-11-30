@@ -1,0 +1,73 @@
+.dialog {
+    background-color: #49454F !important;
+    color: white !important;
+    padding: 15px !important;
+    border-radius: 20px !important;
+    min-width: 400px !important;
+}
+
+.dialog-title {
+    color: white;
+    font-weight: bold;
+    font-size: 1.25rem;
+}
+
+.dialog-content-text {
+    color: #d0bcff !important;
+    margin-bottom: 16px;
+}
+
+.dialog-actions button {
+    color: #ffffff;
+}
+
+.custom-text-field {
+	border-bottom: #ffffff !important;
+	border-top-left-radius: 10px !important;
+	border-top-right-radius: 10px !important;
+	background-color: #322f35 !important;
+}
+
+.custom-text-field .MuiOutlinedInput-root {
+	border: none !important;
+    border-bottom: 1px solid white !important;
+    border-radius: 0 !important;
+}
+
+.custom-text-field .MuiOutlinedInput-notchedOutline {
+	border: none !important;
+}
+
+.custom-text-field .MuiInputBase-input {
+	color: white;
+}
+
+.submit-button {
+	color: #6750a4 !important;
+	background-color: #d0bcff !important;
+	border-radius: 9999px !important;
+	padding: 6px 16px !important;
+	display: inline-flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	font-size: 16px !important;
+	font-weight: 500 !important;
+	border: none !important;
+	text-transform: none !important;
+	margin-right: 10px !important;
+}
+
+.cancel-button {
+	color: #F1E9FF !important;
+	background-color: #49454F !important;
+	border-radius: 9999px !important;
+	padding: 6px 16px !important;
+	display: inline-flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	font-size: 16px !important;
+	font-weight: 500 !important;
+	border: 1px solid #F1E9FF !important; /* Added border */
+	text-transform: none !important;
+	margin-right: 10px !important;
+}
