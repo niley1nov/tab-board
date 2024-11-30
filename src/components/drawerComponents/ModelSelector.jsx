@@ -12,10 +12,10 @@ const ModelSelector = ({ selectedModel, nodeId, handleModelChange }) => (
 				value={selectedModel || "Gemini Nano"}
 				onChange={(e) => handleModelChange(nodeId, e)}
 				style={{ fontFamily: "Poppins, sans-serif" }}
-				className="custom-select" // Add a custom class here
+				className="custom-select"
 			>
-				<MenuItem value="Gemini Nano">Gemini Nano</MenuItem>
 				<MenuItem value="Gemini Pro">Gemini Pro</MenuItem>
+				<MenuItem value="Gemini Nano">Gemini Nano</MenuItem>
 			</Select>
 		</FormControl>
 	</Box>

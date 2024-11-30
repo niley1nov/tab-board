@@ -80,6 +80,8 @@ export const GraphProvider = ({ children }) => {
 				session: null,
 				ready: false,
 				adjacentNodeInputs: {},
+				model: 'Gemini Pro',
+				service: null,
 			},
 		);
 	};
@@ -101,6 +103,8 @@ export const GraphProvider = ({ children }) => {
 				session: null,
 				ready: false,
 				adjacentNodeInputs: {},
+				model: 'Gemini Pro',
+				service: null,
 			},
 		);
 	};
