@@ -47,7 +47,7 @@ const PromptNodeContent = ({
 		if (selectedValue === "Gemini Pro" && !token) setDialogOpen(true);
 	};
 
-	const initializeChat = () => {
+	const initializeChat = async () => {
 		let inputNodes = adjacencyNodes.filter((node) => node.type === 'TabNode');
 		let context = "";
 		for (let node of inputNodes) {
@@ -62,7 +62,7 @@ const PromptNodeContent = ({
 		if (graph.selectedNode.data.context !== context) {
 			node.data.context = context;
 			node.data.processing = false;
-			node.data.session = geminiService.initializeSession(context);
+			node.data.session = await geminiService.initializeSession(context);
 		}
 		node.data.ready = true;
 		setChatVisible(true);
