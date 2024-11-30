@@ -10,6 +10,7 @@ import {
 } from "../../helpers/CustomDrawerHelper";
 import GeminiProService from "../../services/GeminiProService";
 import GeminiNanoService from "../../services/GeminiNanoService";
+import "../../stylesheets/ChatNodeContent.css"
 
 const PromptNodeContent = ({
 	token,

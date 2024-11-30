@@ -84,7 +84,6 @@ const ChatNodeContent = ({
 				handleModelChange={handleModelChange}
 			/>
 			<Divider sx={{ marginY: 2, borderColor: "#F1E9FF" }} />
-			<br />
 			<AdjacentNodeInputs
 				adjacencyNodes={adjacencyNodes}
 				adjacentNodeInputs={adjacentNodeInputs}
@@ -94,7 +93,6 @@ const ChatNodeContent = ({
 				}
 				}
 			/>
-			<br />
 			<Box className="centered-button">
 				<Button
 					variant="contained"
