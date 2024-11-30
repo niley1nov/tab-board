@@ -43,17 +43,20 @@ export default class GeminiNanoService extends AIService {
 		const container = document.createElement("div");
 		document.body.appendChild(container);
 
+		// Create a root for rendering
+		const root = ReactDOM.createRoot(container);
+
 		// Function to remove the popup after 3 seconds
 		const removePopup = () => {
-			ReactDOM.unmountComponentAtNode(container);
-			container.remove();
+			root.unmount(); // Unmount the React component
+			container.remove(); // Remove the container from the DOM
 		};
 
 		// Render the Snackbar into the container
-		ReactDOM.render(
+		root.render(
 			<Snackbar
 				open={true}
-				autoHideDuration={10000} // Close after 10 seconds
+				autoHideDuration={3000} // Close after 3 seconds
 				onClose={removePopup}
 				anchorOrigin={{ vertical: "top", horizontal: "center" }}
 			>
@@ -61,8 +64,7 @@ export default class GeminiNanoService extends AIService {
 					The provided context is too large for Gemini Nano and has been shortened.
 					For larger contexts, consider using Gemini Pro.
 				</Alert>
-			</Snackbar>,
-			container
+			</Snackbar>
 		);
 	}
 

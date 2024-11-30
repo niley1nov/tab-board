@@ -24,7 +24,7 @@ const PromptNodeContent = ({
 	);
 	const [modelSelection, setModelSelection] = useState(graph.getNode(nodeId)?.data?.model ?? "Gemini Pro");
 	const [geminiService, setGeminiService] = useState(graph.getNode(nodeId)?.data?.service ?? null);
-	
+
 	useEffect(() => {
 		setChatVisible(graph.getNode(nodeId)?.data?.ready || false);
 		setAdjacentNodeInputs(graph.getNode(nodeId)?.data?.adjacentNodeInputs || {});
@@ -65,21 +65,19 @@ const PromptNodeContent = ({
 		}
 		console.log(context);
 		const node = graph.getNode(nodeId);
-		if (graph.selectedNode.data.context !== context) {
-			node.data.context = context;
-			node.data.chatHistory = [];
-			node.data.processing = false;
-			if(modelSelection === "Gemini Pro") {
-				const service = new GeminiProService(token);
-				node.data.service = service;
-				setGeminiService(service);
-			} else if(modelSelection === "Gemini Nano") {
-				const service = new GeminiNanoService();
-				node.data.service = service;
-				setGeminiService(service);
-			}
-			node.data.session = await node.data.service.initializeSession(context);
+		node.data.context = context;
+		node.data.chatHistory = [];
+		node.data.processing = false;
+		if (modelSelection === "Gemini Pro") {
+			const service = new GeminiProService(token);
+			node.data.service = service;
+			setGeminiService(service);
+		} else if (modelSelection === "Gemini Nano") {
+			const service = new GeminiNanoService();
+			node.data.service = service;
+			setGeminiService(service);
 		}
+		node.data.session = await node.data.service.initializeSession(context);
 		node.data.ready = true;
 		setChatVisible(true);
 	};
