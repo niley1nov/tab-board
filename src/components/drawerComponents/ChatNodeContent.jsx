@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from "react";
 import AdjacentNodeInputs from "./AdjacentNodeInputs";
-import { Divider } from "@mui/material";
+import { Button, Box } from "@mui/material";
 import ModelSelector from "./ModelSelector";
-import PromptInputField from "./PromptInputField";
 import { useGraph } from "../../containers/GraphContext";
 import ChatWindow from "./ChatWindow";
-import {
-	updatePromptNodeDetails,
-	addFinalPrompt,
-} from "../../helpers/CustomDrawerHelper";
+import "../../stylesheets/ChatNodeContent.css"
 import GeminiProService from "../../services/GeminiProService";
 
 const ChatNodeContent = ({
@@ -16,10 +12,18 @@ const ChatNodeContent = ({
 	setDialogOpen
 }) => {
 	const graph = useGraph();
-	const [adjacentNodeInputs, setAdjacentNodeInputs] = useState({});
 	const [nodeModelSelections, setNodeModelSelections] = useState({});
 	const geminiService = new GeminiProService(token);
 	const { nodeId, adjacencyNodes } = graph.sidebarContent;
+	const [adjacentNodeInputs, setAdjacentNodeInputs] = useState(graph.getNode(nodeId)?.data?.adjacentNodeInputs ?? {});
+	const [chatVisible, setChatVisible] = useState(
+		graph.getNode(nodeId)?.data?.ready ?? false
+	);
+
+	useEffect(() => {
+		setChatVisible(graph.getNode(nodeId)?.data?.ready || false);
+		setAdjacentNodeInputs(graph.getNode(nodeId)?.data?.adjacentNodeInputs || {});
+	}, [nodeId]);
 
 	const handleModelChange = (nodeId, event) => {
 		const selectedValue = event.target.value;
@@ -30,26 +34,38 @@ const ChatNodeContent = ({
 		if (selectedValue === "Gemini Pro" && !token) setDialogOpen(true);
 	};
 
-	useEffect(() => {
-		// Initialize AI session on mount
-		if (token) {
-			geminiService.initializeSession(nodeId);
-		}
-		return () => {
-			// Cleanup session on unmount (optional)
-			geminiService.clearSession(nodeId);
-		};
-	}, [nodeId, token, geminiService]);
-
 	const handleSendMessage = async (message) => {
 		try {
 			// Call the model with the message
-			const response = await geminiService.callModel(nodeId, message);
+			const node = graph.getNode(nodeId);
+			const response = await geminiService.callModel(node, message);
 			return response;
 		} catch (error) {
 			console.error("Error sending message:", error.message);
-			return "Failed to get a response.";
+			throw error;
 		}
+	};
+
+	const initializeChat = () => {
+		let inputNodes = adjacencyNodes.filter((node) => node.type === 'TabNode');
+		let context = "";
+		for (let node of inputNodes) {
+			let name = adjacentNodeInputs[node.id];
+			if (!!name) {
+				context += (name + '\n\n');
+			}
+			context += (node.data.content + '\n\n' + '----------' + '\n\n');
+		}
+		console.log(context);
+		const node = graph.getNode(nodeId);
+		if (graph.selectedNode.data.context !== context) {
+			node.data.context = context;
+			node.data.chatHistory = [];
+			node.data.processing = false;
+			node.data.session = geminiService.initializeSession(context);
+		}
+		node.data.ready = true;
+		setChatVisible(true);
 	};
 
 	return (
@@ -57,8 +73,10 @@ const ChatNodeContent = ({
 			<AdjacentNodeInputs
 				adjacencyNodes={adjacencyNodes}
 				adjacentNodeInputs={adjacentNodeInputs}
-				handleInputChange={(id, value) =>
-					setAdjacentNodeInputs((prev) => ({ ...prev, [id]: value }))
+				handleInputChange={(id, value) => {
+						graph.getNode(nodeId).data.adjacentNodeInputs = { ...graph.getNode(nodeId).data.adjacentNodeInputs, [id]: value };
+						setAdjacentNodeInputs((prev) => ({ ...prev, [id]: value }));
+					}
 				}
 			/>
 			<ModelSelector
@@ -66,7 +84,12 @@ const ChatNodeContent = ({
 				nodeId={nodeId}
 				handleModelChange={handleModelChange}
 			/>
-			<ChatWindow handleSendMessage={handleSendMessage} />
+			<Box className="centered-button">
+				<Button variant="contained" color="primary" onClick={initializeChat}>
+					Initialize
+				</Button>
+			</Box>
+			{chatVisible && <ChatWindow handleSendMessage={handleSendMessage} />}
 		</>
 	);
 };

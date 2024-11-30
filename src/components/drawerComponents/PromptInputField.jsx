@@ -19,7 +19,6 @@ const PromptInputField = ({ handleSubmit }) => {
 	const handleSendClick = async () => {
 		if (!graph.selectedNode) return; // Ensure a node is selected
 
-		console.log("INSIDE INPUT COMPONENT: ", graph.selectedNode.data);
 		const controller = new AbortController();
 		setAbortController(controller);
 		setLoading(true);

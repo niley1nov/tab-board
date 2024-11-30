@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import AdjacentNodeInputs from "./AdjacentNodeInputs";
+import { Button, Box } from "@mui/material";
 import { Divider } from "@mui/material";
 import ModelSelector from "./ModelSelector";
 import PromptInputField from "./PromptInputField";
 import { useGraph } from "../../containers/GraphContext";
 import {
-	updatePromptNodeDetails,
 	addFinalPrompt,
 } from "../../helpers/CustomDrawerHelper";
 import GeminiProService from "../../services/GeminiProService";
@@ -20,28 +20,19 @@ const PromptNodeContent = ({
 	const [promptNodeDetails, setPromptNodeDetails] = useState({});
 	const geminiService = new GeminiProService(token);
 	const { nodeId, adjacencyNodes } = graph.sidebarContent;
+	const [chatVisible, setChatVisible] = useState(
+		graph.getNode(nodeId)?.data?.ready ?? false
+	);
 
 	const handleSubmitPrompt = async () => {
-		let inputNodes = adjacencyNodes.filter((node) => node.type === 'TabNode');
-		let context = "";
-		for (let node of inputNodes) {
-			let name = adjacentNodeInputs[node.id];
-			if (!!name) {
-				context += (name + '\n\n');
-			}
-			context += (node.data.content + '\n\n' + '----------' + '\n\n');
-		}
-
 		try {
-			const response = token
-				? await geminiService.callModel(nodeId, `Prompt: ${graph.selectedNode.data.prompt}\n\nContext: ${context}`)
-				: null;
+			const node = graph.getNode(nodeId);
+			const response = await geminiService.callModel(node, graph.selectedNode.data.prompt);
 			console.log("Response:", response);
 			graph.selectedNode.data.content = response.text;
 			setPromptNodeDetails((prevDetails) =>
 				addFinalPrompt(prevDetails, nodeId, graph.selectedNode.data.prompt),
 			); //what is this doing?
-			console.log(graph.selectedNode);
 		} catch (error) {
 			console.error("Error while submitting prompt:", error.message);
 		}
@@ -56,16 +47,26 @@ const PromptNodeContent = ({
 		if (selectedValue === "Gemini Pro" && !token) setDialogOpen(true);
 	};
 
-	useEffect(() => {
-		// Initialize AI session on mount
-		if (token) {
-			geminiService.initializeSession(nodeId);
+	const initializeChat = () => {
+		let inputNodes = adjacencyNodes.filter((node) => node.type === 'TabNode');
+		let context = "";
+		for (let node of inputNodes) {
+			let name = adjacentNodeInputs[node.id];
+			if (!!name) {
+				context += (name + '\n\n');
+			}
+			context += (node.data.content + '\n\n' + '----------' + '\n\n');
 		}
-		return () => {
-			// Cleanup session on unmount (optional)
-			geminiService.clearSession(nodeId);
-		};
-	}, [nodeId, token, geminiService]);
+		console.log(context);
+		const node = graph.getNode(nodeId);
+		if (graph.selectedNode.data.context !== context) {
+			node.data.context = context;
+			node.data.processing = false;
+			node.data.session = geminiService.initializeSession(context);
+		}
+		node.data.ready = true;
+		setChatVisible(true);
+	};
 
 	return (
 		<>
@@ -75,7 +76,7 @@ const PromptNodeContent = ({
 				handleModelChange={handleModelChange}
 			/>
 			<Divider sx={{ marginY: 2, borderColor: "#F1E9FF" }} />
-			<br/>
+			<br />
 			<AdjacentNodeInputs
 				adjacencyNodes={adjacencyNodes}
 				adjacentNodeInputs={adjacentNodeInputs}
@@ -83,10 +84,15 @@ const PromptNodeContent = ({
 					setAdjacentNodeInputs((prev) => ({ ...prev, [id]: value }))
 				}
 			/>
-			<br/>
-			<PromptInputField
+			<br />
+			<Box className="centered-button">
+				<Button variant="contained" color="primary" onClick={initializeChat}>
+					Initialize
+				</Button>
+			</Box>
+			{chatVisible && <PromptInputField
 				handleSubmit={handleSubmitPrompt} // Updated to pass handleSubmitPrompt
-			/>
+			/>}
 		</>
 	);
 };
