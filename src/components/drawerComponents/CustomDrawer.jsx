@@ -35,10 +35,15 @@ const CustomDrawer = ({ open, onClose }) => {
 						width: "320px",
 						top: "64px",
 						height: "calc(100vh - 64px)",
-						overflow: "hidden", // Ensure the outer drawer doesn’t scroll.
+						overflow: "hidden",
+						'& .MuiDrawer-paper': {
+							zIndex: 1,
+						},
 					},
 				}}
 				ModalProps={{ keepMounted: true }}
+				variant="persistent"
+				disableEnforceFocus
 			>
 				<DrawerHeader title={title} onClose={onClose} />
 				{nodeType === "PromptNode" && (
