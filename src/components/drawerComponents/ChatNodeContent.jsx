@@ -26,8 +26,8 @@ const ChatNodeContent = ({
 	);
 
 	useEffect(() => {
-		setChatVisible(graph.getNode(nodeId).data.ready);
-		setAdjacentNodeInputs(graph.getNode(nodeId).data.adjacentNodeInputs);
+		setChatVisible(graph.getNode(nodeId)?.data?.ready || false);
+		setAdjacentNodeInputs(graph.getNode(nodeId)?.data?.adjacentNodeInputs || {});
 	}, [nodeId]);
 
 	const handleModelChange = (nodeId, event) => {

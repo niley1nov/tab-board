@@ -14,7 +14,7 @@ const ChatWindow = ({ handleSendMessage }) => {
 
 	// Sync messages to selectedNode.data
 	useEffect(() => {
-		// setMessages(selectedNode.data.chatHistory);
+		setMessages(selectedNode.data.chatHistory);
 		setLoading(selectedNode.data.processing);
 	}, [messages, selectedNode, selectedNode.data.chatHistory]);
 
