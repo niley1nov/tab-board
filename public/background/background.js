@@ -27,16 +27,25 @@ function isValidTab(tab) {
 	return tab.url && !invalidUrls.some((prefix) => tab.url.startsWith(prefix));
 }
 
-// Inject inline content extraction function into the tab
 function injectContentScript(tab) {
-	chrome.scripting.executeScript({
-		target: { tabId: tab.id },
-		func: extractContentAndSend,
-		args: [tab.id, tab.title, tab.url],
+	// Capture the tab's screenshot and extract content
+	chrome.tabs.captureVisibleTab(tab.windowId, { format: "png" }, (image) => {
+		if (chrome.runtime.lastError) {
+			console.warn("Screenshot capture failed:", chrome.runtime.lastError.message);
+			image = null; // Handle failure gracefully
+		}
+
+		// Extract and send tab content
+		chrome.scripting.executeScript({
+			target: { tabId: tab.id },
+			func: extractContentAndSend,
+			args: [tab.id, tab.title, tab.url, image], // Pass the screenshot as a parameter
+		});
 	});
 }
 
-function extractContentAndSend(tabId, tabTitle, tabUrl) {
+
+function extractContentAndSend(tabId, tabTitle, tabUrl, screenshot) {
 	// Function to extract metadata from meta tags
 	function getMetaTags() {
 		const metaTags = {};
@@ -78,20 +87,6 @@ function extractContentAndSend(tabId, tabTitle, tabUrl) {
 		return openGraphData;
 	}
 
-	function removeHeaderAndFooter(element) {
-		const children = Array.from(element.childNodes);
-		const excludedTags = ["HEADER", "FOOTER", "NAV", "ASIDE"];
-		children.forEach((node) => {
-			if (node.nodeType === Node.ELEMENT_NODE) {
-				if (excludedTags.includes(node.tagName)) {
-					node.remove();
-				} else {
-					removeHeaderAndFooter(node);
-				}
-			}
-		});
-	}
-
 	// Build the structured data to send
 	const tabData = {
 		title: tabTitle,
@@ -101,6 +96,7 @@ function extractContentAndSend(tabId, tabTitle, tabUrl) {
 		content: document.body.innerText, // Structured text content (headings, paragraphs, etc.)
 		jsonLD: getJSONLD(), // Extract JSON-LD structured data
 		openGraph: getOpenGraphData(), // Extract OpenGraph metadata
+		screenshot: screenshot, // Include the screenshot
 	};
 
 	// Send extracted content to background.js
@@ -112,6 +108,7 @@ function extractContentAndSend(tabId, tabTitle, tabUrl) {
 		url: tabUrl,
 	});
 }
+
 
 // Handle the extracted content and send it to fullscreen.js
 function handleExtractedContent(request) {

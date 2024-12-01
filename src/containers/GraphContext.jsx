@@ -60,6 +60,7 @@ export const GraphProvider = ({ children }) => {
 			{
 				label: request.content.title,
 				content: request.content.content,
+				image: request.content.screenshot,
 			},
 		);
 	};

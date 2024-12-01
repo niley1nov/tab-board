@@ -28,19 +28,6 @@ const TabNode = ({ data }) => {
 			{/* Divider Line */}
 			<Divider className="tab-node-divider" sx={{ margin: "8px 0" }} />
 
-			{/* Action Icons Section */}
-			<div className="tab-node-actions-container">
-				<Button
-					className="edit-title-button"
-					variant="outlined"
-					startIcon={
-						<EditIcon className="edit-icon" fontSize="inherit" />
-					}
-				>
-					Edit
-				</Button>
-			</div>
-
 			{/* Right Handle for Output Connection */}
 			<Handle
 				type="source"
