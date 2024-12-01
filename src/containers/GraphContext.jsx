@@ -9,6 +9,8 @@ const GraphContext = createContext();
 export const GraphProvider = ({ children }) => {
 	const xCustPosRef = useRef(700);
 	const yCustPosRef = useRef(100);
+	const xOutPosRef = useRef(1300);
+	const yOutPosRef = useRef(100);
 	const adjacencyList = useRef({});
 	const [sidebarContent, setSidebarContent] = useState({
 		id: "",
@@ -64,7 +66,7 @@ export const GraphProvider = ({ children }) => {
 		);
 	};
 
-	const createSumamryNode = (x,y) => {
+	const createSumamryNode = (x, y) => {
 		const id = generateRandomID();
 		addNodeToAdjacencyList(id);
 		return createNode(
@@ -150,7 +152,9 @@ export const GraphProvider = ({ children }) => {
 
 	// Nodes state
 	const [nodes, setNodes, onNodesChange] = useNodesState(() => {
-		const initialNode = createOutputNode(1300, 100);
+		const initialNode = createOutputNode(xOutPosRef.current,
+			yOutPosRef.current);
+		yOutPosRef.current += 250;
 		addNodeToAdjacencyList(initialNode.id);
 		return [initialNode];
 	});
@@ -254,21 +258,29 @@ export const GraphProvider = ({ children }) => {
 				xCustPosRef.current,
 				yCustPosRef.current,
 			);
+			yCustPosRef.current += 250;
 		} else if (option === "chat") {
 			newNode = createChatNode(
 				xCustPosRef.current,
 				yCustPosRef.current,
 			);
+			yCustPosRef.current += 250;
 		} else if (option === "summary") {
 			newNode = createSumamryNode(
 				xCustPosRef.current,
 				yCustPosRef.current,
 			);
+			yCustPosRef.current += 250;
+		} else if (option === "output") {
+			newNode = createOutputNode(
+				xOutPosRef.current,
+				yOutPosRef.current,
+			);
+			yOutPosRef.current += 250
 		}
 
 		if (!!newNode) {
 			setNodes((prevNodes) => [...prevNodes, newNode]);
-			yCustPosRef.current += 250;
 		}
 	};
 

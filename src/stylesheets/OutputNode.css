@@ -69,3 +69,21 @@
 	background: #666;
 	border-radius: 50%;
 }
+
+.delete-node-button {
+	color: #322f35 !important;
+	background-color: #f1e9ff !important;
+	border-radius: 9999px !important;
+	padding: 5px 12px !important;
+	display: inline-flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	font-size: 10px !important;
+	font-weight: 500 !important;
+	border: none !important;
+	text-transform: none !important;
+}
+
+.delete-node-button .delete-icon {
+	font-size: 14px !important;
+}
