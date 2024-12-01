@@ -4,6 +4,7 @@ import TabNode from "../components/boardComponents/TabNode";
 import PromptNode from "../components/boardComponents/PromptNode";
 import OutputNode from "../components/boardComponents/OutputNode";
 import ChatNode from "../components/boardComponents/ChatNode";
+import SummaryNode from "../components/boardComponents/SummaryNode";
 import NavBar from "../components/boardComponents/NavBar";
 import Edge from "../components/boardComponents/Edge";
 import NodeMenu from "../components/boardComponents/NodeMenu";
@@ -26,6 +27,7 @@ const Board = () => {
 		PromptNode: PromptNode,
 		OutputNode: OutputNode,
 		ChatNode: ChatNode,
+		SummaryNode: SummaryNode,
 	};
 	const edgeTypes = { Edge: Edge };
 

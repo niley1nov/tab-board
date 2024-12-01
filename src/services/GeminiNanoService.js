@@ -68,7 +68,11 @@ export default class GeminiNanoService extends AIService {
 		);
 	}
 
-	async initializeSession(context) {
+	async initializeSummarySession(context) {
+		console.log('Initialize Session');
+	}
+
+	async initializePromptSession(context) {
 		console.log('Initialize Session');
 		const maxTokens = 4800;
 		const systemPrompt = getPrompts("system_prompt");

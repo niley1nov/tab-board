@@ -6,6 +6,7 @@ import TokenDialog from "./TokenDialog";
 import { useGraph } from "../../containers/GraphContext";
 import { useToken } from "../../containers/TokenContext";
 import PromptNodeContent from "./PromptNodeContent";
+import SummaryNodeContent from "./SummaryNodeContent";
 import ChatNodeContent from "./ChatNodeContent";
 import TabNodeContent from "./TabNodeContent";
 import OutputNodeContent from "./OutputNodeContent";
@@ -48,7 +49,7 @@ const CustomDrawer = ({ open, onClose }) => {
 				<DrawerHeader title={title} onClose={onClose} />
 				<Divider sx={{ marginY: 2, borderColor: "#F1E9FF" }} />
 				<div className={`drawer-wrapper ${
-					nodeType === "PromptNode" || nodeType === "ChatNode" ? "no-padding" : ""}`}
+					nodeType === "PromptNode" || nodeType === "ChatNode" || nodeType === "SummaryNode" ? "no-padding" : ""}`}
 					style={{
 						background:
 							nodeType === "TabNode"
@@ -59,9 +60,15 @@ const CustomDrawer = ({ open, onClose }) => {
 					}}
 				>
 					<div className={`drawer-content ${
-						nodeType === "PromptNode" || nodeType === "ChatNode" ? "no-padding-content" : ""}`}>
+						nodeType === "PromptNode" || nodeType === "ChatNode" || nodeType === "SummaryNode" ? "no-padding-content" : ""}`}>
 						{nodeType === "PromptNode" && (
 							<PromptNodeContent
+								token={token}
+								setDialogOpen={setDialogOpen}
+							/>
+						)}
+						{nodeType === "SummaryNode" && (
+							<SummaryNodeContent
 								token={token}
 								setDialogOpen={setDialogOpen}
 							/>

@@ -3,7 +3,6 @@ import AdjacentNodeInputs from "./AdjacentNodeInputs";
 import { Button, Box } from "@mui/material";
 import { Divider } from "@mui/material";
 import ModelSelector from "./ModelSelector";
-import PromptInputField from "./PromptInputField";
 import { useGraph } from "../../containers/GraphContext";
 import {
 	addFinalPrompt,
@@ -12,7 +11,7 @@ import GeminiProService from "../../services/GeminiProService";
 import GeminiNanoService from "../../services/GeminiNanoService";
 import "../../stylesheets/ChatNodeContent.css"
 
-const PromptNodeContent = ({
+const SummaryNodeContent = ({
 	token,
 	setDialogOpen
 }) => {
@@ -25,6 +24,8 @@ const PromptNodeContent = ({
 	);
 	const [modelSelection, setModelSelection] = useState(graph.getNode(nodeId)?.data?.model ?? "Gemini Pro");
 	const [geminiService, setGeminiService] = useState(graph.getNode(nodeId)?.data?.service ?? null);
+	const [loading, setLoading] = useState(false); //store this in node
+	const [abortController, setAbortController] = useState(null);
 
 	useEffect(() => {
 		setChatVisible(graph.getNode(nodeId)?.data?.ready || false);
@@ -33,20 +34,6 @@ const PromptNodeContent = ({
 		setGeminiService(graph.getNode(nodeId)?.data?.service || null);
 	}, [nodeId]);
 
-	const handleSubmitPrompt = async () => {
-		try {
-			const node = graph.getNode(nodeId);
-			const response = await node.data.service.callModel(node, graph.selectedNode.data.prompt);
-			console.log("Response:", response);
-			graph.selectedNode.data.content = response.text;
-			setPromptNodeDetails((prevDetails) =>
-				addFinalPrompt(prevDetails, nodeId, graph.selectedNode.data.prompt),
-			); //what is this doing?
-		} catch (error) {
-			console.error("Error while submitting prompt:", error.message);
-		}
-	};
-
 	const handleModelChange = (nodeId, event) => {
 		const selectedValue = event.target.value;
 		graph.getNode(nodeId).data.model = selectedValue;
@@ -54,32 +41,53 @@ const PromptNodeContent = ({
 		if (selectedValue === "Gemini Pro" && !token) setDialogOpen(true);
 	};
 
-	const initializeChat = async () => {
-		let inputNodes = adjacencyNodes.filter((node) => node.type === 'TabNode');
-		let context = "";
-		for (let node of inputNodes) {
-			let name = adjacentNodeInputs[node.id];
+	const handleSendClick = async () => {
+		if (adjacencyNodes.length === 0) return;
+		const controller = new AbortController();
+		setAbortController(controller);
+		setLoading(true);
+		try {
+			let inputNode = adjacencyNodes[0];
+			let context = "";
+			let name = adjacentNodeInputs[inputNode.id];
 			if (!!name) {
 				context += (name + '\n\n');
 			}
-			context += (node.data.content + '\n\n' + '----------' + '\n\n');
+			context += (inputNode.data.content + '\n\n' + '----------' + '\n\n');
+			console.log(context);
+			const node = graph.getNode(nodeId);
+			node.data.context = context;
+			node.data.processing = false;
+			if (modelSelection === "Gemini Pro") {
+				const service = new GeminiProService(token);
+				node.data.service = service;
+				setGeminiService(service);
+			} else if (modelSelection === "Gemini Nano") {
+				const service = new GeminiNanoService();
+				node.data.service = service;
+				setGeminiService(service);
+			}
+			node.data.session = await node.data.service.initializeSummarySession();
+			const response = await node.data.service.callModel(node, context);
+			console.log("Response:", response);
+			graph.selectedNode.data.content = response.text;
+			setPromptNodeDetails((prevDetails) =>
+				addFinalPrompt(prevDetails, nodeId, graph.selectedNode.data.prompt),
+			); //what is this doing?
+			node.data.ready = true;
+			setChatVisible(true);
+		} catch (error) {
+			console.error("Error while submitting prompt:", error.message);
+		} finally {
+			setLoading(false);
+			setAbortController(null);
 		}
-		console.log(context);
-		const node = graph.getNode(nodeId);
-		node.data.context = context;
-		node.data.processing = false;
-		if (modelSelection === "Gemini Pro") {
-			const service = new GeminiProService(token);
-			node.data.service = service;
-			setGeminiService(service);
-		} else if (modelSelection === "Gemini Nano") {
-			const service = new GeminiNanoService();
-			node.data.service = service;
-			setGeminiService(service);
+	};
+
+	const handleStopClick = () => {
+		if (abortController) {
+			abortController.abort(); // Cancel the ongoing request
 		}
-		node.data.session = await node.data.service.initializePromptSession(context);
-		node.data.ready = true;
-		setChatVisible(true);
 	};
 
 	return (
@@ -100,20 +108,21 @@ const PromptNodeContent = ({
 				}
 			/>
 			<Box className="centered-button">
-				<Button
-					variant="contained"
-					color="primary"
-					onClick={initializeChat}
-					className="send-button"
-				>
-					Initialize
-				</Button>
+				{/* Show the button only if adjacencyNodes is not empty */}
+				{adjacencyNodes.length > 0 && (
+					<Button
+						variant="contained"
+						color="primary"
+						onClick={loading ? handleStopClick : handleSendClick}
+						disabled={loading}
+						className="send-button"
+					>
+						{loading ? "Processing..." : "Summarize"}
+					</Button>
+				)}
 			</Box>
-			{chatVisible && <PromptInputField
-				handleSubmit={handleSubmitPrompt} // Updated to pass handleSubmitPrompt
-			/>}
 		</>
 	);
 };
 
-export default PromptNodeContent;
+export default SummaryNodeContent;

@@ -5,7 +5,7 @@ import "../../stylesheets/CustomDrawer.css";
 
 const PromptInputField = ({ handleSubmit }) => {
 	const graph = useGraph();
-	const [loading, setLoading] = useState(false);
+	const [loading, setLoading] = useState(false); //store this in node
 	const [abortController, setAbortController] = useState(null);
 	const [prompt, setPrompt] = useState("");
 
