@@ -103,7 +103,7 @@ const SummaryNodeContent = ({
 			/>
 			<Box className="centered-button">
 				{/* Show the button only if adjacencyNodes is not empty */}
-				{adjacencyNodes.length > 0 && (
+				{graph.adjacencyList[nodeId].left.length > 0 && (
 					<Button
 						variant="contained"
 						color="primary"

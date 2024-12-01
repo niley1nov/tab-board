@@ -48,8 +48,7 @@ const CustomDrawer = ({ open, onClose }) => {
 			>
 				<DrawerHeader title={title} onClose={onClose} />
 				<Divider sx={{ marginY: 2, borderColor: "#F1E9FF" }} />
-				<div className={`drawer-wrapper ${
-					nodeType === "PromptNode" || nodeType === "ChatNode" || nodeType === "SummaryNode" ? "no-padding" : ""}`}
+				<div className={`drawer-wrapper ${nodeType === "PromptNode" || nodeType === "ChatNode" || nodeType === "SummaryNode" ? "no-padding" : ""}`}
 					style={{
 						background:
 							nodeType === "TabNode"
@@ -59,8 +58,7 @@ const CustomDrawer = ({ open, onClose }) => {
 									: "#49454F",
 					}}
 				>
-					<div className={`drawer-content ${
-						nodeType === "PromptNode" || nodeType === "ChatNode" || nodeType === "SummaryNode" ? "no-padding-content" : ""}`}>
+					<div className={`drawer-content ${nodeType === "PromptNode" || nodeType === "ChatNode" || nodeType === "SummaryNode" ? "no-padding-content" : ""}`}>
 						{nodeType === "PromptNode" && (
 							<PromptNodeContent
 								token={token}

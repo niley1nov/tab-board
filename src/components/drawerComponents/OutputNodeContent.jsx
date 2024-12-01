@@ -6,17 +6,9 @@ import { useGraph } from "../../containers/GraphContext";
 const OutputNodeContent = () => {
 	const graph = useGraph();
 
-	// State to track connectedContent
-	const [connectedContent, setConnectedContent] = useState(null);
-
-	// Extract adjacency nodes from `selectedNode`
 	const connectedNodes = graph.selectedNode?.data?.adjacencyNodes || [];
-	const firstNodeContent = connectedNodes[0]?.data?.content || null;
-
-	// Update connectedContent only when `firstNodeContent` changes
-	useEffect(() => {
-		setConnectedContent(firstNodeContent);
-	}, [firstNodeContent]);
+	const connectedContent =
+		connectedNodes.length > 0 ? connectedNodes[0]?.data?.content : null;
 
 	return (
 		<div className="tabnode-container">
