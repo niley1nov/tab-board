@@ -24,7 +24,7 @@
 
 .drawer-content {
     margin-bottom: 50px !important;
-    height: calc(100% - 48px) !important;
+    height: calc(100% - 20%) !important;
     overflow-y: auto !important;
     padding-left: 8px;
 	padding-right: 8px;
@@ -247,16 +247,18 @@
 	font-size: 16px !important;
 	font-weight: 500 !important;
 	border: none !important;
+	width: 100% !important;
 	text-transform: none !important;
 	margin-right: 10px !important;
+	margin-left: 10px !important;
+	margin-bottom: 20px !important;
 }
 
 .button-container {
-	margin-bottom: 50px;
 	display: flex;
 	justify-content: flex-end; /* Align the button to the right */
 	width: 100%;
-	margin-top: 10px; /* Ensure there's space between input and button */
+	margin-top: 16px; /* Ensure there's space between input and button */
 }
 
 .prompt-container {
@@ -281,4 +283,13 @@
 
 .react-markdown {
 	color: white !important;
+}
+
+.no-padding {
+	padding: 0 !important;
+}
+
+.no-padding-content {
+	padding-left: 0 !important;
+	padding-right: 3px !important;
 }

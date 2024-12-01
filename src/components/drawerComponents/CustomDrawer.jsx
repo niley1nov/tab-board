@@ -35,16 +35,20 @@ const CustomDrawer = ({ open, onClose }) => {
 						width: "320px",
 						top: "64px",
 						height: "calc(100vh - 64px)",
-						overflow: "hidden", // Ensure the outer drawer doesn’t scroll.
+						overflow: "hidden",
+						'& .MuiDrawer-paper': {
+							zIndex: 1,
+						},
 					},
 				}}
 				ModalProps={{ keepMounted: true }}
+				variant="persistent"
+				disableEnforceFocus
 			>
 				<DrawerHeader title={title} onClose={onClose} />
-				{nodeType === "PromptNode" && (
-					<Divider sx={{ marginY: 2, borderColor: "#F1E9FF" }} />
-				)}
-				<div className="drawer-wrapper"
+				<Divider sx={{ marginY: 2, borderColor: "#F1E9FF" }} />
+				<div className={`drawer-wrapper ${
+					nodeType === "PromptNode" || nodeType === "ChatNode" ? "no-padding" : ""}`}
 					style={{
 						background:
 							nodeType === "TabNode"
@@ -54,7 +58,8 @@ const CustomDrawer = ({ open, onClose }) => {
 									: "#49454F",
 					}}
 				>
-					<div className="drawer-content">
+					<div className={`drawer-content ${
+						nodeType === "PromptNode" || nodeType === "ChatNode" ? "no-padding-content" : ""}`}>
 						{nodeType === "PromptNode" && (
 							<PromptNodeContent
 								token={token}

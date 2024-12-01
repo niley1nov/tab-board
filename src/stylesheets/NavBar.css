@@ -8,18 +8,6 @@
 	min-height: 72px !important;
 }
 
-/* Global override for backdrop styles */
-.css-14dl35y {
-	position: unset !important;
-	inset: unset !important;
-}
-
-.css-s0r7el {
-    position: unset !important;
-    inset: 0px !important;
-    z-index: 1200 !important;
-}
-
 /* Drawer close icon styles */
 .close-icon {
 	color: white !important;
