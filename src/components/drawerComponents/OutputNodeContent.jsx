@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import ScrollableContent from "./ScrollableContent";
 import ReactMarkdown from "react-markdown";
 import { useGraph } from "../../containers/GraphContext";
@@ -6,10 +6,17 @@ import { useGraph } from "../../containers/GraphContext";
 const OutputNodeContent = () => {
 	const graph = useGraph();
 
-	// Extract the first connected node's content from `selectedNode`
+	// State to track connectedContent
+	const [connectedContent, setConnectedContent] = useState(null);
+
+	// Extract adjacency nodes from `selectedNode`
 	const connectedNodes = graph.selectedNode?.data?.adjacencyNodes || [];
-	const connectedContent =
-		connectedNodes.length > 0 ? connectedNodes[0]?.data?.content : null;
+	const firstNodeContent = connectedNodes[0]?.data?.content || null;
+
+	// Update connectedContent only when `firstNodeContent` changes
+	useEffect(() => {
+		setConnectedContent(firstNodeContent);
+	}, [firstNodeContent]);
 
 	return (
 		<div className="tabnode-container">
@@ -31,9 +38,9 @@ const OutputNodeContent = () => {
 
 								// Blockquotes
 								blockquote: ({ children }) => (
-								<blockquote style={{ color: "white", fontStyle: "italic" }}>
-									{children}
-								</blockquote>
+									<blockquote style={{ color: "white", fontStyle: "italic" }}>
+										{children}
+									</blockquote>
 								),
 
 								// Lists
@@ -43,30 +50,30 @@ const OutputNodeContent = () => {
 
 								// Code and preformatted text
 								code: ({ children }) => (
-								<code style={{ color: "white", background: "#333", padding: "2px 4px" }}>
-									{children}
-								</code>
+									<code style={{ color: "white", background: "#333", padding: "2px 4px" }}>
+										{children}
+									</code>
 								),
 								pre: ({ children }) => (
-								<pre style={{ color: "white", background: "#333", padding: "10px" }}>
-									{children}
-								</pre>
+									<pre style={{ color: "white", background: "#333", padding: "10px" }}>
+										{children}
+									</pre>
 								),
 
 								// Links
 								a: ({ href, children }) => (
-								<a href={href} style={{ color: "cyan", textDecoration: "underline" }}>
-									{children}
-								</a>
+									<a href={href} style={{ color: "cyan", textDecoration: "underline" }}>
+										{children}
+									</a>
 								),
 
 								// Images
 								img: ({ src, alt }) => (
-								<img
-									src={src}
-									alt={alt}
-									style={{ maxWidth: "100%", border: "1px solid white" }}
-								/>
+									<img
+										src={src}
+										alt={alt}
+										style={{ maxWidth: "100%", border: "1px solid white" }}
+									/>
 								),
 
 								// Strong and emphasis
@@ -78,24 +85,24 @@ const OutputNodeContent = () => {
 
 								// Tables
 								table: ({ children }) => (
-								<table style={{ color: "white", borderCollapse: "collapse", width: "100%" }}>
-									{children}
-								</table>
+									<table style={{ color: "white", borderCollapse: "collapse", width: "100%" }}>
+										{children}
+									</table>
 								),
 								thead: ({ children }) => <thead style={{ background: "#444" }}>{children}</thead>,
 								tbody: ({ children }) => <tbody>{children}</tbody>,
 								tr: ({ children }) => <tr>{children}</tr>,
 								th: ({ children }) => (
-								<th style={{ border: "1px solid white", padding: "8px" }}>{children}</th>
+									<th style={{ border: "1px solid white", padding: "8px" }}>{children}</th>
 								),
 								td: ({ children }) => (
-								<td style={{ border: "1px solid white", padding: "8px" }}>{children}</td>
+									<td style={{ border: "1px solid white", padding: "8px" }}>{children}</td>
 								),
 							}}
-							>
+						>
 							{connectedContent}
-							</ReactMarkdown>
-						</div>
+						</ReactMarkdown>
+					</div>
 				) : (
 					<div>No content available.</div>
 				)}

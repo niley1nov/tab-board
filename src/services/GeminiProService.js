@@ -76,21 +76,6 @@ export default class GeminiProService extends AIService {
 	}
 
 	async summarize(node, prompt, title) {
-		try {
-			const chatSession = node.data.session;
-			const nodeId = node.data.id;
-			if (!chatSession) {
-				throw new Error(`Session not initialized`);
-			}
-			const result = await chatSession.sendMessage(prompt);
-			return {
-				id: nodeId,
-				text: result.response.text()
-			};
-		} catch (error) {
-			this.showWarningPopup(error.message);
-			console.error("Error in GeminiProService callModel:", error);
-			throw error;
-		}
+		return this.callModel(node, prompt);
 	}
 }
