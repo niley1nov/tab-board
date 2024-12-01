@@ -44,7 +44,8 @@
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
-	max-width: 200px; /* Ensure title doesn’t overlap the icon */
+	max-width: 200px;
+	/* Ensure title doesn’t overlap the icon */
 }
 
 /* Action icons styling (MoreVertIcon) */
@@ -77,4 +78,22 @@
 	height: 8px;
 	background: #666;
 	border-radius: 50%;
+}
+
+/* Container for the image */
+.tab-node-image-container {
+	text-align: center;
+	margin: 8px 0;
+}
+
+/* Image styling */
+.tab-node-image {
+	max-width: 100%;
+	/* Ensure the image fits within the node */
+	height: auto;
+	/* Maintain aspect ratio */
+	border-radius: 4px;
+	/* Optional: Add rounded corners */
+	box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+	/* Optional: Add shadow */
 }

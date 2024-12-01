@@ -1,8 +1,6 @@
 import React from "react";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
-import Button from "@mui/material/Button";
-import EditIcon from "@mui/icons-material/Edit";
 import { Handle, Position } from "@xyflow/react";
 import "../../stylesheets/TabNode.css";
 
@@ -27,6 +25,17 @@ const TabNode = ({ data }) => {
 
 			{/* Divider Line */}
 			<Divider className="tab-node-divider" sx={{ margin: "8px 0" }} />
+
+			{/* Image Section */}
+			{data.image && (
+				<div className="tab-node-image-container">
+					<img
+						src={data.image}
+						alt={data.label || "Tab Image"}
+						className="tab-node-image"
+					/>
+				</div>
+			)}
 
 			{/* Right Handle for Output Connection */}
 			<Handle

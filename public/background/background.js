@@ -28,24 +28,22 @@ function isValidTab(tab) {
 }
 
 function injectContentScript(tab) {
-	// Capture the tab's screenshot and extract content
-	chrome.tabs.captureVisibleTab(tab.windowId, { format: "png" }, (image) => {
-		if (chrome.runtime.lastError) {
-			console.warn("Screenshot capture failed:", chrome.runtime.lastError.message);
-			image = null; // Handle failure gracefully
-		}
-
-		// Extract and send tab content
-		chrome.scripting.executeScript({
-			target: { tabId: tab.id },
-			func: extractContentAndSend,
-			args: [tab.id, tab.title, tab.url, image], // Pass the screenshot as a parameter
-		});
+	// Inject the content script into the tab
+	chrome.scripting.executeScript({
+		target: { tabId: tab.id },
+		func: extractContentAndSend,
+		args: [tab.id, tab.title, tab.url], // Pass necessary arguments
 	});
 }
 
+function extractContentAndSend(tabId, tabTitle, tabUrl) {
+	// Function to capture a screenshot of the current tab
+	function captureScreenshot(callback) {
+		chrome.runtime.sendMessage({ action: "captureScreenshot" }, (response) => {
+			callback(response.image || null);
+		});
+	}
 
-function extractContentAndSend(tabId, tabTitle, tabUrl, screenshot) {
 	// Function to extract metadata from meta tags
 	function getMetaTags() {
 		const metaTags = {};
@@ -87,28 +85,30 @@ function extractContentAndSend(tabId, tabTitle, tabUrl, screenshot) {
 		return openGraphData;
 	}
 
-	// Build the structured data to send
-	const tabData = {
-		title: tabTitle,
-		url: tabUrl,
-		tabId: tabId,
-		metaTags: getMetaTags(), // Extract meta tags
-		content: document.body.innerText, // Structured text content (headings, paragraphs, etc.)
-		jsonLD: getJSONLD(), // Extract JSON-LD structured data
-		openGraph: getOpenGraphData(), // Extract OpenGraph metadata
-		screenshot: screenshot, // Include the screenshot
-	};
+	// Capture screenshot and send extracted content
+	captureScreenshot((screenshot) => {
+		// Build the structured data to send
+		const tabData = {
+			title: tabTitle,
+			url: tabUrl,
+			tabId: tabId,
+			metaTags: getMetaTags(), // Extract meta tags
+			content: document.body.innerText, // Structured text content (headings, paragraphs, etc.)
+			jsonLD: getJSONLD(), // Extract JSON-LD structured data
+			openGraph: getOpenGraphData(), // Extract OpenGraph metadata
+			screenshot, // Include the screenshot
+		};
 
-	// Send extracted content to background.js
-	chrome.runtime.sendMessage({
-		action: "extractContent",
-		content: tabData,
-		tabId: tabId,
-		title: tabTitle,
-		url: tabUrl,
+		// Send extracted content to background.js
+		chrome.runtime.sendMessage({
+			action: "extractContent",
+			content: tabData,
+			tabId: tabId,
+			title: tabTitle,
+			url: tabUrl,
+		});
 	});
 }
-
 
 // Handle the extracted content and send it to fullscreen.js
 function handleExtractedContent(request) {
@@ -118,3 +118,18 @@ function handleExtractedContent(request) {
 		tabData: { id: tabId, title, content, url },
 	});
 }
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+	if (request.action === "captureScreenshot") {
+		// Capture screenshot of the active tab in the sender's window
+		chrome.tabs.captureVisibleTab(sender.tab.windowId, { format: "png" }, (image) => {
+			if (chrome.runtime.lastError) {
+				console.warn("Screenshot capture failed:", chrome.runtime.lastError.message);
+				sendResponse({ image: null });
+			} else {
+				sendResponse({ image });
+			}
+		});
+		return true; // Keep the message channel open for asynchronous response
+	}
+});
