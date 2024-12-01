@@ -42,6 +42,7 @@ const ChatWindow = ({ handleSendMessage }) => {
 				{ sender: "gemini", text: response.text || "No response" },
 			];
 			setMessages([...selectedNode.data.chatHistory]);
+			selectedNode.data.content = JSON.stringify(selectedNode.data.chatHistory);
 		} catch (error) {
 			// Format the error message by introducing breaks on commas, periods, and slashes
 			const formattedError = String(error.message).replace(/[,./]/g, (match) => `${match} `);

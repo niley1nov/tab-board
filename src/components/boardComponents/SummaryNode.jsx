@@ -2,12 +2,13 @@ import React, { useRef } from "react";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
+import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { Handle, Position } from "@xyflow/react";
 import { useGraph } from "../../containers/GraphContext";
-import "../../stylesheets/OutputNode.css";
+import "../../stylesheets/SummaryNode.css";
 
-const OutputNode = ({ data }) => {
+const SummaryNode = ({ data }) => {
 	const nodeRef = useRef(null);
 	const graph = useGraph();
 	const { nodeId, adjacencyNodes } = graph.sidebarContent;
@@ -30,10 +31,10 @@ const OutputNode = ({ data }) => {
 		<div
 			onClick={data.onClick}
 			ref={nodeRef}
-			className="output-node"
+			className="prompt-node"
 			style={{ backgroundColor: data.backgroundColor || "#FFF" }}
 		>
-			{/* Left Handle */}
+			{/* Left Handle for Schema */}
 			<Handle
 				type="target"
 				position={Position.Left}
@@ -42,19 +43,30 @@ const OutputNode = ({ data }) => {
 			/>
 
 			{/* Header Section */}
-			<div className="output-node-header">
+			<div className="prompt-node-header">
 				<Typography
-					className="output-node-title"
+					variant="subtitle2"
+					className="prompt-node-title"
 					style={{ fontFamily: "Poppins, sans-serif" }}
 				>
 					{data.label}
 				</Typography>
 			</div>
 
-			<Divider className="output-node-divider" sx={{ margin: "8px 0" }} />
+			<Divider className="prompt-node-divider" sx={{ margin: "8px 0" }} />
 
 			{/* Action Icons Section */}
-			<div className="tab-node-actions-container">
+			<div className="prompt-node-actions-container">
+				<Button
+					className="edit-title-button"
+					variant="outlined"
+					onClick={data.editTitle}
+					startIcon={
+						<EditIcon className="edit-icon" fontSize="inherit" />
+					}
+				>
+					Edit
+				</Button>
 				<Button
 					className="delete-node-button"
 					variant="outlined"
@@ -69,9 +81,16 @@ const OutputNode = ({ data }) => {
 					Delete
 				</Button>
 			</div>
-		</div>
 
+			{/* Right Handle for Context */}
+			<Handle
+				type="source"
+				position={Position.Right}
+				id="context"
+				style={{ top: "50%" }}
+			/>
+		</div>
 	);
 };
 
-export default OutputNode;
+export default SummaryNode;

@@ -14,7 +14,27 @@ export default class GeminiProService extends AIService {
 	}
 
 	// Initialize a session for a specific node
-	async initializeSession(context) {
+	async initializeSummarySession() {
+		console.log('Initialize Session');
+		try {
+			const model = this.genAI.getGenerativeModel({
+				model: models["pro"],
+				systemInstruction: getPrompts("summary_prompt"),
+			});
+			const chatSession = model.startChat({
+				generationConfig: getGenConfig(1, "text/plain"),
+				safetySettings: safety_settings,
+				history: [],
+			});
+			return chatSession;
+		} catch (error) {
+			console.error("Error initializing AI session:", error);
+			throw new Error("Failed to initialize AI session");
+		}
+	}
+
+	// Initialize a session for a specific node
+	async initializePromptSession(context) {
 		console.log('Initialize Session');
 		try {
 			const model = this.genAI.getGenerativeModel({

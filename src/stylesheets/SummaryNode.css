@@ -1,0 +1,101 @@
+.prompt-node {
+	border: 1px solid #d0bcff;
+	border-radius: 12px;
+	padding: 10px;
+	background-color: #fff;
+	width: 180px;
+	position: relative;
+	align-items: stretch;
+	cursor: pointer;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.edit-title-button {
+	color: #322f35 !important;
+	background-color: #f1e9ff !important;
+	border-radius: 9999px !important;
+	padding: 5px 12px !important;
+	display: inline-flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	font-size: 10px !important;
+	font-weight: 500 !important;
+	border: none !important;
+	text-transform: none !important;
+}
+
+.delete-node-button {
+	color: #322f35 !important;
+	background-color: #f1e9ff !important;
+	border-radius: 9999px !important;
+	padding: 5px 12px !important;
+	display: inline-flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	font-size: 10px !important;
+	font-weight: 500 !important;
+	border: none !important;
+	text-transform: none !important;
+}
+
+.edit-title-button .edit-icon {
+	font-size: 14px !important;
+}
+
+.delete-node-button .delete-icon {
+	font-size: 14px !important;
+}
+
+.prompt-node-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.prompt-node-title {
+	font-weight: 400 !important;
+	font-size: 16px;
+	color: #322f35;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	max-width: 200px; /* Ensure title doesn’t overlap the icon */
+}
+
+.prompt-node-actions .MuiIconButton-root {
+	padding: 2px;
+}
+
+.prompt-node-divider {
+	margin: 5px 0;
+	background-color: #e0e0e0;
+}
+
+.prompt-node-content {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	padding-top: 4px;
+	padding-bottom: 4px;
+}
+
+/* Container for action icons */
+.prompt-node-actions-container {
+	display: flex;
+	justify-content: space-around;
+	padding: 4px 0;
+}
+
+/* Icon button styling within the actions container */
+.prompt-node-actions-container .MuiIconButton-root {
+	color: #555;
+	padding: 4px;
+}
+
+/* Handle positioning */
+.prompt-node .react-flow__handle {
+	width: 8px;
+	height: 8px;
+	background: #666;
+	border-radius: 50%;
+}

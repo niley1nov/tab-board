@@ -71,7 +71,7 @@ const ChatNodeContent = ({
 			node.data.service = service;
 			setGeminiService(service);
 		}
-		node.data.session = await node.data.service.initializeSession(context);
+		node.data.session = await node.data.service.initializePromptSession(context);
 		node.data.ready = true;
 		setChatVisible(true);
 	};

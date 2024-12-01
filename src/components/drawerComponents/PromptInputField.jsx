@@ -3,10 +3,9 @@ import { Box, TextField, Button } from "@mui/material";
 import { useGraph } from "../../containers/GraphContext";
 import "../../stylesheets/CustomDrawer.css";
 
-const PromptInputField = ({ handleSubmit }) => {
+const PromptInputField = ({ nodeId, handleSubmit }) => {
 	const graph = useGraph();
-	const [loading, setLoading] = useState(false);
-	const [abortController, setAbortController] = useState(null);
+	const [loading, setLoading] = useState(graph.getNode(nodeId)?.data?.loading ?? false);
 	const [prompt, setPrompt] = useState("");
 
 	// Update prompt when selectedNode changes
@@ -16,31 +15,28 @@ const PromptInputField = ({ handleSubmit }) => {
 		}
 	}, [graph.selectedNode]);
 
+	useEffect(() => {
+		setLoading(graph.getNode(nodeId)?.data?.loading || false);
+	}, [nodeId]);
+
 	const handleSendClick = async () => {
 		if (!graph.selectedNode) return; // Ensure a node is selected
 
-		const controller = new AbortController();
-		setAbortController(controller);
+		graph.getNode(nodeId).data.loading = true;
 		setLoading(true);
 
 		// Update the prompt for the selected node in the graph context
 		graph.selectedNode.data.prompt = prompt;
 
 		try {
-			await handleSubmit(controller.signal); // Send the prompt to Gemini API
+			await handleSubmit(); // Send the prompt to Gemini API
 		} catch (error) {
 			if (error.name !== "AbortError") {
 				console.error("Error while sending prompt:", error.message);
 			}
 		} finally {
+			graph.getNode(nodeId).data.loading = false;
 			setLoading(false);
-			setAbortController(null);
-		}
-	};
-
-	const handleStopClick = () => {
-		if (abortController) {
-			abortController.abort(); // Cancel the ongoing request
 		}
 	};
 
@@ -70,7 +66,7 @@ const PromptInputField = ({ handleSubmit }) => {
 					<Button
 						variant="contained"
 						color="primary"
-						onClick={loading ? handleStopClick : handleSendClick}
+						onClick={handleSendClick}
 						disabled={loading}
 						className="send-button"
 					>

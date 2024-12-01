@@ -9,6 +9,8 @@ const GraphContext = createContext();
 export const GraphProvider = ({ children }) => {
 	const xCustPosRef = useRef(700);
 	const yCustPosRef = useRef(100);
+	const xOutPosRef = useRef(1300);
+	const yOutPosRef = useRef(100);
 	const adjacencyList = useRef({});
 	const [sidebarContent, setSidebarContent] = useState({
 		id: "",
@@ -64,6 +66,29 @@ export const GraphProvider = ({ children }) => {
 		);
 	};
 
+	const createSumamryNode = (x, y) => {
+		const id = generateRandomID();
+		addNodeToAdjacencyList(id);
+		return createNode(
+			id,
+			"SummaryNode",
+			{ x, y },
+			{
+				label: "Summarization Node",
+				content: "",
+				prompt: "",
+				context: "",
+				processing: false,
+				session: null,
+				ready: false,
+				adjacentNodeInputs: {},
+				model: 'Gemini Pro',
+				service: null,
+				loading: false,
+			},
+		);
+	};
+
 	const createPromptNode = (x, y) => {
 		const id = generateRandomID();
 		addNodeToAdjacencyList(id);
@@ -82,6 +107,7 @@ export const GraphProvider = ({ children }) => {
 				adjacentNodeInputs: {},
 				model: 'Gemini Pro',
 				service: null,
+				loading: false,
 			},
 		);
 	};
@@ -105,6 +131,7 @@ export const GraphProvider = ({ children }) => {
 				adjacentNodeInputs: {},
 				model: 'Gemini Pro',
 				service: null,
+				loading: false,
 			},
 		);
 	};
@@ -125,7 +152,9 @@ export const GraphProvider = ({ children }) => {
 
 	// Nodes state
 	const [nodes, setNodes, onNodesChange] = useNodesState(() => {
-		const initialNode = createOutputNode(1300, 100);
+		const initialNode = createOutputNode(xOutPosRef.current,
+			yOutPosRef.current);
+		yOutPosRef.current += 250;
 		addNodeToAdjacencyList(initialNode.id);
 		return [initialNode];
 	});
@@ -229,22 +258,35 @@ export const GraphProvider = ({ children }) => {
 				xCustPosRef.current,
 				yCustPosRef.current,
 			);
-		} else if(option === "chat") {
+			yCustPosRef.current += 250;
+		} else if (option === "chat") {
 			newNode = createChatNode(
 				xCustPosRef.current,
 				yCustPosRef.current,
 			);
+			yCustPosRef.current += 250;
+		} else if (option === "summary") {
+			newNode = createSumamryNode(
+				xCustPosRef.current,
+				yCustPosRef.current,
+			);
+			yCustPosRef.current += 250;
+		} else if (option === "output") {
+			newNode = createOutputNode(
+				xOutPosRef.current,
+				yOutPosRef.current,
+			);
+			yOutPosRef.current += 250
 		}
 
-		if(!!newNode) {
+		if (!!newNode) {
 			setNodes((prevNodes) => [...prevNodes, newNode]);
-			yCustPosRef.current += 250;
 		}
 	};
 
 	const addEdge = (params, eds) => {
 		const targetNode = getNode(params.target);
-		if (targetNode?.type === "OutputNode") {
+		if (targetNode?.type === "OutputNode" || targetNode?.type === "SummaryNode") {
 			const connectedEdges = eds.filter((edge) => edge.target === params.target);
 			if (connectedEdges.length >= 1) {
 				console.warn("OutputNode can only have one edge connected.");
@@ -264,7 +306,7 @@ export const GraphProvider = ({ children }) => {
 	};
 
 	const handleEdgeChange = (updatedEdges) => {
-		if(updatedEdges[0].type === "remove") {
+		if (updatedEdges[0].type === "remove") {
 			const edge = getEdge(updatedEdges[0].id);
 			updateAdjacencyList(edge.source, edge.target, "remove");
 		}
@@ -291,6 +333,7 @@ export const GraphProvider = ({ children }) => {
 				createNode,
 				createTabNode,
 				createPromptNode,
+				createSumamryNode,
 				createChatNode,
 				createOutputNode,
 				nodes,
