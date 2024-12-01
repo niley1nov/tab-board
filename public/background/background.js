@@ -37,9 +37,9 @@ function injectContentScript(tab) {
 }
 
 function extractContentAndSend(tabId, tabTitle, tabUrl) {
-	// Function to capture a screenshot of the current tab
-	function captureScreenshot(callback) {
-		chrome.runtime.sendMessage({ action: "captureScreenshot" }, (response) => {
+	// Function to capture a screenshot of the specific tab
+	function captureScreenshot(tabId, callback) {
+		chrome.runtime.sendMessage({ action: "captureScreenshot", tabId }, (response) => {
 			callback(response.image || null);
 		});
 	}
@@ -86,7 +86,7 @@ function extractContentAndSend(tabId, tabTitle, tabUrl) {
 	}
 
 	// Capture screenshot and send extracted content
-	captureScreenshot((screenshot) => {
+	captureScreenshot(tabId, (screenshot) => {
 		// Build the structured data to send
 		const tabData = {
 			title: tabTitle,
@@ -110,6 +110,7 @@ function extractContentAndSend(tabId, tabTitle, tabUrl) {
 	});
 }
 
+
 // Handle the extracted content and send it to fullscreen.js
 function handleExtractedContent(request) {
 	const { tabId, title, content, url } = request;
@@ -121,15 +122,28 @@ function handleExtractedContent(request) {
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 	if (request.action === "captureScreenshot") {
-		// Capture screenshot of the active tab in the sender's window
-		chrome.tabs.captureVisibleTab(sender.tab.windowId, { format: "png" }, (image) => {
-			if (chrome.runtime.lastError) {
-				console.warn("Screenshot capture failed:", chrome.runtime.lastError.message);
+		const tabId = request.tabId;
+
+		// Get the tab's window information
+		chrome.tabs.get(tabId, (tab) => {
+			if (chrome.runtime.lastError || !tab) {
+				console.warn("Failed to get tab information:", chrome.runtime.lastError?.message);
 				sendResponse({ image: null });
-			} else {
-				sendResponse({ image });
+				return;
 			}
+
+			// Capture screenshot of the specific tab's window
+			chrome.tabs.captureVisibleTab(tab.windowId, { format: "png" }, (image) => {
+				if (chrome.runtime.lastError) {
+					console.warn("Screenshot capture failed:", chrome.runtime.lastError.message);
+					sendResponse({ image: null });
+				} else {
+					sendResponse({ image });
+				}
+			});
 		});
+
 		return true; // Keep the message channel open for asynchronous response
 	}
 });
+
