@@ -48,14 +48,14 @@ const ChatNodeContent = ({
 	};
 
 	const initializeChat = async () => {
-		let inputNodes = adjacencyNodes.filter((node) => node.type === 'TabNode');
+		let inputNodes = graph.adjacencyList[nodeId].left;
 		let context = "";
-		for (let node of inputNodes) {
-			let name = adjacentNodeInputs[node.id];
+		for (let nnid of inputNodes) {
+			let name = adjacentNodeInputs[nnid];
 			if (!!name) {
 				context += (name + '\n\n');
 			}
-			context += (node.data.content + '\n\n' + '----------' + '\n\n');
+			context += (graph.getNode(nnid).data.content + '\n\n' + '----------' + '\n\n');
 		}
 		console.log(context);
 		const node = graph.getNode(nodeId);

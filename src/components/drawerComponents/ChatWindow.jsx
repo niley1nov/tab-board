@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { TextField, Paper, List, ListItem, ListItemText, Button, Divider, Box, CircularProgress } from "@mui/material";
+import ReactMarkdown from "react-markdown";
 import { useGraph } from "../../containers/GraphContext";
 import "../../stylesheets/ChatWindow.css";
 
@@ -69,31 +70,39 @@ const ChatWindow = ({ handleSendMessage }) => {
 							key={index}
 							className={`message-item ${message.sender === "user" ? "user-message" : "gemini-message"}`}
 						>
-							<ListItemText
-								primary={message.text}
-								className="message-text"
-							/>
+							{message.sender === "user" ? (
+								<ListItemText
+									primary={message.text}
+									className="message-text"
+								/>
+							) : (
+								<ListItemText
+									primary={<ReactMarkdown>{message.text}</ReactMarkdown>}
+									className="message-text"
+								/>
+							)}
 						</ListItem>
 					))}
 				</List>
 				<Divider className="divider" />
 				<Box className="input-container">
 					<TextField
-						variant="outlined"
 						fullWidth
+						variant="outlined"
 						placeholder="Type your message here..."
 						value={input}
 						onChange={(e) => setInput(e.target.value)}
 						onKeyDown={(e) => {
 							if (e.key === "Enter" && !loading) handleSend();
 						}}
-						disabled={loading}
+						className="chat-text-field"
+						autoComplete="off"
 					/>
 					<Button
 						variant="contained"
 						onClick={handleSend}
 						disabled={loading || !input.trim()}
-						className="send-button"
+						className="chat-button"
 					>
 						{loading ? <CircularProgress size={24} className="loading-spinner" /> : "Send"}
 					</Button>

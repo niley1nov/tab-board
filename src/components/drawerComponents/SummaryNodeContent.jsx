@@ -42,32 +42,31 @@ const SummaryNodeContent = ({
 	};
 
 	const handleSendClick = async () => {
-		if (adjacencyNodes.length === 0) return;
+		if (graph.adjacencyList[nodeId].left.length === 0) return;
 		graph.getNode(nodeId).data.loading = true;
 		setLoading(true);
 		try {
-			let inputNode = adjacencyNodes[0];
+			let inputNode = graph.getNode(graph.adjacencyList[nodeId].left[0]);
 			let context = "";
 			let name = adjacentNodeInputs[inputNode.id];
 			if (!!name) {
 				context += (name + '\n\n');
 			}
-			context += (inputNode.data.content + '\n\n' + '----------' + '\n\n');
+			context += inputNode.data.content;
 			console.log(context);
 			const node = graph.getNode(nodeId);
 			node.data.context = context;
 			node.data.processing = false;
+			let service;
 			if (modelSelection === "Gemini Pro") {
-				const service = new GeminiProService(token);
-				node.data.service = service;
-				setGeminiService(service);
+				service = new GeminiProService(token);
 			} else if (modelSelection === "Gemini Nano") {
-				const service = new GeminiNanoService();
-				node.data.service = service;
-				setGeminiService(service);
+				service = new GeminiNanoService();
 			}
+			node.data.service = service;
+			setGeminiService(service);
 			node.data.session = await node.data.service.initializeSummarySession();
-			const response = await node.data.service.callModel(node, context);
+			const response = await node.data.service.summarize(node, context, name);
 			console.log("Response:", response);
 			graph.selectedNode.data.content = response.text;
 			setPromptNodeDetails((prevDetails) =>
@@ -76,7 +75,9 @@ const SummaryNodeContent = ({
 			node.data.ready = true;
 			setChatVisible(true);
 		} catch (error) {
-			console.error("Error while submitting prompt:", error.message);
+			console.error("Error while submitting prompt.");
+			console.error(error);
+			throw error;
 		} finally {
 			graph.getNode(nodeId).data.loading = false;
 			setLoading(false);
@@ -102,7 +103,7 @@ const SummaryNodeContent = ({
 			/>
 			<Box className="centered-button">
 				{/* Show the button only if adjacencyNodes is not empty */}
-				{adjacencyNodes.length > 0 && (
+				{graph.adjacencyList[nodeId].left.length > 0 && (
 					<Button
 						variant="contained"
 						color="primary"
