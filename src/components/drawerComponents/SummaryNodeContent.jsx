@@ -24,11 +24,11 @@ const SummaryNodeContent = ({
 	);
 	const [modelSelection, setModelSelection] = useState(graph.getNode(nodeId)?.data?.model ?? "Gemini Pro");
 	const [geminiService, setGeminiService] = useState(graph.getNode(nodeId)?.data?.service ?? null);
-	const [loading, setLoading] = useState(false); //store this in node
-	const [abortController, setAbortController] = useState(null);
+	const [loading, setLoading] = useState(graph.getNode(nodeId)?.data?.loading ?? false);
 
 	useEffect(() => {
 		setChatVisible(graph.getNode(nodeId)?.data?.ready || false);
+		setLoading(graph.getNode(nodeId)?.data?.loading || false);
 		setAdjacentNodeInputs(graph.getNode(nodeId)?.data?.adjacentNodeInputs || {});
 		setModelSelection(graph.getNode(nodeId)?.data?.model || "Gemini Pro");
 		setGeminiService(graph.getNode(nodeId)?.data?.service || null);
@@ -43,8 +43,7 @@ const SummaryNodeContent = ({
 
 	const handleSendClick = async () => {
 		if (adjacencyNodes.length === 0) return;
-		const controller = new AbortController();
-		setAbortController(controller);
+		graph.getNode(nodeId).data.loading = true;
 		setLoading(true);
 		try {
 			let inputNode = adjacencyNodes[0];
@@ -79,14 +78,8 @@ const SummaryNodeContent = ({
 		} catch (error) {
 			console.error("Error while submitting prompt:", error.message);
 		} finally {
+			graph.getNode(nodeId).data.loading = false;
 			setLoading(false);
-			setAbortController(null);
-		}
-	};
-
-	const handleStopClick = () => {
-		if (abortController) {
-			abortController.abort(); // Cancel the ongoing request
 		}
 	};
 
@@ -113,7 +106,7 @@ const SummaryNodeContent = ({
 					<Button
 						variant="contained"
 						color="primary"
-						onClick={loading ? handleStopClick : handleSendClick}
+						onClick={handleSendClick}
 						disabled={loading}
 						className="send-button"
 					>

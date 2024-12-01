@@ -110,7 +110,8 @@ const PromptNodeContent = ({
 				</Button>
 			</Box>
 			{chatVisible && <PromptInputField
-				handleSubmit={handleSubmitPrompt} // Updated to pass handleSubmitPrompt
+				handleSubmit={handleSubmitPrompt}
+				nodeId={nodeId}
 			/>}
 		</>
 	);

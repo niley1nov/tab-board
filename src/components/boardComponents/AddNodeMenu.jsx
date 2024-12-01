@@ -58,9 +58,9 @@ const AddNodeMenu = ({ anchorEl, open, onClose, onSelectOption }) => {
 				<hr className="menu-divider" />
 				<div
 					className="menu-option"
-					onClick={() => onSelectOption("agent")}
+					onClick={() => onSelectOption("output")}
 				>
-					Agent Node
+					Output Node
 				</div>
 			</Box>
 		</Popover>

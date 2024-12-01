@@ -82,6 +82,7 @@ export const GraphProvider = ({ children }) => {
 				adjacentNodeInputs: {},
 				model: 'Gemini Pro',
 				service: null,
+				loading: false,
 			},
 		);
 	};
@@ -104,6 +105,7 @@ export const GraphProvider = ({ children }) => {
 				adjacentNodeInputs: {},
 				model: 'Gemini Pro',
 				service: null,
+				loading: false,
 			},
 		);
 	};
@@ -127,6 +129,7 @@ export const GraphProvider = ({ children }) => {
 				adjacentNodeInputs: {},
 				model: 'Gemini Pro',
 				service: null,
+				loading: false,
 			},
 		);
 	};
