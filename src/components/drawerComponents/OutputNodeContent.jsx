@@ -6,6 +6,8 @@ import { useGraph } from "../../containers/GraphContext";
 const OutputNodeContent = () => {
 	const graph = useGraph();
 
+	//fix data refresh
+	//low priority
 	const connectedNodes = graph.selectedNode?.data?.adjacencyNodes || [];
 	const connectedContent =
 		connectedNodes.length > 0 ? connectedNodes[0]?.data?.content : null;
