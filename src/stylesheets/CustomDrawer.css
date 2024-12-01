@@ -1,59 +1,59 @@
 .drawer-paper {
-    margin-top: 20px !important;
-    margin-right: 10px !important;
-    margin-bottom: calc(50px + env(safe-area-inset-bottom, 0)) !important;
-    border-radius: 10px !important;
-    width: 320px !important;
-    padding: 16px !important;
-    background-color: #49454F !important;
-    color: white !important;
-    z-index: 1300 !important;
+	margin-top: 20px !important;
+	margin-right: 10px !important;
+	margin-bottom: calc(50px + env(safe-area-inset-bottom, 0)) !important;
+	border-radius: 10px !important;
+	width: 320px !important;
+	padding: 16px !important;
+	background-color: #49454f !important;
+	color: white !important;
+	z-index: 1300 !important;
 
-    /* Prevent scrolling on the entire drawer */
-    overflow: hidden !important;
+	/* Prevent scrolling on the entire drawer */
+	overflow: hidden !important;
 }
 
 .drawer-wrapper {
 	margin-top: 12px !important;
 	margin-bottom: 50px !important;
-    padding: 8px; /* Add padding inside the wrapper */
-    border-radius: 20px; /* Round the corners */
-    height: 100%; /* Ensure it occupies the full height of the parent */
-    box-sizing: border-box; /* Include padding in height/width calculations */
+	padding: 8px; /* Add padding inside the wrapper */
+	border-radius: 20px; /* Round the corners */
+	height: 100%; /* Ensure it occupies the full height of the parent */
+	box-sizing: border-box; /* Include padding in height/width calculations */
 }
 
 .drawer-content {
-    margin-bottom: 50px !important;
-    height: calc(100% - 20%) !important;
-    overflow-y: auto !important;
-    padding-left: 8px;
+	margin-bottom: 50px !important;
+	height: calc(100% - 20%) !important;
+	overflow-y: auto !important;
+	padding-left: 8px;
 	padding-right: 8px;
-    border-radius: 8px; /* Round inner content corners slightly */
+	border-radius: 8px; /* Round inner content corners slightly */
 }
 
 /* Custom scrollbar for WebKit browsers */
 .drawer-content::-webkit-scrollbar {
-    width: 6px;
+	width: 6px;
 }
 
 .drawer-content::-webkit-scrollbar-track {
-    background: #2d2a30;
-    border-radius: 3px;
+	background: #2d2a30;
+	border-radius: 3px;
 }
 
 .drawer-content::-webkit-scrollbar-thumb {
-    background: #d0bcff;
-    border-radius: 3px;
+	background: #d0bcff;
+	border-radius: 3px;
 }
 
 .drawer-content::-webkit-scrollbar-thumb:hover {
-    background: #b29edd;
+	background: #b29edd;
 }
 
 /* Custom scrollbar for Firefox */
 .drawer-content {
-    scrollbar-width: thin;
-    scrollbar-color: #d0bcff #2d2a30;
+	scrollbar-width: thin;
+	scrollbar-color: #d0bcff #2d2a30;
 }
 
 /* Drawer header */
@@ -154,8 +154,8 @@
 
 .custom-text-field .MuiOutlinedInput-root {
 	border: none !important;
-    border-bottom: 1px solid white !important;
-    border-radius: 0 !important;
+	border-bottom: 1px solid white !important;
+	border-radius: 0 !important;
 }
 
 .custom-text-field .MuiOutlinedInput-notchedOutline {
@@ -184,56 +184,58 @@
 
 .custom-select {
 	border-bottom: 1px solid white !important;
-    border-top-left-radius: 10px !important;
-    border-top-right-radius: 10px !important;
-    background-color: #322f35 !important;
+	border-top-left-radius: 10px !important;
+	border-top-right-radius: 10px !important;
+	background-color: #322f35 !important;
 	margin-bottom: 10px !important;
 }
 
 .custom-select .MuiOutlinedInput-root {
-    border: none !important;
-    border-bottom: 1px solid white !important;
-    border-radius: 0 !important;
-    background-color: transparent !important;
+	border: none !important;
+	border-bottom: 1px solid white !important;
+	border-radius: 0 !important;
+	background-color: transparent !important;
 }
 
 .custom-select .MuiOutlinedInput-notchedOutline {
-    border: none !important;
+	border: none !important;
 }
 
 .custom-select .MuiSelect-select {
 	font-weight: 100 !important;
 	margin-left: 12px !important;
-    color: #fff !important;
-    padding: 15px 0 !important;
+	color: #fff !important;
+	padding: 15px 0 !important;
 }
 
 .custom-select .MuiSvgIcon-root {
-    color: white !important; /* Style the dropdown arrow */
+	color: white !important; /* Style the dropdown arrow */
 }
 
 /* Focus state for the select field */
-.custom-select .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
-    border-bottom: 2px solid #d0bcff !important; /* Highlight color when focused */
+.custom-select
+	.MuiOutlinedInput-root.Mui-focused
+	.MuiOutlinedInput-notchedOutline {
+	border-bottom: 2px solid #d0bcff !important; /* Highlight color when focused */
 }
 
 /* Disabled state for the select field */
 .custom-select .MuiOutlinedInput-root.Mui-disabled {
-    background-color: #49454f !important; /* Dimmed background for disabled */
+	background-color: #49454f !important; /* Dimmed background for disabled */
 }
 
 .custom-select .MuiSelect-icon {
-    color: white !important; /* Dropdown arrow color */
+	color: white !important; /* Dropdown arrow color */
 }
 
 /* Placeholder text color */
 .custom-select .MuiInputBase-input::placeholder {
-    color: #d0bcff !important; /* Adjust placeholder color */
+	color: #d0bcff !important; /* Adjust placeholder color */
 }
 
 /* Optional: Add hover effect */
 .custom-select:hover .MuiOutlinedInput-notchedOutline {
-    border-bottom: 1px solid #b29edd !important; /* Slightly lighter hover color */
+	border-bottom: 1px solid #b29edd !important; /* Slightly lighter hover color */
 }
 
 .send-button {
@@ -292,4 +294,10 @@
 .no-padding-content {
 	padding-left: 0 !important;
 	padding-right: 3px !important;
+}
+
+@media (max-width: 1200px) {
+	.drawer-content {
+		height: calc(100% - 10%) !important;
+	}
 }
