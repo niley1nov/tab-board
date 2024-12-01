@@ -15,7 +15,7 @@ export default class GeminiProService extends AIService {
 
 	// Initialize a session for a specific node
 	async initializeSummarySession() {
-		console.log('Initialize Session');
+		console.log('Initialize Summary Session - pro');
 		try {
 			const model = this.genAI.getGenerativeModel({
 				model: models["pro"],
@@ -28,6 +28,7 @@ export default class GeminiProService extends AIService {
 			});
 			return chatSession;
 		} catch (error) {
+			this.showWarningPopup(error.message);
 			console.error("Error initializing AI session:", error);
 			throw new Error("Failed to initialize AI session");
 		}
@@ -35,7 +36,7 @@ export default class GeminiProService extends AIService {
 
 	// Initialize a session for a specific node
 	async initializePromptSession(context) {
-		console.log('Initialize Session');
+		console.log('Initialize prompt Session - pro');
 		try {
 			const model = this.genAI.getGenerativeModel({
 				model: models["pro"],
@@ -48,6 +49,7 @@ export default class GeminiProService extends AIService {
 			});
 			return chatSession;
 		} catch (error) {
+			this.showWarningPopup(error.message);
 			console.error("Error initializing AI session:", error);
 			throw new Error("Failed to initialize AI session");
 		}
@@ -67,6 +69,26 @@ export default class GeminiProService extends AIService {
 				text: result.response.text()
 			};
 		} catch (error) {
+			this.showWarningPopup(error.message);
+			console.error("Error in GeminiProService callModel:", error);
+			throw error;
+		}
+	}
+
+	async summarize(node, prompt, title) {
+		try {
+			const chatSession = node.data.session;
+			const nodeId = node.data.id;
+			if (!chatSession) {
+				throw new Error(`Session not initialized`);
+			}
+			const result = await chatSession.sendMessage(prompt);
+			return {
+				id: nodeId,
+				text: result.response.text()
+			};
+		} catch (error) {
+			this.showWarningPopup(error.message);
 			console.error("Error in GeminiProService callModel:", error);
 			throw error;
 		}

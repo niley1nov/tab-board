@@ -1,7 +1,4 @@
 import AIService from "./AIService";
-import React from "react";
-import ReactDOM from "react-dom";
-import { Snackbar, Alert } from "@mui/material";
 import { getPrompts } from "./AIConfigData.js";
 
 export default class GeminiNanoService extends AIService {
@@ -32,48 +29,35 @@ export default class GeminiNanoService extends AIService {
 
 		// Check if the context was shortened
 		if (context.length < originalContextLength) {
-			this.showWarningPopup(); // Call the warning popup function
+			this.showWarningPopup("The provided context is too large for Gemini Nano and has been shortened. For larger contexts, consider using Gemini Pro."); // Call the warning popup function
 		}
 
 		return context;
 	}
 
-	showWarningPopup() {
-		// Create a container div for the popup
-		const container = document.createElement("div");
-		document.body.appendChild(container);
-
-		// Create a root for rendering
-		const root = ReactDOM.createRoot(container);
-
-		// Function to remove the popup after 3 seconds
-		const removePopup = () => {
-			root.unmount(); // Unmount the React component
-			container.remove(); // Remove the container from the DOM
-		};
-
-		// Render the Snackbar into the container
-		root.render(
-			<Snackbar
-				open={true}
-				autoHideDuration={3000} // Close after 3 seconds
-				onClose={removePopup}
-				anchorOrigin={{ vertical: "top", horizontal: "center" }}
-			>
-				<Alert onClose={removePopup} severity="warning" sx={{ width: "100%" }}>
-					The provided context is too large for Gemini Nano and has been shortened.
-					For larger contexts, consider using Gemini Pro.
-				</Alert>
-			</Snackbar>
-		);
-	}
-
 	async initializeSummarySession(context) {
-		console.log('Initialize Session');
+		console.log('Initialize Summary Session - nano');
+
+		const options = {
+			sharedContext: 'This is either scraped content of a web page or a chatbot summary',
+			type: 'tl;dr',
+			format: 'plain-text',
+			length: 'medium',
+		  };
+
+		try {
+			const chatSession = await window.ai.summarizer.create(options);
+			return chatSession;
+		} catch (error) {
+			console.error(error);
+			this.showWarningPopup(error.message);
+			// More informative error message
+			throw new Error("Failed to initialize AI Summary Session.");
+		}
 	}
 
 	async initializePromptSession(context) {
-		console.log('Initialize Session');
+		console.log('Initialize Prompt Session - nano');
 		const maxTokens = 4800;
 		const systemPrompt = getPrompts("system_prompt");
 
@@ -95,8 +79,9 @@ export default class GeminiNanoService extends AIService {
 			return chatSession;
 		} catch (error) {
 			console.error(error);
+			this.showWarningPopup(error.message);
 			// More informative error message
-			throw new Error("Failed to initialize AI session. This could be due to a large context or a network issue.");
+			throw new Error("Failed to initialize AI session.");
 		}
 	}
 
@@ -113,8 +98,32 @@ export default class GeminiNanoService extends AIService {
 				text: result
 			};
 		} catch (error) {
-			console.error("Error in GeminiProService callModel:", error);
+			this.showWarningPopup(error.message);
+			console.error("Error in GeminiNanoService callModel:", error);
+			throw error;
+		}
+	}
+
+	async summarize(node, prompt, title) {
+		try {
+			const chatSession = node.data.session;
+			const nodeId = node.data.id;
+			if (!chatSession) {
+				throw new Error(`Session not initialized`);
+			}
+			let result = await chatSession.summarize(prompt, {context: title});
+
+			return {
+				id: nodeId,
+				text: result
+			};
+		} catch (error) {
+			this.showWarningPopup(error.message);
+			console.error("Error in GeminiNanoService callModel:", error);
 			throw error;
 		}
 	}
 }
+
+// use destroy to destroy session
+// sharedContext??

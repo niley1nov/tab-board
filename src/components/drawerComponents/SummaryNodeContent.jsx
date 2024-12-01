@@ -52,7 +52,7 @@ const SummaryNodeContent = ({
 			if (!!name) {
 				context += (name + '\n\n');
 			}
-			context += (inputNode.data.content + '\n\n' + '----------' + '\n\n');
+			context += inputNode.data.content;
 			console.log(context);
 			const node = graph.getNode(nodeId);
 			node.data.context = context;
@@ -67,7 +67,7 @@ const SummaryNodeContent = ({
 				setGeminiService(service);
 			}
 			node.data.session = await node.data.service.initializeSummarySession();
-			const response = await node.data.service.callModel(node, context);
+			const response = await node.data.service.summarize(node, context, name);
 			console.log("Response:", response);
 			graph.selectedNode.data.content = response.text;
 			setPromptNodeDetails((prevDetails) =>
