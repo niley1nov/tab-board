@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import AdjacentNodeInputs from "./AdjacentNodeInputs";
-import { Button, Box } from "@mui/material";
+import { TextField, Button, Box } from "@mui/material";
 import { Divider } from "@mui/material";
 import ModelSelector from "./ModelSelector";
 import PromptInputField from "./PromptInputField";
@@ -25,13 +25,24 @@ const WriteNodeContent = ({
 	);
 	const [modelSelection, setModelSelection] = useState(graph.getNode(nodeId)?.data?.model ?? "Gemini Pro");
 	const [geminiService, setGeminiService] = useState(graph.getNode(nodeId)?.data?.service ?? null);
+	const [context, setContext] = useState(graph.getNode(nodeId)?.data?.context ?? "");
 
 	useEffect(() => {
 		setChatVisible(graph.getNode(nodeId)?.data?.ready || false);
 		setAdjacentNodeInputs(graph.getNode(nodeId)?.data?.adjacentNodeInputs || {});
 		setModelSelection(graph.getNode(nodeId)?.data?.model || "Gemini Pro");
 		setGeminiService(graph.getNode(nodeId)?.data?.service || null);
+		setContext(graph.getNode(nodeId)?.data?.context || "");
 	}, [nodeId]);
+
+	const handleContextChange = (e) => {
+		setContext(e.target.value);
+
+		// Update the prompt for the selected node in the graph context
+		if (graph.selectedNode) {
+			graph.selectedNode.data.context = e.target.value;
+		}
+	};
 
 	const handleSubmitPrompt = async () => {
 		try {
@@ -90,15 +101,19 @@ const WriteNodeContent = ({
 				handleModelChange={handleModelChange}
 			/>
 			<Divider sx={{ marginY: 2, borderColor: "#F1E9FF" }} />
-			<AdjacentNodeInputs
-				adjacencyNodes={adjacencyNodes}
-				adjacentNodeInputs={adjacentNodeInputs}
-				handleInputChange={(id, value) => {
-					graph.getNode(nodeId).data.adjacentNodeInputs = { ...graph.getNode(nodeId).data.adjacentNodeInputs, [id]: value };
-					setAdjacentNodeInputs((prev) => ({ ...prev, [id]: value }));
-				}
-				}
-			/>
+			<div className="context-container">
+				<TextField
+					fullWidth
+					variant="outlined"
+					placeholder="Submit Prompt Here..."
+					value={context}
+					onChange={handleContextChange}
+					className="custom-text-field"
+					multiline
+					rows={4}
+				/>
+			</div>
+			<Divider sx={{ marginY: 2, borderColor: "#F1E9FF" }} />
 			<Box className="centered-button">
 				<Button
 					variant="contained"

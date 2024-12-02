@@ -4,3 +4,33 @@
     margin-top: 16px !important;
     margin-bottom: 16px !important;
 }
+
+.context-container {
+	display: flex;
+	flex-direction: column; /* Stack the input and button vertically */
+	width: 100%;
+}
+
+/* Custom styles for AdjacentNodeInputs component */
+.custom-text-field {
+	border-bottom: #ffffff !important;
+	border-top-left-radius: 10px !important;
+	border-top-right-radius: 10px !important;
+	background-color: #322f35 !important;
+	width: 100%; /* Ensure text field takes the full width */
+}
+
+.custom-text-field .MuiOutlinedInput-root {
+	border: none !important;
+	border-bottom: 1px solid white !important;
+	border-radius: 0 !important;
+}
+
+.custom-text-field .MuiOutlinedInput-notchedOutline {
+	border: none !important;
+}
+
+/* Style the input text color */
+.custom-text-field .MuiInputBase-input {
+	color: white;
+}

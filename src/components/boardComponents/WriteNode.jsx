@@ -34,14 +34,6 @@ const WriteNode = ({ data }) => {
 			className="prompt-node"
 			style={{ backgroundColor: data.backgroundColor || "#FFF" }}
 		>
-			{/* Left Handle for Schema */}
-			<Handle
-				type="target"
-				position={Position.Left}
-				id="schema"
-				style={{ top: "50%" }}
-			/>
-
 			{/* Header Section */}
 			<div className="prompt-node-header">
 				<Typography
