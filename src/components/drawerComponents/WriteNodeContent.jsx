@@ -5,8 +5,8 @@ import { Divider } from "@mui/material";
 import ModelSelector from "./ModelSelector";
 import PromptInputField from "./PromptInputField";
 import { useGraph } from "../../containers/GraphContext";
-import GeminiProService from "../../services/GeminiProService";
-import GeminiNanoService from "../../services/GeminiNanoService";
+import GeminiProWriteService from "../../services/GeminiProWriteService";
+import GeminiNanoWriteService from "../../services/GeminiNanoWriteService";
 import "../../stylesheets/ChatNodeContent.css"
 
 const WriteNodeContent = ({
@@ -22,11 +22,13 @@ const WriteNodeContent = ({
 	);
 	const [modelSelection, setModelSelection] = useState(graph.getNode(nodeId)?.data?.model ?? "Gemini Pro");
 	const [geminiService, setGeminiService] = useState(graph.getNode(nodeId)?.data?.service ?? null);
+	const [loading, setLoading] = useState(graph.getNode(nodeId)?.data?.loading ?? false);
 	const [context, setContext] = useState(graph.getNode(nodeId)?.data?.context ?? "");
 	const [prompt, setPrompt] = useState(graph.getNode(nodeId)?.data?.prompt ?? "");
 
 	useEffect(() => {
 		setChatVisible(graph.getNode(nodeId)?.data?.ready || false);
+		setLoading(graph.getNode(nodeId)?.data?.loading || false);
 		setAdjacentNodeInputs(graph.getNode(nodeId)?.data?.adjacentNodeInputs || {});
 		setModelSelection(graph.getNode(nodeId)?.data?.model || "Gemini Pro");
 		setGeminiService(graph.getNode(nodeId)?.data?.service || null);
@@ -70,32 +72,36 @@ const WriteNodeContent = ({
 		if (selectedValue === "Gemini Pro" && !token) setDialogOpen(true);
 	};
 
-	const initializeChat = async () => {
-		let inputNodes = graph.adjacencyList[nodeId].left;
-		let context = "";
-		for (let nnid of inputNodes) {
-			let name = adjacentNodeInputs[nnid];
-			if (!!name) {
-				context += (name + '\n\n');
+	const handleSendClick = async () => {
+		graph.getNode(nodeId).data.loading = true;
+		setLoading(true);
+		try {
+			console.log(context);
+			console.log(prompt);
+			const node = graph.getNode(nodeId);
+			node.data.processing = false;
+			let service;
+			if (modelSelection === "Gemini Pro") {
+				service = new GeminiProWriteService(token);
+			} else if (modelSelection === "Gemini Nano") {
+				service = new GeminiNanoWriteService();
 			}
-			context += (graph.getNode(nnid).data.content + '\n\n' + '----------' + '\n\n');
-		}
-		console.log(context);
-		const node = graph.getNode(nodeId);
-		node.data.context = context;
-		node.data.processing = false;
-		if (modelSelection === "Gemini Pro") {
-			const service = new GeminiProService(token);
 			node.data.service = service;
 			setGeminiService(service);
-		} else if (modelSelection === "Gemini Nano") {
-			const service = new GeminiNanoService();
-			node.data.service = service;
-			setGeminiService(service);
+			node.data.session = await node.data.service.initializeSession(context);
+			const response = await node.data.service.callModel(node, prompt);
+			console.log("Response:", response);
+			graph.selectedNode.data.content = response.text;
+			node.data.ready = true;
+			setChatVisible(true);
+		} catch (error) {
+			console.error("Error while submitting prompt.");
+			console.error(error);
+			throw error;
+		} finally {
+			graph.getNode(nodeId).data.loading = false;
+			setLoading(false);
 		}
-		node.data.session = await node.data.service.initializePromptSession(context);
-		node.data.ready = true;
-		setChatVisible(true);
 	};
 
 	return (
@@ -142,16 +148,13 @@ const WriteNodeContent = ({
 				<Button
 					variant="contained"
 					color="primary"
-					onClick={initializeChat}
+					onClick={handleSendClick}
 					className="send-button"
+					disabled={loading}
 				>
-					Initialize
+					{loading ? "Processing..." : "Write"}
 				</Button>
 			</Box>
-			{chatVisible && <PromptInputField
-				handleSubmit={handleSubmitPrompt}
-				nodeId={nodeId}
-			/>}
 		</>
 	);
 };

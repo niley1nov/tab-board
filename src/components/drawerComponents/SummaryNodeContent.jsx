@@ -4,8 +4,8 @@ import { Button, Box } from "@mui/material";
 import { Divider } from "@mui/material";
 import ModelSelector from "./ModelSelector";
 import { useGraph } from "../../containers/GraphContext";
-import GeminiProService from "../../services/GeminiProService";
-import GeminiNanoService from "../../services/GeminiNanoService";
+import GeminiProSummarizeService from "../../services/GeminiProSummarizeService";
+import GeminiNanoSummarizeService from "../../services/GeminiNanoSummarizeService";
 import "../../stylesheets/ChatNodeContent.css"
 
 const SummaryNodeContent = ({
@@ -56,14 +56,14 @@ const SummaryNodeContent = ({
 			node.data.processing = false;
 			let service;
 			if (modelSelection === "Gemini Pro") {
-				service = new GeminiProService(token);
+				service = new GeminiProSummarizeService(token);
 			} else if (modelSelection === "Gemini Nano") {
-				service = new GeminiNanoService();
+				service = new GeminiNanoSummarizeService();
 			}
 			node.data.service = service;
 			setGeminiService(service);
-			node.data.session = await node.data.service.initializeSummarySession();
-			const response = await node.data.service.summarize(node, context, name);
+			node.data.session = await node.data.service.initializeSession();
+			const response = await node.data.service.callModel(node, context, name);
 			console.log("Response:", response);
 			graph.selectedNode.data.content = response.text;
 			node.data.ready = true;

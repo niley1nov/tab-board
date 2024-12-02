@@ -5,8 +5,8 @@ import { Divider } from "@mui/material";
 import ModelSelector from "./ModelSelector";
 import PromptInputField from "./PromptInputField";
 import { useGraph } from "../../containers/GraphContext";
-import GeminiProService from "../../services/GeminiProService";
-import GeminiNanoService from "../../services/GeminiNanoService";
+import GeminiProPromptService from "../../services/GeminiProPromptService";
+import GeminiNanoPromptService from "../../services/GeminiNanoPromptService";
 import "../../stylesheets/ChatNodeContent.css"
 
 const PromptNodeContent = ({
@@ -63,15 +63,15 @@ const PromptNodeContent = ({
 		node.data.context = context;
 		node.data.processing = false;
 		if (modelSelection === "Gemini Pro") {
-			const service = new GeminiProService(token);
+			const service = new GeminiProPromptService(token);
 			node.data.service = service;
 			setGeminiService(service);
 		} else if (modelSelection === "Gemini Nano") {
-			const service = new GeminiNanoService();
+			const service = new GeminiNanoPromptService();
 			node.data.service = service;
 			setGeminiService(service);
 		}
-		node.data.session = await node.data.service.initializePromptSession(context);
+		node.data.session = await node.data.service.initializeSession(context);
 		node.data.ready = true;
 		setChatVisible(true);
 	};

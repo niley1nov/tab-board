@@ -5,8 +5,8 @@ import ModelSelector from "./ModelSelector";
 import { useGraph } from "../../containers/GraphContext";
 import ChatWindow from "./ChatWindow";
 import "../../stylesheets/ChatNodeContent.css"
-import GeminiProService from "../../services/GeminiProService";
-import GeminiNanoService from "../../services/GeminiNanoService";
+import GeminiProChatService from "../../services/GeminiProChatService";
+import GeminiNanoChatService from "../../services/GeminiNanoChatService";
 
 const ChatNodeContent = ({
 	token,
@@ -63,15 +63,15 @@ const ChatNodeContent = ({
 		node.data.chatHistory = [];
 		node.data.processing = false;
 		if (modelSelection === "Gemini Pro") {
-			const service = new GeminiProService(token);
+			const service = new GeminiProChatService(token);
 			node.data.service = service;
 			setGeminiService(service);
 		} else if (modelSelection === "Gemini Nano") {
-			const service = new GeminiNanoService();
+			const service = new GeminiNanoChatService();
 			node.data.service = service;
 			setGeminiService(service);
 		}
-		node.data.session = await node.data.service.initializePromptSession(context);
+		node.data.session = await node.data.service.initializeSession(context);
 		node.data.ready = true;
 		setChatVisible(true);
 	};

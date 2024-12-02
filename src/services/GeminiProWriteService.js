@@ -1,4 +1,4 @@
-import AIService from "./AIService";
+import AIService from "./AIService.js";
 import {
 	GoogleGenerativeAI,
 	HarmCategory,
@@ -7,14 +7,14 @@ import {
 import { getGenConfig } from "../utilities/AIUtil.js";
 import { models, getPrompts, safety_settings } from "./AIConfigData.js";
 
-export default class GeminiProService extends AIService {
+export default class GeminiProWriteService extends AIService {
 	constructor(token) {
 		super();
 		this.genAI = new GoogleGenerativeAI(token);
 	}
 
 	// Initialize a session for a specific node
-	async initializeSummarySession() {
+	async initializeSession() {
 		console.log('Initialize Summary Session - pro');
 		try {
 			const model = this.genAI.getGenerativeModel({
@@ -34,33 +34,8 @@ export default class GeminiProService extends AIService {
 		}
 	}
 
-	// Initialize a session for a specific node
-	async initializePromptSession(context) {
-		console.log('Initialize prompt Session - pro');
-		try {
-			const model = this.genAI.getGenerativeModel({
-				model: models["pro"],
-				systemInstruction: getPrompts("system_prompt") + `\n\nContext:\n\n` + context,
-			});
-			const chatSession = model.startChat({
-				generationConfig: getGenConfig(1, "text/plain"),
-				safetySettings: safety_settings,
-				history: [],
-			});
-			return chatSession;
-		} catch (error) {
-			this.showWarningPopup(error.message);
-			console.error("Error initializing AI session:", error);
-			throw new Error("Failed to initialize AI session");
-		}
-	}
-
-	async initializeTranslationSession(language, name) {
-		return null;
-	}
-
 	// Call the model with a prompt for a specific node
-	async callModel(node, prompt) {
+	async callModel(node, prompt, title) {
 		try {
 			const chatSession = node.data.session;
 			const nodeId = node.data.id;
@@ -74,16 +49,8 @@ export default class GeminiProService extends AIService {
 			};
 		} catch (error) {
 			this.showWarningPopup(error.message);
-			console.error("Error in GeminiProService callModel:", error);
+			console.error("Error in GeminiProWriteService callModel:", error);
 			throw error;
 		}
-	}
-
-	async summarize(node, prompt, title) {
-		return this.callModel(node, prompt);
-	}
-
-	async translate(node, context) {
-		return "";
 	}
 }

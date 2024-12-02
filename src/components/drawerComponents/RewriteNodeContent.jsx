@@ -5,8 +5,8 @@ import { Divider } from "@mui/material";
 import ModelSelector from "./ModelSelector";
 import PromptInputField from "./PromptInputField";
 import { useGraph } from "../../containers/GraphContext";
-import GeminiProService from "../../services/GeminiProService";
-import GeminiNanoService from "../../services/GeminiNanoService";
+import GeminiProRewriteService from "../../services/GeminiProRewriteService";
+import GeminiNanoRewriteService from "../../services/GeminiNanoRewriteService";
 import "../../stylesheets/ChatNodeContent.css"
 
 const RewriteNodeContent = ({
@@ -63,15 +63,15 @@ const RewriteNodeContent = ({
 		node.data.context = context;
 		node.data.processing = false;
 		if (modelSelection === "Gemini Pro") {
-			const service = new GeminiProService(token);
+			const service = new GeminiProRewriteService(token);
 			node.data.service = service;
 			setGeminiService(service);
 		} else if (modelSelection === "Gemini Nano") {
-			const service = new GeminiNanoService();
+			const service = new GeminiNanoRewriteService();
 			node.data.service = service;
 			setGeminiService(service);
 		}
-		node.data.session = await node.data.service.initializePromptSession(context);
+		node.data.session = await node.data.service.initializeSession(context);
 		node.data.ready = true;
 		setChatVisible(true);
 	};
@@ -93,16 +93,18 @@ const RewriteNodeContent = ({
 				}
 				}
 			/>
-			<Box className="centered-button">
-				<Button
-					variant="contained"
-					color="primary"
-					onClick={initializeChat}
-					className="send-button"
-				>
-					Initialize
-				</Button>
-			</Box>
+			{graph.adjacencyList[nodeId].left.length > 0 && (
+				<Box className="centered-button">
+					<Button
+						variant="contained"
+						color="primary"
+						onClick={initializeChat}
+						className="send-button"
+					>
+						Initialize
+					</Button>
+				</Box>
+			)}
 			{chatVisible && <PromptInputField
 				handleSubmit={handleSubmitPrompt}
 				nodeId={nodeId}

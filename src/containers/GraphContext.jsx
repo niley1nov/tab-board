@@ -375,10 +375,11 @@ export const GraphProvider = ({ children }) => {
 
 	const addEdge = (params, eds) => {
 		const targetNode = getNode(params.target);
-		if (targetNode?.type === "OutputNode" || targetNode?.type === "SummaryNode" || targetNode?.type === "TranslateNode") {
+		const nodeType = targetNode?.type;
+		if (nodeType === "OutputNode" || nodeType === "SummaryNode" || nodeType === "TranslateNode" || nodeType === "RewriteNode") {
 			const connectedEdges = eds.filter((edge) => edge.target === params.target);
 			if (connectedEdges.length >= 1) {
-				console.warn("OutputNode can only have one edge connected.");
+				console.warn("This Node can only have one edge connected.");
 				return eds;
 			}
 		}

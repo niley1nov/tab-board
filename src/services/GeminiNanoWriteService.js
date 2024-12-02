@@ -1,38 +1,9 @@
-import AIService from "./AIService";
+import AIService from "./AIService.js";
 import { getPrompts } from "./AIConfigData.js";
 
-export default class GeminiNanoService extends AIService {
+export default class GeminiNanoWriteService extends AIService {
 	constructor() {
 		super();
-	}
-
-	approximateTokenCount(text) {
-		let tokens = 0;
-		const words = text.trim().split(/\s+/);
-		for (const word of words) {
-			tokens += Math.max(1, Math.ceil(word.length / 4));
-			tokens += (word.match(/[.,!?;:]/g) || []).length;
-		}
-		return tokens;
-	}
-
-	trimContext(context, maxTokens, systemPrompt) {
-		let currentTokens = this.approximateTokenCount(systemPrompt) + this.approximateTokenCount(context);
-		let originalContextLength = context.length; // Store original length
-
-		while (currentTokens > maxTokens) {
-			const sections = context.split('\n');
-			sections.pop();
-			context = sections.join('\n');
-			currentTokens = this.approximateTokenCount(systemPrompt) + this.approximateTokenCount(context);
-		}
-
-		// Check if the context was shortened
-		if (context.length < originalContextLength) {
-			this.showWarningPopup("The provided context is too large for Gemini Nano and has been shortened. For larger contexts, consider using Gemini Pro."); // Call the warning popup function
-		}
-
-		return context;
 	}
 
 	async initializeSummarySession(context) {
@@ -103,7 +74,7 @@ export default class GeminiNanoService extends AIService {
 			};
 		} catch (error) {
 			this.showWarningPopup(error.message);
-			console.error("Error in GeminiNanoService callModel:", error);
+			console.error("Error in GeminiNanoWriteService callModel:", error);
 			throw error;
 		}
 	}
@@ -123,7 +94,7 @@ export default class GeminiNanoService extends AIService {
 			};
 		} catch (error) {
 			this.showWarningPopup(error.message);
-			console.error("Error in GeminiNanoService callModel:", error);
+			console.error("Error in GeminiNanoWriteService callModel:", error);
 			throw error;
 		}
 	}

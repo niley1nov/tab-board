@@ -5,8 +5,8 @@ import "../../stylesheets/CustomDrawer.css";
 import ModelSelector from "./ModelSelector";
 import PromptInputField from "./PromptInputField";
 import { useGraph } from "../../containers/GraphContext";
-import GeminiProService from "../../services/GeminiProService";
-import GeminiNanoService from "../../services/GeminiNanoService";
+import GeminiProTranslateService from "../../services/GeminiProTranslateService";
+import GeminiNanoTranslateService from "../../services/GeminiNanoTranslateService";
 import "../../stylesheets/ChatNodeContent.css"
 
 const TranslateNodeContent = ({
@@ -50,14 +50,14 @@ const TranslateNodeContent = ({
 			node.data.processing = false;
 			let service;
 			if (modelSelection === "Gemini Pro") {
-				service = new GeminiProService(token);
+				service = new GeminiProTranslateService(token);
 			} else if (modelSelection === "Gemini Nano") {
-				service = new GeminiNanoService();
+				service = new GeminiNanoTranslateService();
 			}
 			node.data.service = service;
 			setGeminiService(service);
-			node.data.session = await node.data.service.initializeTranslationSession(language, name);
-			const response = await node.data.service.translate(node, context);
+			node.data.session = await node.data.service.initializeSession(language, name);
+			const response = await node.data.service.callModel(node, context);
 			console.log("Response:", response);
 			graph.selectedNode.data.content = response.text;
 			node.data.ready = true;
@@ -83,34 +83,6 @@ const TranslateNodeContent = ({
 		const selectedValue = event.target.value;
 		graph.getNode(nodeId).data.targetLanguage = selectedValue;
 		setLanguage(selectedValue);
-	};
-
-	const initializeChat = async () => {
-		let inputNodes = graph.adjacencyList[nodeId].left;
-		let context = "";
-		for (let nnid of inputNodes) {
-			let name = adjacentNodeInputs[nnid];
-			if (!!name) {
-				context += (name + '\n\n');
-			}
-			context += (graph.getNode(nnid).data.content + '\n\n' + '----------' + '\n\n');
-		}
-		console.log(context);
-		const node = graph.getNode(nodeId);
-		node.data.context = context;
-		node.data.processing = false;
-		if (modelSelection === "Gemini Pro") {
-			const service = new GeminiProService(token);
-			node.data.service = service;
-			setGeminiService(service);
-		} else if (modelSelection === "Gemini Nano") {
-			const service = new GeminiNanoService();
-			node.data.service = service;
-			setGeminiService(service);
-		}
-		node.data.session = await node.data.service.initializePromptSession(context);
-		node.data.ready = true;
-		setChatVisible(true);
 	};
 
 	return (
