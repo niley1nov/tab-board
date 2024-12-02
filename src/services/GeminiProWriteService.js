@@ -14,12 +14,12 @@ export default class GeminiProWriteService extends AIService {
 	}
 
 	// Initialize a session for a specific node
-	async initializeSession() {
+	async initializeSession(context) {
 		console.log('Initialize Summary Session - pro');
 		try {
 			const model = this.genAI.getGenerativeModel({
 				model: models["pro"],
-				systemInstruction: getPrompts("summary_prompt"),
+				systemInstruction: getPrompts("system_prompt") + " " + context,
 			});
 			const chatSession = model.startChat({
 				generationConfig: getGenConfig(1, "text/plain"),
@@ -35,7 +35,7 @@ export default class GeminiProWriteService extends AIService {
 	}
 
 	// Call the model with a prompt for a specific node
-	async callModel(node, prompt, title) {
+	async callModel(node, prompt) {
 		try {
 			const chatSession = node.data.session;
 			const nodeId = node.data.id;

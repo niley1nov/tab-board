@@ -54,17 +54,6 @@ const WriteNodeContent = ({
 		}
 	};
 
-	const handleSubmitPrompt = async () => {
-		try {
-			const node = graph.getNode(nodeId);
-			const response = await node.data.service.callModel(node, graph.selectedNode.data.prompt);
-			console.log("Response:", response);
-			graph.selectedNode.data.content = response.text;
-		} catch (error) {
-			console.error("Error while submitting prompt:", error.message);
-		}
-	};
-
 	const handleModelChange = (nodeId, event) => {
 		const selectedValue = event.target.value;
 		graph.getNode(nodeId).data.model = selectedValue;
