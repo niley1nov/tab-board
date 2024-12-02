@@ -6,6 +6,7 @@ import TokenDialog from "./TokenDialog";
 import { useGraph } from "../../containers/GraphContext";
 import { useToken } from "../../containers/TokenContext";
 import PromptNodeContent from "./PromptNodeContent";
+import TranslateNodeContent from "./TranslateNodeContent";
 import WriteNodeContent from "./WriteNodeContent";
 import RewriteNodeContent from "./RewriteNodeContent";
 import SummaryNodeContent from "./SummaryNodeContent";
@@ -20,7 +21,7 @@ const CustomDrawer = ({ open, onClose }) => {
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const [apiToken, setApiToken] = useState("");
 	const { nodeId, title, nodeType } = graph.sidebarContent;
-	const noPaddingNodeTypes = ["PromptNode", "ChatNode", "SummaryNode", "WriteNode", "RewriteNode"];
+	const noPaddingNodeTypes = ["PromptNode", "ChatNode", "SummaryNode", "WriteNode", "RewriteNode", "TranslateNode"];
 
 	useEffect(() => {
 		// Initialize apiToken with the current token value on component mount
@@ -64,6 +65,12 @@ const CustomDrawer = ({ open, onClose }) => {
 					<div className={`drawer-content ${noPaddingNodeTypes.includes(nodeType) ? "no-padding-content" : ""}`}>
 						{nodeType === "PromptNode" && (
 							<PromptNodeContent
+								token={token}
+								setDialogOpen={setDialogOpen}
+							/>
+						)}
+						{nodeType === "TranslateNode" && (
+							<TranslateNodeContent
 								token={token}
 								setDialogOpen={setDialogOpen}
 							/>

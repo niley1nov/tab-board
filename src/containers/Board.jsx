@@ -7,6 +7,7 @@ import RewriteNode from "../components/boardComponents/RewriteNode";
 import OutputNode from "../components/boardComponents/OutputNode";
 import ChatNode from "../components/boardComponents/ChatNode";
 import SummaryNode from "../components/boardComponents/SummaryNode";
+import TranslateNode from "../components/boardComponents/TranslateNode";
 import NavBar from "../components/boardComponents/NavBar";
 import Edge from "../components/boardComponents/Edge";
 import NodeMenu from "../components/boardComponents/NodeMenu";
@@ -32,6 +33,7 @@ const Board = () => {
 		SummaryNode: SummaryNode,
 		WriteNode: WriteNode,
 		RewriteNode: RewriteNode,
+		TranslateNode: TranslateNode,
 	};
 	const edgeTypes = { Edge: Edge };
 

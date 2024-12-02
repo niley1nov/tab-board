@@ -158,6 +158,29 @@ export const GraphProvider = ({ children }) => {
 		);
 	};
 
+	const createTranslationNode = (x, y) => {
+		const id = generateRandomID();
+		addNodeToAdjacencyList(id);
+		return createNode(
+			id,
+			"TranslateNode",
+			{ x, y },
+			{
+				label: "Translate Node",
+				content: "",
+				prompt: "",
+				context: "",
+				processing: false,
+				session: null,
+				ready: false,
+				adjacentNodeInputs: {},
+				model: 'Gemini Pro',
+				service: null,
+				loading: false,
+			},
+		);
+	};
+
 	const createChatNode = (x, y) => {
 		const id = generateRandomID();
 		addNodeToAdjacencyList(id);
@@ -329,6 +352,12 @@ export const GraphProvider = ({ children }) => {
 				yCustPosRef.current,
 			);
 			yCustPosRef.current += 250;
+		} else if (option === "translate") {
+			newNode = createTranslationNode(
+				xCustPosRef.current,
+				yCustPosRef.current,
+			);
+			yCustPosRef.current += 250;
 		} else if (option === "output") {
 			newNode = createOutputNode(
 				xOutPosRef.current,
@@ -394,6 +423,7 @@ export const GraphProvider = ({ children }) => {
 				createSumamryNode,
 				createWriteNode,
 				createRewriteNode,
+				createTranslationNode,
 				createChatNode,
 				createOutputNode,
 				nodes,
