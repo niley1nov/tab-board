@@ -14,7 +14,6 @@ const RewriteNodeContent = ({
 	setDialogOpen
 }) => {
 	const graph = useGraph();
-	const [promptNodeDetails, setPromptNodeDetails] = useState({});
 	const { nodeId, adjacencyNodes } = graph.sidebarContent;
 	const [adjacentNodeInputs, setAdjacentNodeInputs] = useState(graph.getNode(nodeId)?.data?.adjacentNodeInputs ?? {});
 	const [chatVisible, setChatVisible] = useState(
@@ -31,13 +30,33 @@ const RewriteNodeContent = ({
 	}, [nodeId]);
 
 	const handleSubmitPrompt = async () => {
+		if (graph.adjacencyList[nodeId].left.length === 0) return;
 		try {
 			const node = graph.getNode(nodeId);
-			const response = await node.data.service.callModel(node, graph.selectedNode.data.prompt);
+			let inputNode = graph.getNode(graph.adjacencyList[nodeId].left[0]);
+			let context = inputNode.data.content;
+			let name = adjacentNodeInputs[inputNode.id]; //use tab name + title
+			console.log(context);
+			node.data.context = context;
+			node.data.processing = false;
+			let service;
+			if (modelSelection === "Gemini Pro") {
+				service = new GeminiProRewriteService(token);
+			} else if (modelSelection === "Gemini Nano") {
+				service = new GeminiNanoRewriteService();
+			}
+			node.data.service = service;
+			setGeminiService(service);
+			node.data.session = await node.data.service.initializeSession(name);
+			const response = await node.data.service.callModel(node, context, prompt);
 			console.log("Response:", response);
 			graph.selectedNode.data.content = response.text;
+			node.data.ready = true;
+			setChatVisible(true);
 		} catch (error) {
-			console.error("Error while submitting prompt:", error.message);
+			console.error("Error while submitting prompt.");
+			console.error(error);
+			throw error;
 		}
 	};
 
@@ -56,21 +75,20 @@ const RewriteNodeContent = ({
 			if (!!name) {
 				context += (name + '\n\n');
 			}
-			context += (graph.getNode(nnid).data.content + '\n\n' + '----------' + '\n\n');
+			context += (graph.getNode(nnid).data.content + '\n\n----------\n\n');
 		}
 		console.log(context);
 		const node = graph.getNode(nodeId);
 		node.data.context = context;
 		node.data.processing = false;
+		let service;
 		if (modelSelection === "Gemini Pro") {
-			const service = new GeminiProRewriteService(token);
-			node.data.service = service;
-			setGeminiService(service);
+			service = new GeminiProRewriteService(token);
 		} else if (modelSelection === "Gemini Nano") {
-			const service = new GeminiNanoRewriteService();
-			node.data.service = service;
-			setGeminiService(service);
+			service = new GeminiNanoRewriteService();
 		}
+		node.data.service = service;
+		setGeminiService(service);
 		node.data.session = await node.data.service.initializeSession(context);
 		node.data.ready = true;
 		setChatVisible(true);
@@ -94,21 +112,11 @@ const RewriteNodeContent = ({
 				}
 			/>
 			{graph.adjacencyList[nodeId].left.length > 0 && (
-				<Box className="centered-button">
-					<Button
-						variant="contained"
-						color="primary"
-						onClick={initializeChat}
-						className="send-button"
-					>
-						Initialize
-					</Button>
-				</Box>
+				<PromptInputField
+					handleSubmit={handleSubmitPrompt} //take names for button states
+					nodeId={nodeId}
+				/>
 			)}
-			{chatVisible && <PromptInputField
-				handleSubmit={handleSubmitPrompt}
-				nodeId={nodeId}
-			/>}
 		</>
 	);
 };

@@ -9,12 +9,13 @@ export default class GeminiNanoWriteService extends AIService {
 	async initializeSession(context) {
 		console.log('Initialize Session');
 
+		//make options configurable
 		const options = {
 			sharedContext: context || "",
 			tone: 'neutral',
 			format: 'plain-text',
 			length: 'medium',
-		  };
+		};
 
 		try {
 			const chatSession = await window.ai.writer.create(options);

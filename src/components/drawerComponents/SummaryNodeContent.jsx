@@ -13,7 +13,6 @@ const SummaryNodeContent = ({
 	setDialogOpen
 }) => {
 	const graph = useGraph();
-	const [promptNodeDetails, setPromptNodeDetails] = useState({});
 	const { nodeId, adjacencyNodes } = graph.sidebarContent;
 	const [adjacentNodeInputs, setAdjacentNodeInputs] = useState(graph.getNode(nodeId)?.data?.adjacentNodeInputs ?? {});
 	const [chatVisible, setChatVisible] = useState(

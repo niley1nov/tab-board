@@ -14,13 +14,13 @@ export default class GeminiProRewriteService extends AIService {
 	}
 
 	// Initialize a session for a specific node
-	async initializeSession(context) {
+	async initializeSession(name) {
 		console.log('Initialize prompt Session - pro');
 		try {
 			const model = this.genAI.getGenerativeModel({
 				model: models["pro"],
-				systemInstruction: getPrompts("system_prompt") + `\n\nContext:\n\n` + context,
-			});
+				systemInstruction: getPrompts("rewrite_prompt") + `\n\nContext:\n\n` + name,
+			}); //add rewrite_prompt
 			const chatSession = model.startChat({
 				generationConfig: getGenConfig(1, "text/plain"),
 				safetySettings: safety_settings,
@@ -35,14 +35,14 @@ export default class GeminiProRewriteService extends AIService {
 	}
 
 	// Call the model with a prompt for a specific node
-	async callModel(node, prompt) {
+	async callModel(node, context, prompt) {
 		try {
 			const chatSession = node.data.session;
 			const nodeId = node.data.id;
 			if (!chatSession) {
 				throw new Error(`Session not initialized`);
 			}
-			const result = await chatSession.sendMessage(prompt);
+			const result = await chatSession.sendMessage(context + '\n\n----------\n\n' + prompt);
 			return {
 				id: nodeId,
 				text: result.response.text()

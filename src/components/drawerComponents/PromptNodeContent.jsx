@@ -56,21 +56,20 @@ const PromptNodeContent = ({
 			if (!!name) {
 				context += (name + '\n\n');
 			}
-			context += (graph.getNode(nnid).data.content + '\n\n' + '----------' + '\n\n');
+			context += (graph.getNode(nnid).data.content + '\n\n----------\n\n');
 		}
 		console.log(context);
 		const node = graph.getNode(nodeId);
 		node.data.context = context;
 		node.data.processing = false;
+		let service;
 		if (modelSelection === "Gemini Pro") {
-			const service = new GeminiProPromptService(token);
-			node.data.service = service;
-			setGeminiService(service);
+			service = new GeminiProPromptService(token);
 		} else if (modelSelection === "Gemini Nano") {
-			const service = new GeminiNanoPromptService();
-			node.data.service = service;
-			setGeminiService(service);
+			service = new GeminiNanoPromptService();
 		}
+		node.data.service = service;
+		setGeminiService(service);
 		node.data.session = await node.data.service.initializeSession(context);
 		node.data.ready = true;
 		setChatVisible(true);

@@ -6,50 +6,47 @@ export default class GeminiNanoRewriteService extends AIService {
 		super();
 	}
 
-	async initializeSession(context) {
-		console.log('Initialize Prompt Session - nano');
-		const maxTokens = 4800;
-		const systemPrompt = getPrompts("system_prompt");
+	async initializeSession(name) {
+		console.log('Initialize Session');
 
-		// Optimize: Calculate systemPrompt tokens only once
-		const systemPromptTokens = this.approximateTokenCount(systemPrompt);
-		let contextTokens = this.approximateTokenCount(context);
-		let combinedTokens = systemPromptTokens + contextTokens;
-
-		if (combinedTokens > maxTokens) {
-			context = this.trimContext(context, maxTokens, systemPrompt);
-			contextTokens = this.approximateTokenCount(context); // Recalculate after trimming
-			combinedTokens = systemPromptTokens + contextTokens;
-		}
+		//add option to reduce content length
+		//make options configurable
+		const options = {
+			sharedContext: name || "",
+			tone: 'neutral',
+			format: 'plain-text',
+			length: 'medium',
+		};
 
 		try {
-			const chatSession = await window.ai.languageModel.create({
-				systemPrompt: systemPrompt + `\n\nContext:\n\n` + context,
-			});
+			const chatSession = await window.ai.rewriter.create(options);
 			return chatSession;
 		} catch (error) {
 			console.error(error);
 			this.showWarningPopup(error.message);
 			// More informative error message
-			throw new Error("Failed to initialize AI session.");
+			throw new Error("Failed to initialize AI Session.");
 		}
 	}
 
-	async callModel(node, prompt) {
+
+	async callModel(node, context, prompt) {
 		try {
 			const chatSession = node.data.session;
 			const nodeId = node.data.id;
 			if (!chatSession) {
 				throw new Error(`Session not initialized`);
 			}
-			let result = await chatSession.prompt(prompt);
+			let result = await chatSession.rewrite(context, {
+				context: prompt
+			});
 			return {
 				id: nodeId,
 				text: result
 			};
 		} catch (error) {
 			this.showWarningPopup(error.message);
-			console.error("Error in GeminiNanoRewriteService callModel:", error);
+			console.error(error);
 			throw error;
 		}
 	}
