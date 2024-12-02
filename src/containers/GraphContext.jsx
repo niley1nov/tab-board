@@ -112,6 +112,52 @@ export const GraphProvider = ({ children }) => {
 		);
 	};
 
+	const createWriteNode = (x, y) => {
+		const id = generateRandomID();
+		addNodeToAdjacencyList(id);
+		return createNode(
+			id,
+			"WriteNode",
+			{ x, y },
+			{
+				label: "Write Node",
+				content: "",
+				prompt: "",
+				context: "",
+				processing: false,
+				session: null,
+				ready: false,
+				adjacentNodeInputs: {},
+				model: 'Gemini Pro',
+				service: null,
+				loading: false,
+			},
+		);
+	};
+
+	const createRewriteNode = (x, y) => {
+		const id = generateRandomID();
+		addNodeToAdjacencyList(id);
+		return createNode(
+			id,
+			"RewriteNode",
+			{ x, y },
+			{
+				label: "Rewrite Node",
+				content: "",
+				prompt: "",
+				context: "",
+				processing: false,
+				session: null,
+				ready: false,
+				adjacentNodeInputs: {},
+				model: 'Gemini Pro',
+				service: null,
+				loading: false,
+			},
+		);
+	};
+
 	const createChatNode = (x, y) => {
 		const id = generateRandomID();
 		addNodeToAdjacencyList(id);
@@ -271,6 +317,18 @@ export const GraphProvider = ({ children }) => {
 				yCustPosRef.current,
 			);
 			yCustPosRef.current += 250;
+		} else if (option === "write") {
+			newNode = createWriteNode(
+				xCustPosRef.current,
+				yCustPosRef.current,
+			);
+			yCustPosRef.current += 250;
+		} else if (option === "rewrite") {
+			newNode = createRewriteNode(
+				xCustPosRef.current,
+				yCustPosRef.current,
+			);
+			yCustPosRef.current += 250;
 		} else if (option === "output") {
 			newNode = createOutputNode(
 				xOutPosRef.current,
@@ -334,6 +392,8 @@ export const GraphProvider = ({ children }) => {
 				createTabNode,
 				createPromptNode,
 				createSumamryNode,
+				createWriteNode,
+				createRewriteNode,
 				createChatNode,
 				createOutputNode,
 				nodes,

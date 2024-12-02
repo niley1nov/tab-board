@@ -30,9 +30,23 @@ const AddNodeMenu = ({ anchorEl, open, onClose, onSelectOption }) => {
 				<hr className="menu-divider" />
 				<div
 					className="menu-option"
+					onClick={() => onSelectOption("chat")}
+				>
+					Chat Node
+				</div>
+				<hr className="menu-divider" />
+				<div
+					className="menu-option"
 					onClick={() => onSelectOption("summary")}
 				>
 					Summarization Node
+				</div>
+				<hr className="menu-divider" />
+				<div
+					className="menu-option"
+					onClick={() => onSelectOption("write")}
+				>
+					Write Node
 				</div>
 				<hr className="menu-divider" />
 				<div
@@ -47,13 +61,6 @@ const AddNodeMenu = ({ anchorEl, open, onClose, onSelectOption }) => {
 					onClick={() => onSelectOption("translate")}
 				>
 					Translate Node
-				</div>
-				<hr className="menu-divider" />
-				<div
-					className="menu-option"
-					onClick={() => onSelectOption("chat")}
-				>
-					Chat Node
 				</div>
 				<hr className="menu-divider" />
 				<div

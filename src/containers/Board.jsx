@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { useGraph } from "./GraphContext";
 import TabNode from "../components/boardComponents/TabNode";
 import PromptNode from "../components/boardComponents/PromptNode";
+import WriteNode from "../components/boardComponents/WriteNode";
+import RewriteNode from "../components/boardComponents/RewriteNode";
 import OutputNode from "../components/boardComponents/OutputNode";
 import ChatNode from "../components/boardComponents/ChatNode";
 import SummaryNode from "../components/boardComponents/SummaryNode";
@@ -28,6 +30,8 @@ const Board = () => {
 		OutputNode: OutputNode,
 		ChatNode: ChatNode,
 		SummaryNode: SummaryNode,
+		WriteNode: WriteNode,
+		RewriteNode: RewriteNode,
 	};
 	const edgeTypes = { Edge: Edge };
 
