@@ -1,4 +1,5 @@
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+	console.log("ONLOAD: ", request)
 	switch (request.action) {
 		case "extractContentFromTabs":
 			queryAndExtractTabContent();
@@ -7,6 +8,32 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 			handleExtractedContent(request);
 			break;
 	}
+});
+
+chrome.tabs.onCreated.addListener((tab) => {
+    console.log("Tab Added: ", tab);
+    if (isValidTab(tab)) {
+        injectContentScript(tab);
+    } else {
+        console.warn("Tab is not valid for extraction:", tab.url);
+    }
+});
+
+chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
+	console.log("Tab Deleted: ", tabId)
+    chrome.runtime.sendMessage({ action: "removeTabNode", tabId: tabId });
+});
+
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+	console.log("Tab Updated..........")
+	console.log("Tab ID: ", tabId)
+    if (changeInfo.title || changeInfo.url) {
+        chrome.runtime.sendMessage({
+            action: "updateTabData",
+            tabId: tabId,
+            tabData: { title: tab.title, url: tab.url },
+        });
+    }
 });
 
 // Query all open tabs and inject script for content extraction

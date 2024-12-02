@@ -22,6 +22,7 @@ const defaultViewport = { x: 0, y: 0, zoom: 1 };
 
 const Board = () => {
 	const graph = useGraph();
+	console.log("Current nodes in ReactFlow:", graph.nodes);
 	const nodeTypes = {
 		TabNode: TabNode,
 		PromptNode: PromptNode,
@@ -48,33 +49,72 @@ const Board = () => {
 
 	const handleTitleChange = () => {
 		graph.setNodes((nds) =>
-			nds.map((node) =>
-				node.id === graph.selectedNode.id
-					? { ...node, data: { ...node.data, label: newTitle } }
-					: node,
-			),
+			nds.map((node) => {
+				if (node.id === graph.selectedNode.id) {
+					const newLabel = newTitle || "Untitled";
+					return { ...node, data: { ...node.data, label: newLabel } };
+				}
+				return node;
+			})
 		);
 		closeEditDialog();
-	};
+	};	
 
 	useEffect(() => {
 		const handleTabData = (request) => {
-			if (request.action === "sendTabData") {
-				const newNode = graph.createTabNode(
-					xPosRef.current,
-					yPosRef.current,
-					request.tabData,
-				);
-				graph.setNodes((prevNodes) => [...prevNodes, newNode]);
-				yPosRef.current += 250;
+			console.log("REQUEST: ", request);
+			
+			// // Validate tabData before proceeding
+			// if (!tabData || !tabData.content || !tabData.content.tabId) {
+				// 	console.error("Invalid tabData received:", tabData);
+				// 	return;
+				// }
+				
+			switch (request.action) {
+				case "sendTabData":
+					const newNode = graph.createTabNode(
+						xPosRef.current,
+						yPosRef.current,
+						request.tabData
+					);
+					graph.setNodes((prevNodes) => [...prevNodes, newNode]);
+					yPosRef.current += 250;
+					break;
+
+				case "removeTabNode":
+					graph.setNodes((prevNodes) =>
+						prevNodes.filter((node) => node.id !== request.tabId.toString())
+					);
+					break;
+	
+				case "updateTabData":
+					graph.setNodes((prevNodes) =>
+						prevNodes.map((node) =>
+							node.id === request.tabId.toString()
+								? {
+									...node,
+									data: {
+										...node.data,
+										label: request.tabData.title || "Updated Tab",
+										content: request.tabData.url || "",
+									},
+								}
+								: node
+						)
+					);
+					break;
+	
+				default:
+					console.warn("Unknown action:", request.action);
 			}
 		};
+	
 		window.chrome.runtime.onMessage.addListener(handleTabData);
-
+	
 		return () => {
 			window.chrome.runtime.onMessage.removeListener(handleTabData);
 		};
-	}, []);
+	}, [graph]);	
 
 	return (
 		<div className="board-container">

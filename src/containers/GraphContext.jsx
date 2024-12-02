@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useRef } from "react";
+import React, { createContext, useContext, useState, useRef, useEffect } from "react";
 import {
 	useNodesState,
 	useEdgesState,
@@ -53,18 +53,24 @@ export const GraphProvider = ({ children }) => {
 	};
 
 	const createTabNode = (x, y, request) => {
-		const id = request.content.tabId.toString();
+		const content = request?.content; // Safely access content
+		if (!content || !content.tabId) {
+			console.error("Invalid tab data:", request);
+			return null; // Or handle this case appropriately
+		}
+		const id = content.tabId.toString();
 		addNodeToAdjacencyList(id);
 		return createNode(
 			id,
 			"TabNode",
 			{ x, y },
 			{
-				label: request.content.title,
-				content: request.content.content,
+				label: content.title || "Untitled Tab",
+				content: content.content || "",
 			},
 		);
 	};
+	
 
 	const createSumamryNode = (x, y) => {
 		const id = generateRandomID();
@@ -181,10 +187,10 @@ export const GraphProvider = ({ children }) => {
 
 
 	const handleDeleteNode = (e, node) => {
-		setSelectedNode(node);
 		const nodeId = node.id;
+	
+		// Remove the node from adjacencyList
 		const neighbors = adjacencyList.current[nodeId];
-
 		if (neighbors) {
 			neighbors.left.forEach((neighbor) => {
 				adjacencyList.current[neighbor].right = adjacencyList.current[
@@ -198,10 +204,12 @@ export const GraphProvider = ({ children }) => {
 			});
 			delete adjacencyList.current[nodeId];
 		}
-
-		setNodes((nodes) => nodes.filter((node) => node.id !== nodeId));
+	
+		// Update nodes state
+		setNodes((nodes) => nodes.filter((n) => n.id !== nodeId));
 		closeMenu();
 	};
+	
 
 	const updateAdjacencyList = (source, target, action) => {
 		if (action === "add") {
@@ -209,47 +217,21 @@ export const GraphProvider = ({ children }) => {
 				adjacencyList.current[source] = { left: [], right: [] };
 			if (!adjacencyList.current[target])
 				adjacencyList.current[target] = { left: [], right: [] };
-
-			// Update the adjacency list to include node data
+	
 			adjacencyList.current[source].right.push(target);
 			adjacencyList.current[target].left.push(source);
-
-			// Fetch the full node data and store in adjacencyNodes array
-			const sourceNode = getNode(source);
-			const targetNode = getNode(target);
-			if (sourceNode && targetNode) {
-				sourceNode.data.adjacencyNodes.push(targetNode); // Store the full node object
-				targetNode.data.adjacencyNodes.push(sourceNode); // Store the full node object
-			}
 		} else if (action === "remove") {
-			// Remove the target from source's adjacencyNodes and vice versa
-			adjacencyList.current[source].right = adjacencyList.current[
-				source
-			].right.filter((id) => id !== target);
-			adjacencyList.current[target].left = adjacencyList.current[
-				target
-			].left.filter((id) => id !== source);
-
-			// Update adjacencyNodes array on each node after edge removal
-			const sourceNode = getNode(source);
-			const targetNode = getNode(target);
-			if (sourceNode && targetNode) {
-				sourceNode.data.adjacencyNodes =
-					sourceNode.data.adjacencyNodes.filter(
-						(node) => node.id !== target,
-					);
-				targetNode.data.adjacencyNodes =
-					targetNode.data.adjacencyNodes.filter(
-						(node) => node.id !== source,
-					);
+			if (adjacencyList.current[source]) {
+				adjacencyList.current[source].right =
+					adjacencyList.current[source].right.filter((id) => id !== target);
 			}
-
-			// Update sidebar content to reflect the removal
-			if (selectedNode) {
-				handleSetSelectedNode(selectedNode); // Call this to refresh sidebar content
+			if (adjacencyList.current[target]) {
+				adjacencyList.current[target].left =
+					adjacencyList.current[target].left.filter((id) => id !== source);
 			}
 		}
 	};
+	
 
 	const handleAddNode = (option) => {
 		let newNode;
