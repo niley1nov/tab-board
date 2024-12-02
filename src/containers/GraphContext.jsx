@@ -53,18 +53,24 @@ export const GraphProvider = ({ children }) => {
 	};
 
 	const createTabNode = (x, y, request) => {
-		const id = request.content.tabId.toString();
+		const content = request?.content; // Safely access content
+		if (!content || !content.tabId) {
+			console.error("Invalid tab data:", request);
+			return null; // Or handle this case appropriately
+		}
+		const id = content.tabId.toString();
 		addNodeToAdjacencyList(id);
 		return createNode(
 			id,
 			"TabNode",
 			{ x, y },
 			{
-				label: request.content.title,
-				content: request.content.content,
+				label: content.title || "Untitled Tab",
+				content: content.content || "",
 			},
 		);
 	};
+	
 
 	const createSumamryNode = (x, y) => {
 		const id = generateRandomID();

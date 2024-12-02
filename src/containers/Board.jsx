@@ -49,18 +49,27 @@ const Board = () => {
 
 	const handleTitleChange = () => {
 		graph.setNodes((nds) =>
-			nds.map((node) =>
-				node.id === graph.selectedNode.id
-					? { ...node, data: { ...node.data, label: newTitle } }
-					: node,
-			),
+			nds.map((node) => {
+				if (node.id === graph.selectedNode.id) {
+					const newLabel = newTitle || "Untitled";
+					return { ...node, data: { ...node.data, label: newLabel } };
+				}
+				return node;
+			})
 		);
 		closeEditDialog();
-	};
+	};	
 
 	useEffect(() => {
 		const handleTabData = (request) => {
 			const { action, tabData } = request;
+	
+			// Validate tabData before proceeding
+			if (!tabData || !tabData.content || !tabData.content.tabId) {
+				console.error("Invalid tabData received:", tabData);
+				return;
+			}
+	
 			switch (action) {
 				case "sendTabData":
 					const newNode = graph.createTabNode(
@@ -71,41 +80,41 @@ const Board = () => {
 					graph.setNodes((prevNodes) => [...prevNodes, newNode]);
 					yPosRef.current += 250;
 					break;
-		
+	
 				case "removeTabNode":
 					graph.setNodes((prevNodes) =>
-						prevNodes.filter((node) => node.id !== tabData.tabId.toString())
+						prevNodes.filter((node) => node.id !== tabData.content.tabId.toString())
 					);
 					break;
-		
+	
 				case "updateTabData":
 					graph.setNodes((prevNodes) =>
 						prevNodes.map((node) =>
-							node.id === tabData.tabId.toString()
+							node.id === tabData.content.tabId.toString()
 								? {
 									  ...node,
 									  data: {
 										  ...node.data,
-										  label: tabData.title || "Updated Tab",
-										  content: tabData.url || "",
+										  label: tabData.content.title || "Updated Tab",
+										  content: tabData.content.url || "",
 									  },
 								  }
 								: node
 						)
 					);
 					break;
-		
+	
 				default:
 					console.warn("Unknown action:", action);
 			}
 		};
-		
+	
 		window.chrome.runtime.onMessage.addListener(handleTabData);
-
+	
 		return () => {
 			window.chrome.runtime.onMessage.removeListener(handleTabData);
 		};
-	}, []);
+	}, []);	
 
 	return (
 		<div className="board-container">
