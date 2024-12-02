@@ -177,6 +177,8 @@ export const GraphProvider = ({ children }) => {
 				model: 'Gemini Pro',
 				service: null,
 				loading: false,
+				sourceLanguage: "",
+				targetLanguage: "",
 			},
 		);
 	};
@@ -373,7 +375,7 @@ export const GraphProvider = ({ children }) => {
 
 	const addEdge = (params, eds) => {
 		const targetNode = getNode(params.target);
-		if (targetNode?.type === "OutputNode" || targetNode?.type === "SummaryNode") {
+		if (targetNode?.type === "OutputNode" || targetNode?.type === "SummaryNode" || targetNode?.type === "TranslateNode") {
 			const connectedEdges = eds.filter((edge) => edge.target === params.target);
 			if (connectedEdges.length >= 1) {
 				console.warn("OutputNode can only have one edge connected.");

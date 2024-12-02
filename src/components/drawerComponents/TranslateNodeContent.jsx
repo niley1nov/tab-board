@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import AdjacentNodeInputs from "./AdjacentNodeInputs";
-import { Button, Box } from "@mui/material";
-import { Divider } from "@mui/material";
+import { Button, Divider, Box, Typography, FormControl, Select, MenuItem } from "@mui/material";
+import "../../stylesheets/CustomDrawer.css";
 import ModelSelector from "./ModelSelector";
 import PromptInputField from "./PromptInputField";
 import { useGraph } from "../../containers/GraphContext";
@@ -18,6 +18,7 @@ const TranslateNodeContent = ({
 }) => {
 	const graph = useGraph();
 	const [promptNodeDetails, setPromptNodeDetails] = useState({});
+	const [language, setLanguage] = useState("English");
 	const { nodeId, adjacencyNodes } = graph.sidebarContent;
 	const [adjacentNodeInputs, setAdjacentNodeInputs] = useState(graph.getNode(nodeId)?.data?.adjacentNodeInputs ?? {});
 	const [chatVisible, setChatVisible] = useState(
@@ -25,6 +26,7 @@ const TranslateNodeContent = ({
 	);
 	const [modelSelection, setModelSelection] = useState(graph.getNode(nodeId)?.data?.model ?? "Gemini Pro");
 	const [geminiService, setGeminiService] = useState(graph.getNode(nodeId)?.data?.service ?? null);
+	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
 		setChatVisible(graph.getNode(nodeId)?.data?.ready || false);
@@ -32,6 +34,10 @@ const TranslateNodeContent = ({
 		setModelSelection(graph.getNode(nodeId)?.data?.model || "Gemini Pro");
 		setGeminiService(graph.getNode(nodeId)?.data?.service || null);
 	}, [nodeId]);
+
+	const handleSendClick = async () => {
+
+	};
 
 	const handleSubmitPrompt = async () => {
 		try {
@@ -52,6 +58,12 @@ const TranslateNodeContent = ({
 		graph.getNode(nodeId).data.model = selectedValue;
 		setModelSelection(selectedValue);
 		if (selectedValue === "Gemini Pro" && !token) setDialogOpen(true);
+	};
+
+	const handleLanguageChange = (nodeId, event) => {
+		const selectedValue = event.target.value;
+		graph.getNode(nodeId).data.targetLanguage = selectedValue;
+		setLanguage(selectedValue);
 	};
 
 	const initializeChat = async () => {
@@ -109,10 +121,39 @@ const TranslateNodeContent = ({
 					Initialize
 				</Button>
 			</Box>
-			{chatVisible && <PromptInputField
-				handleSubmit={handleSubmitPrompt}
-				nodeId={nodeId}
-			/>}
+			{chatVisible && <Box mb={2}>
+				<div className="prompt-container">
+					<div>
+						<Typography className="language-selector-title" style={{ fontFamily: "Poppins, sans-serif" }}>
+							Choose Language
+						</Typography>
+						<FormControl fullWidth>
+							<Select
+								value={language || "English"}
+								onChange={(e) => handleLanguageChange(nodeId, e)}
+								style={{ fontFamily: "Poppins, sans-serif" }}
+								className="custom-select"
+							>
+								<MenuItem value="English">English</MenuItem>
+								<MenuItem value="German">German</MenuItem>
+								<MenuItem value="French">French</MenuItem>
+							</Select>
+						</FormControl>
+					</div>
+					<div className="button-container">
+						<Button
+							variant="contained"
+							color="primary"
+							onClick={handleSendClick}
+							disabled={loading}
+							className="send-button"
+						>
+							{loading ? "Sending..." : "Send"}
+						</Button>
+					</div>
+				</div>
+
+			</Box>}
 		</>
 	);
 };
