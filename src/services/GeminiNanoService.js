@@ -85,6 +85,10 @@ export default class GeminiNanoService extends AIService {
 		}
 	}
 
+	async initializeTranslationSession(language, name) {
+		return "";
+	}
+
 	async callModel(node, prompt) {
 		try {
 			const chatSession = node.data.session;
@@ -122,6 +126,10 @@ export default class GeminiNanoService extends AIService {
 			console.error("Error in GeminiNanoService callModel:", error);
 			throw error;
 		}
+	}
+
+	async translate(node, context) {
+		return "";
 	}
 }
 

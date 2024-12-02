@@ -55,6 +55,10 @@ export default class GeminiProService extends AIService {
 		}
 	}
 
+	async initializeTranslationSession(language, name) {
+		return null;
+	}
+
 	// Call the model with a prompt for a specific node
 	async callModel(node, prompt) {
 		try {
@@ -77,5 +81,9 @@ export default class GeminiProService extends AIService {
 
 	async summarize(node, prompt, title) {
 		return this.callModel(node, prompt);
+	}
+
+	async translate(node, context) {
+		return "";
 	}
 }

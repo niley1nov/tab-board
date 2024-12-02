@@ -5,9 +5,6 @@ import "../../stylesheets/CustomDrawer.css";
 import ModelSelector from "./ModelSelector";
 import PromptInputField from "./PromptInputField";
 import { useGraph } from "../../containers/GraphContext";
-import {
-	addFinalPrompt,
-} from "../../helpers/CustomDrawerHelper";
 import GeminiProService from "../../services/GeminiProService";
 import GeminiNanoService from "../../services/GeminiNanoService";
 import "../../stylesheets/ChatNodeContent.css"
@@ -36,20 +33,42 @@ const TranslateNodeContent = ({
 	}, [nodeId]);
 
 	const handleSendClick = async () => {
-
-	};
-
-	const handleSubmitPrompt = async () => {
+		if (graph.adjacencyList[nodeId].left.length === 0) return;
+		graph.getNode(nodeId).data.loading = true;
+		setLoading(true);
 		try {
+			let inputNode = graph.getNode(graph.adjacencyList[nodeId].left[0]);
+			let context = "";
+			let name = adjacentNodeInputs[inputNode.id];
+			if (!!name) {
+				context += (name + '\n\n');
+			}
+			context += inputNode.data.content;
+			console.log(context);
 			const node = graph.getNode(nodeId);
-			const response = await node.data.service.callModel(node, graph.selectedNode.data.prompt);
+			node.data.context = context;
+			node.data.processing = false;
+			let service;
+			if (modelSelection === "Gemini Pro") {
+				service = new GeminiProService(token);
+			} else if (modelSelection === "Gemini Nano") {
+				service = new GeminiNanoService();
+			}
+			node.data.service = service;
+			setGeminiService(service);
+			node.data.session = await node.data.service.initializeTranslationSession(language, name);
+			const response = await node.data.service.translate(node, context);
 			console.log("Response:", response);
 			graph.selectedNode.data.content = response.text;
-			setPromptNodeDetails((prevDetails) =>
-				addFinalPrompt(prevDetails, nodeId, graph.selectedNode.data.prompt),
-			); //what is this doing?
+			node.data.ready = true;
+			setChatVisible(true);
 		} catch (error) {
-			console.error("Error while submitting prompt:", error.message);
+			console.error("Error while submitting prompt.");
+			console.error(error);
+			throw error;
+		} finally {
+			graph.getNode(nodeId).data.loading = false;
+			setLoading(false);
 		}
 	};
 

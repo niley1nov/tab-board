@@ -5,9 +5,6 @@ import { Divider } from "@mui/material";
 import ModelSelector from "./ModelSelector";
 import PromptInputField from "./PromptInputField";
 import { useGraph } from "../../containers/GraphContext";
-import {
-	addFinalPrompt,
-} from "../../helpers/CustomDrawerHelper";
 import GeminiProService from "../../services/GeminiProService";
 import GeminiNanoService from "../../services/GeminiNanoService";
 import "../../stylesheets/ChatNodeContent.css"
@@ -61,9 +58,6 @@ const WriteNodeContent = ({
 			const response = await node.data.service.callModel(node, graph.selectedNode.data.prompt);
 			console.log("Response:", response);
 			graph.selectedNode.data.content = response.text;
-			setPromptNodeDetails((prevDetails) =>
-				addFinalPrompt(prevDetails, nodeId, graph.selectedNode.data.prompt),
-			); //what is this doing?
 		} catch (error) {
 			console.error("Error while submitting prompt:", error.message);
 		}

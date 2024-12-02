@@ -4,9 +4,6 @@ import { Button, Box } from "@mui/material";
 import { Divider } from "@mui/material";
 import ModelSelector from "./ModelSelector";
 import { useGraph } from "../../containers/GraphContext";
-import {
-	addFinalPrompt,
-} from "../../helpers/CustomDrawerHelper";
 import GeminiProService from "../../services/GeminiProService";
 import GeminiNanoService from "../../services/GeminiNanoService";
 import "../../stylesheets/ChatNodeContent.css"
@@ -69,9 +66,6 @@ const SummaryNodeContent = ({
 			const response = await node.data.service.summarize(node, context, name);
 			console.log("Response:", response);
 			graph.selectedNode.data.content = response.text;
-			setPromptNodeDetails((prevDetails) =>
-				addFinalPrompt(prevDetails, nodeId, graph.selectedNode.data.prompt),
-			); //what is this doing?
 			node.data.ready = true;
 			setChatVisible(true);
 		} catch (error) {
