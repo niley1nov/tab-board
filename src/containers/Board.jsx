@@ -62,50 +62,50 @@ const Board = () => {
 
 	useEffect(() => {
 		const handleTabData = (request) => {
-			const { action, tabData } = request;
-	
-			// Validate tabData before proceeding
-			if (!tabData || !tabData.content || !tabData.content.tabId) {
-				console.error("Invalid tabData received:", tabData);
-				return;
-			}
-	
-			switch (action) {
+			console.log("REQUEST: ", request);
+			
+			// // Validate tabData before proceeding
+			// if (!tabData || !tabData.content || !tabData.content.tabId) {
+				// 	console.error("Invalid tabData received:", tabData);
+				// 	return;
+				// }
+				
+			switch (request.action) {
 				case "sendTabData":
 					const newNode = graph.createTabNode(
 						xPosRef.current,
 						yPosRef.current,
-						tabData
+						request.tabData
 					);
 					graph.setNodes((prevNodes) => [...prevNodes, newNode]);
 					yPosRef.current += 250;
 					break;
-	
+
 				case "removeTabNode":
 					graph.setNodes((prevNodes) =>
-						prevNodes.filter((node) => node.id !== tabData.content.tabId.toString())
+						prevNodes.filter((node) => node.id !== request.tabId.toString())
 					);
 					break;
 	
 				case "updateTabData":
 					graph.setNodes((prevNodes) =>
 						prevNodes.map((node) =>
-							node.id === tabData.content.tabId.toString()
+							node.id === request.tabId.toString()
 								? {
-									  ...node,
-									  data: {
-										  ...node.data,
-										  label: tabData.content.title || "Updated Tab",
-										  content: tabData.content.url || "",
-									  },
-								  }
+									...node,
+									data: {
+										...node.data,
+										label: request.tabData.title || "Updated Tab",
+										content: request.tabData.url || "",
+									},
+								}
 								: node
 						)
 					);
 					break;
 	
 				default:
-					console.warn("Unknown action:", action);
+					console.warn("Unknown action:", request.action);
 			}
 		};
 	
@@ -114,7 +114,7 @@ const Board = () => {
 		return () => {
 			window.chrome.runtime.onMessage.removeListener(handleTabData);
 		};
-	}, []);	
+	}, [graph]);	
 
 	return (
 		<div className="board-container">

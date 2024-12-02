@@ -1,4 +1,5 @@
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+	console.log("ONLOAD: ", request)
 	switch (request.action) {
 		case "extractContentFromTabs":
 			queryAndExtractTabContent();
@@ -10,8 +11,12 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 });
 
 chrome.tabs.onCreated.addListener((tab) => {
-	console.log("Tab Added: ", tab)
-    chrome.runtime.sendMessage({ action: "sendTabData", tabData: tab });
+    console.log("Tab Added: ", tab);
+    if (isValidTab(tab)) {
+        injectContentScript(tab);
+    } else {
+        console.warn("Tab is not valid for extraction:", tab.url);
+    }
 });
 
 chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
