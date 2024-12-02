@@ -34,3 +34,14 @@
 .custom-text-field .MuiInputBase-input {
 	color: white;
 }
+
+.text-title {
+	font-weight: 100 !important;
+	white-space: nowrap !important;
+	overflow: hidden !important;
+	text-overflow: ellipsis !important;
+	margin-bottom: 4px !important;
+	margin-top: 4px !important;
+	font-size: 14px !important;
+	color: white !important;
+}
