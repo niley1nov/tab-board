@@ -112,48 +112,42 @@ const TranslateNodeContent = ({
 				}
 			/>
 			<Box className="centered-button">
-				<Button
-					variant="contained"
-					color="primary"
-					onClick={initializeChat}
-					className="send-button"
-				>
-					Initialize
-				</Button>
-			</Box>
-			{chatVisible && <Box mb={2}>
-				<div className="prompt-container">
-					<div>
-						<Typography className="language-selector-title" style={{ fontFamily: "Poppins, sans-serif" }}>
-							Choose Language
-						</Typography>
-						<FormControl fullWidth>
-							<Select
-								value={language || "English"}
-								onChange={(e) => handleLanguageChange(nodeId, e)}
-								style={{ fontFamily: "Poppins, sans-serif" }}
-								className="custom-select"
-							>
-								<MenuItem value="English">English</MenuItem>
-								<MenuItem value="German">German</MenuItem>
-								<MenuItem value="French">French</MenuItem>
-							</Select>
-						</FormControl>
-					</div>
-					<div className="button-container">
-						<Button
-							variant="contained"
-							color="primary"
-							onClick={handleSendClick}
-							disabled={loading}
-							className="send-button"
-						>
-							{loading ? "Sending..." : "Send"}
-						</Button>
-					</div>
-				</div>
+				{graph.adjacencyList[nodeId].left.length > 0 && (
+					<Box mb={2}>
+						<div className="prompt-container">
+							<div>
+								<Typography className="language-selector-title" style={{ fontFamily: "Poppins, sans-serif" }}>
+									Choose Language
+								</Typography>
+								<FormControl fullWidth>
+									<Select
+										value={language || "English"}
+										onChange={(e) => handleLanguageChange(nodeId, e)}
+										style={{ fontFamily: "Poppins, sans-serif" }}
+										className="custom-select"
+									>
+										<MenuItem value="English">English</MenuItem>
+										<MenuItem value="German">German</MenuItem>
+										<MenuItem value="French">French</MenuItem>
+									</Select>
+								</FormControl>
+							</div>
+							<div className="button-container">
+								<Button
+									variant="contained"
+									color="primary"
+									onClick={handleSendClick}
+									disabled={loading}
+									className="send-button"
+								>
+									{loading ? "Processing..." : "Translate"}
+								</Button>
+							</div>
+						</div>
 
-			</Box>}
+					</Box>
+				)}
+			</Box>
 		</>
 	);
 };
