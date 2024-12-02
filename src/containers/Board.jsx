@@ -22,6 +22,7 @@ const defaultViewport = { x: 0, y: 0, zoom: 1 };
 
 const Board = () => {
 	const graph = useGraph();
+	console.log("Current nodes in ReactFlow:", graph.nodes);
 	const nodeTypes = {
 		TabNode: TabNode,
 		PromptNode: PromptNode,
@@ -59,16 +60,46 @@ const Board = () => {
 
 	useEffect(() => {
 		const handleTabData = (request) => {
-			if (request.action === "sendTabData") {
-				const newNode = graph.createTabNode(
-					xPosRef.current,
-					yPosRef.current,
-					request.tabData,
-				);
-				graph.setNodes((prevNodes) => [...prevNodes, newNode]);
-				yPosRef.current += 250;
+			const { action, tabData } = request;
+			switch (action) {
+				case "sendTabData":
+					const newNode = graph.createTabNode(
+						xPosRef.current,
+						yPosRef.current,
+						tabData
+					);
+					graph.setNodes((prevNodes) => [...prevNodes, newNode]);
+					yPosRef.current += 250;
+					break;
+		
+				case "removeTabNode":
+					graph.setNodes((prevNodes) =>
+						prevNodes.filter((node) => node.id !== tabData.tabId.toString())
+					);
+					break;
+		
+				case "updateTabData":
+					graph.setNodes((prevNodes) =>
+						prevNodes.map((node) =>
+							node.id === tabData.tabId.toString()
+								? {
+									  ...node,
+									  data: {
+										  ...node.data,
+										  label: tabData.title || "Updated Tab",
+										  content: tabData.url || "",
+									  },
+								  }
+								: node
+						)
+					);
+					break;
+		
+				default:
+					console.warn("Unknown action:", action);
 			}
 		};
+		
 		window.chrome.runtime.onMessage.addListener(handleTabData);
 
 		return () => {

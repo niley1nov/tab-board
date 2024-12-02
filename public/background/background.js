@@ -9,6 +9,28 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 	}
 });
 
+chrome.tabs.onCreated.addListener((tab) => {
+	console.log("Tab Added: ", tab)
+    chrome.runtime.sendMessage({ action: "sendTabData", tabData: tab });
+});
+
+chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
+	console.log("Tab Deleted: ", tabId)
+    chrome.runtime.sendMessage({ action: "removeTabNode", tabId: tabId });
+});
+
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+	console.log("Tab Updated..........")
+	console.log("Tab ID: ", tabId)
+    if (changeInfo.title || changeInfo.url) {
+        chrome.runtime.sendMessage({
+            action: "updateTabData",
+            tabId: tabId,
+            tabData: { title: tab.title, url: tab.url },
+        });
+    }
+});
+
 // Query all open tabs and inject script for content extraction
 function queryAndExtractTabContent() {
 	chrome.tabs.query({}, (tabs) => {

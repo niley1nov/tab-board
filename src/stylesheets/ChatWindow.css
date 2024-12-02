@@ -14,30 +14,26 @@
 	overflow: hidden;
 }
 
-.chat-container .chat-window .message-list {
-	flex: 1;
-	overflow-y: auto;
-	overflow-x: hidden;
-	padding-right: 10px;
+.message-list {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 10px;
+    background-color: #322f35;
 }
 
-/* Custom scrollbar for WebKit browsers */
-.chat-container .chat-window .message-list::-webkit-scrollbar {
-	width: 6px !important;
+.message-list::-webkit-scrollbar {
+    width: 6px !important;
 }
 
-.chat-container .chat-window .message-list::-webkit-scrollbar-track {
-	background: #2d2a30 !important;
-	border-radius: 3px !important;
+.message-list::-webkit-scrollbar-track {
+    background: #2d2a30 !important;
+    border-radius: 3px !important;
 }
 
-.chat-container .chat-window .message-list::-webkit-scrollbar-thumb {
-	background: #d0bcff !important;
-	border-radius: 3px !important;
-}
-
-.chat-container .chat-window .message-list::-webkit-scrollbar-thumb:hover {
-	background: #b29edd !important;
+.message-list::-webkit-scrollbar-thumb {
+    background: #d0bcff !important;
+    border-radius: 3px !important;
 }
 
 .message-item {
@@ -56,13 +52,12 @@
 }
 
 .user-message .message-text {
-	margin-left: 25px !important;
-	padding: 10px !important;
-	background-color: #d0bcff !important;
-	color: #6750a4 !important;
-	font-size: 12px !important;
-	border-radius: 20px 20px 0 20px !important;
-	display: inline-block !important;
+    background-color: #d0bcff;
+    color: #6750a4;
+    font-size: 14px;
+    border-radius: 12px;
+    padding: 8px 12px;
+    display: inline-block;
 }
 
 .gemini-message {
@@ -71,13 +66,19 @@
 }
 
 .gemini-message .message-text {
-	margin-right: 25px !important;
-	padding: 10px !important;
-	background-color: #49454f !important;
-	color: #d0bcff !important;
-	font-size: 12px !important;
-	border-radius: 20px 20px 20px 0 !important;
-	display: inline-block !important;
+    background-color: #49454F;
+    color: #d0bcff;
+    font-size: 14px;
+    border-radius: 12px;
+    padding: 8px 12px;
+    display: inline-block;
+}
+
+/* Gemini message styling */
+.gemini-message {
+	text-align: left;
+	background-color: #f1f1f1;
+	align-self: flex-start;
 }
 
 .error-message {
@@ -96,50 +97,12 @@
 }
 
 .input-container {
-	border-radius: 10px !important;
-	padding: 5px !important;
-	background-color: #49454f;
-	display: flex;
-	align-items: center;
-	gap: 8px;
+    display: flex;
+    gap: 8px;
 }
 
-.chat-text-field {
-	border-bottom: #ffffff !important;
-	border-top-left-radius: 10px !important;
-	border-top-right-radius: 10px !important;
-	border-bottom-left-radius: 10px !important;
-	border-bottom-right-radius: 10px !important;
-	background-color: #322f35 !important;
-}
-
-.chat-text-field .MuiOutlinedInput-root {
-	border: none !important;
-	border-bottom: none !important;
-	border-radius: 0 !important;
-}
-
-.chat-text-field .MuiOutlinedInput-notchedOutline {
-	border: none !important;
-}
-
-.chat-text-field .MuiInputBase-input {
-	color: white;
-}
-
-.chat-button {
-	color: #6750a4 !important;
-	background-color: #d0bcff !important;
-	border-radius: 9999px !important;
-	padding: 6px 16px !important;
-	display: inline-flex !important;
-	align-items: center !important;
-	justify-content: center !important;
-	font-size: 16px !important;
-	font-weight: 500 !important;
-	border: none !important;
-	text-transform: none !important;
-	margin: 5px !important;
+.send-button {
+    min-width: 64px;
 }
 
 .loading-spinner {
