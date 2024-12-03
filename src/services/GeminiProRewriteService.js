@@ -6,6 +6,7 @@ import {
 } from "@google/generative-ai";
 import { getGenConfig } from "../utilities/AIUtil.js";
 import { models, getPrompts, safety_settings } from "./AIConfigData.js";
+import { handleError } from "./ErrorHandling.js"
 
 export default class GeminiProRewriteService extends AIService {
 	constructor(token) {
@@ -34,9 +35,9 @@ export default class GeminiProRewriteService extends AIService {
 			});
 			return chatSession;
 		} catch (error) {
-			this.showWarningPopup(error.message);
-			console.error("Error initializing AI session:", error);
-			throw new Error("Failed to initialize AI session");
+			const errorMessage = handleError(error)
+			this.showWarningPopup(errorMessage);
+			throw new Error("Failed to initialize GEMINI Session.");
 		}
 	}
 
@@ -54,9 +55,9 @@ export default class GeminiProRewriteService extends AIService {
 				text: result.response.text()
 			};
 		} catch (error) {
-			this.showWarningPopup(error.message);
-			console.error("Error in GeminiProRewriteService callModel:", error);
-			throw error;
+			const errorMessage = handleError(error)
+			this.showWarningPopup(errorMessage);
+			throw new Error("Failed to call GeminiProRewriteService.");
 		}
 	}
 }

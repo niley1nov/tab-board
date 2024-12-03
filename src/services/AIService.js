@@ -31,7 +31,7 @@ export default class AIService {
 				onClose={removePopup}
 				anchorOrigin={{ vertical: "top", horizontal: "center" }}
 			>
-				<Alert onClose={removePopup} severity="warning" sx={{ width: "100%" }}>
+				<Alert onClose={removePopup} severity="error" sx={{ width: "100%" }}>
 					{message}
 				</Alert>
 			</Snackbar>
