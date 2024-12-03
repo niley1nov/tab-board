@@ -55,7 +55,7 @@ const RewriteNodeContent = ({
 			node.data.service = service;
 			setGeminiService(service);
 			node.data.session = await node.data.service.initializeSession(name);
-			const response = await node.data.service.callModel(node, context, prompt);
+			const response = await node.data.service.callModel(node, context, node.data.prompt);
 			console.log("Response:", response);
 			graph.selectedNode.data.content = response.text;
 			node.data.ready = true;
