@@ -72,7 +72,7 @@ const Board = () => {
 					request.tabData,
 				);
 				graph.setNodes((prevNodes) => [...prevNodes, newNode]);
-				yPosRef.current += 250;
+				yPosRef.current += 150;
 			}
 		};
 		window.chrome.runtime.onMessage.addListener(handleTabData);
