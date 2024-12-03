@@ -304,8 +304,8 @@
 	padding-right: 3px !important;
 }
 
-@media (max-width: 1200px) {
+@media (max-height: 1200px) {
 	.drawer-content {
-		height: calc(100% - 10%) !important;
+		height: 90% !important;
 	}
 }

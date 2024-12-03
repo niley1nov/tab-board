@@ -111,10 +111,10 @@ const TranslateNodeContent = ({
 				}
 				}
 			/>
-			<Box className="centered-button">
+			<div className="prompt-container">
 				{graph.adjacencyList[nodeId].left.length > 0 && (
 					<Box mb={2}>
-						<div className="prompt-container">
+						{/* <div className="prompt-container"> */}
 							<div>
 								<Typography className="language-selector-title" style={{ fontFamily: "Poppins, sans-serif" }}>
 									Source Language
@@ -172,11 +172,11 @@ const TranslateNodeContent = ({
 									{loading ? "Processing..." : "Translate"}
 								</Button>
 							</div>
-						</div>
+						{/* </div> */}
 
 					</Box>
 				)}
-			</Box>
+			</div>
 		</>
 	);
 };
