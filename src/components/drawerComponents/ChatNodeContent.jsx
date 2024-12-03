@@ -28,25 +28,6 @@ const ChatNodeContent = ({
 		setGeminiService(graph.getNode(nodeId)?.data?.service || null);
 	}, [nodeId]);
 
-	const handleModelChange = (nodeId, event) => {
-		const selectedValue = event.target.value;
-		graph.getNode(nodeId).data.model = selectedValue;
-		setModelSelection(selectedValue);
-		if (selectedValue === "Gemini Pro" && !token) setDialogOpen(true);
-	};
-
-	const handleSendMessage = async (message) => {
-		try {
-			// Call the model with the message
-			const node = graph.getNode(nodeId);
-			const response = await node.data.service.callModel(node, message);
-			return response;
-		} catch (error) {
-			console.error("Error sending message:", error.message);
-			throw error;
-		}
-	};
-
 	const initializeChat = async () => {
 		let inputNodes = graph.adjacencyList[nodeId].left;
 		let context = "";
@@ -75,6 +56,25 @@ const ChatNodeContent = ({
 		setChatVisible(true);
 	};
 
+	const handleModelChange = (nodeId, event) => {
+		const selectedValue = event.target.value;
+		graph.getNode(nodeId).data.model = selectedValue;
+		setModelSelection(selectedValue);
+		if (selectedValue === "Gemini Pro" && !token) setDialogOpen(true);
+	};
+
+	const handleSendMessage = async (message) => {
+		try {
+			// Call the model with the message
+			const node = graph.getNode(nodeId);
+			const response = await node.data.service.callModel(node, message);
+			return response;
+		} catch (error) {
+			console.error("Error sending message:", error.message);
+			throw error;
+		}
+	};
+
 	return (
 		<>
 			<ModelSelector
@@ -85,6 +85,7 @@ const ChatNodeContent = ({
 			<Divider sx={{ marginY: 2, borderColor: "#F1E9FF" }} />
 			<AdjacentNodeInputs
 				adjacencyNodes={adjacencyNodes}
+				leftNodes={graph?.adjacencyList[nodeId]?.left || []}
 				adjacentNodeInputs={adjacentNodeInputs}
 				handleInputChange={(id, value) => {
 					graph.getNode(nodeId).data.adjacentNodeInputs = { ...graph.getNode(nodeId).data.adjacentNodeInputs, [id]: value };

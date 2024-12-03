@@ -30,24 +30,6 @@ const PromptNodeContent = ({
 		setGeminiService(graph.getNode(nodeId)?.data?.service || null);
 	}, [nodeId]);
 
-	const handleSubmitPrompt = async () => {
-		try {
-			const node = graph.getNode(nodeId);
-			const response = await node.data.service.callModel(node, graph.selectedNode.data.prompt);
-			console.log("Response:", response);
-			graph.selectedNode.data.content = response.text;
-		} catch (error) {
-			console.error("Error while submitting prompt:", error.message);
-		}
-	};
-
-	const handleModelChange = (nodeId, event) => {
-		const selectedValue = event.target.value;
-		graph.getNode(nodeId).data.model = selectedValue;
-		setModelSelection(selectedValue);
-		if (selectedValue === "Gemini Pro" && !token) setDialogOpen(true);
-	};
-
 	const initializeChat = async () => {
 		let inputNodes = graph.adjacencyList[nodeId].left;
 		let context = "";
@@ -75,6 +57,24 @@ const PromptNodeContent = ({
 		setChatVisible(true);
 	};
 
+	const handleSubmitPrompt = async () => {
+		try {
+			const node = graph.getNode(nodeId);
+			const response = await node.data.service.callModel(node, graph.selectedNode.data.prompt);
+			console.log("Response:", response);
+			graph.selectedNode.data.content = response.text;
+		} catch (error) {
+			console.error("Error while submitting prompt:", error.message);
+		}
+	};
+
+	const handleModelChange = (nodeId, event) => {
+		const selectedValue = event.target.value;
+		graph.getNode(nodeId).data.model = selectedValue;
+		setModelSelection(selectedValue);
+		if (selectedValue === "Gemini Pro" && !token) setDialogOpen(true);
+	};
+
 	return (
 		<>
 			<ModelSelector
@@ -85,6 +85,7 @@ const PromptNodeContent = ({
 			<Divider sx={{ marginY: 2, borderColor: "#F1E9FF" }} />
 			<AdjacentNodeInputs
 				adjacencyNodes={adjacencyNodes}
+				leftNodes={graph?.adjacencyList[nodeId]?.left || []}
 				adjacentNodeInputs={adjacentNodeInputs}
 				handleInputChange={(id, value) => {
 					graph.getNode(nodeId).data.adjacentNodeInputs = { ...graph.getNode(nodeId).data.adjacentNodeInputs, [id]: value };

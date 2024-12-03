@@ -34,6 +34,25 @@ const TranslateNodeContent = ({
 		setTargetLanguage(graph.getNode(nodeId)?.data?.targetLanguage || "English");
 	}, [nodeId]);
 
+	const handleModelChange = (nodeId, event) => {
+		const selectedValue = event.target.value;
+		graph.getNode(nodeId).data.model = selectedValue;
+		setModelSelection(selectedValue);
+		if (selectedValue === "Gemini Pro" && !token) setDialogOpen(true);
+	};
+
+	const handleSourceLanguageChange = (nodeId, event) => {
+		const selectedValue = event.target.value;
+		graph.getNode(nodeId).data.sourceLanguage = selectedValue;
+		setSourceLanguage(selectedValue);
+	};
+
+	const handleTargetLanguageChange = (nodeId, event) => {
+		const selectedValue = event.target.value;
+		graph.getNode(nodeId).data.targetLanguage = selectedValue;
+		setTargetLanguage(selectedValue);
+	};
+
 	const handleSendClick = async () => {
 		try {
 			setLoading(true);
@@ -74,25 +93,6 @@ const TranslateNodeContent = ({
 		}
 	};
 
-	const handleModelChange = (nodeId, event) => {
-		const selectedValue = event.target.value;
-		graph.getNode(nodeId).data.model = selectedValue;
-		setModelSelection(selectedValue);
-		if (selectedValue === "Gemini Pro" && !token) setDialogOpen(true);
-	};
-
-	const handleSourceLanguageChange = (nodeId, event) => {
-		const selectedValue = event.target.value;
-		graph.getNode(nodeId).data.sourceLanguage = selectedValue;
-		setSourceLanguage(selectedValue);
-	};
-
-	const handleTargetLanguageChange = (nodeId, event) => {
-		const selectedValue = event.target.value;
-		graph.getNode(nodeId).data.targetLanguage = selectedValue;
-		setTargetLanguage(selectedValue);
-	};
-
 	return (
 		<>
 			<ModelSelector
@@ -103,6 +103,7 @@ const TranslateNodeContent = ({
 			<Divider sx={{ marginY: 2, borderColor: "#F1E9FF" }} />
 			<AdjacentNodeInputs
 				adjacencyNodes={adjacencyNodes}
+				leftNodes={graph?.adjacencyList[nodeId]?.left || []}
 				adjacentNodeInputs={adjacentNodeInputs}
 				handleInputChange={(id, value) => {
 					graph.getNode(nodeId).data.adjacentNodeInputs = { ...graph.getNode(nodeId).data.adjacentNodeInputs, [id]: value };

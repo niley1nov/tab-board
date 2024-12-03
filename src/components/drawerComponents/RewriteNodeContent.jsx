@@ -29,6 +29,13 @@ const RewriteNodeContent = ({
 		setGeminiService(graph.getNode(nodeId)?.data?.service || null);
 	}, [nodeId]);
 
+	const handleModelChange = (nodeId, event) => {
+		const selectedValue = event.target.value;
+		graph.getNode(nodeId).data.model = selectedValue;
+		setModelSelection(selectedValue);
+		if (selectedValue === "Gemini Pro" && !token) setDialogOpen(true);
+	};
+
 	const handleSubmitPrompt = async () => {
 		if (graph.adjacencyList[nodeId].left.length === 0) return;
 		try {
@@ -60,40 +67,6 @@ const RewriteNodeContent = ({
 		}
 	};
 
-	const handleModelChange = (nodeId, event) => {
-		const selectedValue = event.target.value;
-		graph.getNode(nodeId).data.model = selectedValue;
-		setModelSelection(selectedValue);
-		if (selectedValue === "Gemini Pro" && !token) setDialogOpen(true);
-	};
-
-	const initializeChat = async () => {
-		let inputNodes = graph.adjacencyList[nodeId].left;
-		let context = "";
-		for (let nnid of inputNodes) {
-			let name = adjacentNodeInputs[nnid];
-			if (!!name) {
-				context += (name + '\n\n');
-			}
-			context += (graph.getNode(nnid).data.content + '\n\n----------\n\n');
-		}
-		console.log(context);
-		const node = graph.getNode(nodeId);
-		node.data.context = context;
-		node.data.processing = false;
-		let service;
-		if (modelSelection === "Gemini Pro") {
-			service = new GeminiProRewriteService(token);
-		} else if (modelSelection === "Gemini Nano") {
-			service = new GeminiNanoRewriteService();
-		}
-		node.data.service = service;
-		setGeminiService(service);
-		node.data.session = await node.data.service.initializeSession(context);
-		node.data.ready = true;
-		setChatVisible(true);
-	};
-
 	return (
 		<>
 			<ModelSelector
@@ -104,6 +77,7 @@ const RewriteNodeContent = ({
 			<Divider sx={{ marginY: 2, borderColor: "#F1E9FF" }} />
 			<AdjacentNodeInputs
 				adjacencyNodes={adjacencyNodes}
+				leftNodes={graph?.adjacencyList[nodeId]?.left || []}
 				adjacentNodeInputs={adjacentNodeInputs}
 				handleInputChange={(id, value) => {
 					graph.getNode(nodeId).data.adjacentNodeInputs = { ...graph.getNode(nodeId).data.adjacentNodeInputs, [id]: value };

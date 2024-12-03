@@ -87,6 +87,7 @@ const SummaryNodeContent = ({
 			<Divider sx={{ marginY: 2, borderColor: "#F1E9FF" }} />
 			<AdjacentNodeInputs
 				adjacencyNodes={adjacencyNodes}
+				leftNodes={graph?.adjacencyList[nodeId]?.left || []}
 				adjacentNodeInputs={adjacentNodeInputs}
 				handleInputChange={(id, value) => {
 					graph.getNode(nodeId).data.adjacentNodeInputs = { ...graph.getNode(nodeId).data.adjacentNodeInputs, [id]: value };

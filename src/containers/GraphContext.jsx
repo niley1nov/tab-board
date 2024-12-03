@@ -254,8 +254,20 @@ export const GraphProvider = ({ children }) => {
 	const handleDeleteNode = (e, node) => {
 		setSelectedNode(node);
 		const nodeId = node.id;
-		const neighbors = adjacencyList.current[nodeId];
 
+		adjacencyList.current[nodeId].left.forEach((neighbor) => {
+			updateAdjacencyList(neighbor, nodeId, "remove");
+		});
+		adjacencyList.current[nodeId].right.forEach((neighbor) => {
+			updateAdjacencyList(nodeId, neighbor, "remove");
+		});
+
+		//remove from local lists also
+		setEdges((prevEdges) =>
+			prevEdges.filter((edge) => edge.source !== nodeId && edge.target !== nodeId)
+		);
+
+		const neighbors = adjacencyList.current[nodeId];
 		if (neighbors) {
 			neighbors.left.forEach((neighbor) => {
 				adjacencyList.current[neighbor].right = adjacencyList.current[
@@ -304,11 +316,14 @@ export const GraphProvider = ({ children }) => {
 			// Update adjacencyNodes array on each node after edge removal
 			const sourceNode = getNode(source);
 			const targetNode = getNode(target);
-			if (sourceNode && targetNode) {
+
+			if (sourceNode) {
 				sourceNode.data.adjacencyNodes =
 					sourceNode.data.adjacencyNodes.filter(
 						(node) => node.id !== target,
 					);
+			}
+			if (targetNode) {
 				targetNode.data.adjacencyNodes =
 					targetNode.data.adjacencyNodes.filter(
 						(node) => node.id !== source,
