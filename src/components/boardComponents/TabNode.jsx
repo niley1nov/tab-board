@@ -2,12 +2,31 @@ import React from "react";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
-import EditIcon from "@mui/icons-material/Edit";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { Handle, Position } from "@xyflow/react";
+import { useGraph } from "../../containers/GraphContext";
 import "../../stylesheets/Node.css";
 import "../../stylesheets/TabNode.css";
 
 const TabNode = ({ data }) => {
+	
+	const graph = useGraph();
+	const { nodeId, adjacencyNodes } = graph.sidebarContent;
+
+	const handleDelete = (e) => {
+		e.stopPropagation(); // Prevent event bubbling
+
+		if (data.id === nodeId) {
+			graph.setSidebarContent({
+				id: "",
+				title: "Dynamic Sidebar",
+				nodeType: "",
+				additionalContent: ""
+			});
+		}
+		data.deleteNode(e);
+	};
+
 	return (
 		<div
 			className="node"
@@ -32,13 +51,17 @@ const TabNode = ({ data }) => {
 			{/* Action Icons Section */}
 			<div className="node-actions-container">
 				<Button
-					className="edit-title-button"
+					className="delete-node-button"
 					variant="outlined"
+					onClick={handleDelete}
 					startIcon={
-						<EditIcon className="edit-icon" fontSize="inherit" />
+						<DeleteOutlineIcon
+							className="delete-icon"
+							fontSize="inherit"
+						/>
 					}
 				>
-					Edit
+					Delete
 				</Button>
 			</div>
 

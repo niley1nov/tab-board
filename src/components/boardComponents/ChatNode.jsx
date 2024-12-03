@@ -59,15 +59,6 @@ const ChatNode = ({ data }) => {
 			{/* Action Icons Section */}
 			<div className="node-actions-container">
 				<Button
-					className="edit-title-button"
-					variant="outlined"
-					startIcon={
-						<EditIcon className="edit-icon" fontSize="inherit" />
-					}
-				>
-					Edit
-				</Button>
-				<Button
 					className="delete-node-button"
 					variant="outlined"
 					onClick={handleDelete}
