@@ -31,14 +31,39 @@ export default class AIService {
 				onClose={removePopup}
 				anchorOrigin={{ vertical: "top", horizontal: "center" }}
 			>
-				<Alert onClose={removePopup} severity="warning" sx={{ width: "100%" }}>
+				<Alert onClose={removePopup} severity="error" sx={{ width: "100%" }}>
 					{message}
 				</Alert>
 			</Snackbar>
 		);
 	}
 
-	async callModel(prompt) {
-		throw new Error("Method 'callModel()' must be implemented.");
+	approximateTokenCount(text) {
+		let tokens = 0;
+		const words = text.trim().split(/\s+/);
+		for (const word of words) {
+			tokens += Math.max(1, Math.ceil(word.length / 4));
+			tokens += (word.match(/[.,!?;:]/g) || []).length;
+		}
+		return tokens;
+	}
+
+	trimContext(context, maxTokens, systemPrompt) {
+		let currentTokens = this.approximateTokenCount(systemPrompt) + this.approximateTokenCount(context);
+		let originalContextLength = context.length; // Store original length
+
+		while (currentTokens > maxTokens) {
+			const sections = context.split('\n');
+			sections.pop();
+			context = sections.join('\n');
+			currentTokens = this.approximateTokenCount(systemPrompt) + this.approximateTokenCount(context);
+		}
+
+		// Check if the context was shortened
+		if (context.length < originalContextLength) {
+			this.showWarningPopup("The provided context is too large for Gemini Nano and has been shortened. For larger contexts, consider using Gemini Pro."); // Call the warning popup function
+		}
+
+		return context;
 	}
 }

@@ -1,0 +1,98 @@
+.node {
+	border: 1px solid #d0bcff;
+	border-radius: 12px;
+	padding: 10px;
+	background-color: #fff;
+	width: 180px;
+	position: relative;
+	align-items: stretch;
+	cursor: pointer;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.edit-title-button {
+	color: #322f35 !important;
+	background-color: #f1e9ff !important;
+	border-radius: 9999px !important;
+	padding: 5px 12px !important;
+	display: inline-flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	font-size: 10px !important;
+	font-weight: 500 !important;
+	border: none !important;
+	text-transform: none !important;
+}
+
+.edit-title-button .edit-icon {
+	font-size: 14px !important;
+}
+
+.node-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.node-title {
+	font-weight: 400 !important;
+	font-size: 16px;
+	color: #322f35;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	max-width: 200px;
+}
+
+.node-actions .MuiIconButton-root {
+	padding: 2px;
+}
+
+.node-divider {
+	margin: 8px 0;
+	background-color: #e0e0e0;
+}
+
+.node-content {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	padding-top: 4px;
+	padding-bottom: 4px;
+}
+
+.node-actions-container {
+	display: flex;
+	justify-content: space-around;
+	padding: 4px 0;
+}
+
+.node-actions-container .MuiIconButton-root {
+	color: #555;
+	padding: 4px;
+}
+
+.node .react-flow__handle {
+	width: 8px;
+	height: 8px;
+	background: #666;
+	border-radius: 50%;
+}
+
+.delete-node-button {
+	color: #322f35 !important;
+	background-color: #f1e9ff !important;
+	border-radius: 9999px !important;
+	padding: 5px 12px !important;
+	display: inline-flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	font-size: 10px !important;
+	font-weight: 500 !important;
+	border: none !important;
+	text-transform: none !important;
+}
+
+.delete-node-button .delete-icon {
+	font-size: 14px !important;
+}

@@ -25,7 +25,28 @@ const models = {
 function getPrompts(key, replacableText = []) {
 	const prompts = {
 		system_prompt: `You are a helpful assistant.`,
-		summary_prompt: `You are a helpful assistant. You will receive content of a web page, you need to summarize the text.`,
+		context_prompt: `You are a helpful assistant. Answer user query related to below context.
+Context:
+${replacableText[0]}`,
+		chat_with_context_prompt: `You are a helpful assistant. Chat with user regarding below context.
+Context:
+${replacableText[0]}`,
+		summary_prompt: `You are a helpful assistant. You will receive some text content (probably scrapped web page data), you need to summarize the text.`,
+		translation_prompt: `You are a language translator assistant.
+Source Language: ${replacableText[0]}
+Target Language: ${replacableText[1]}`,
+		rewrite_with_context_system_prompt: `You are a helpful assistant. You will get some content from user regarding "${replacableText[0]}".
+You need to rewrite the content according to user instructions.`,
+		rewrite_system_prompt: `You are a helpful assistant. You will get some content from user.
+You need to rewrite the content according to user instructions.`,
+		rewrite_prompt: `Content:
+${replacableText[0]}
+
+----------
+
+Instructions:
+${replacableText[1]}`,
+		write_prompt: `You are a helpful assistant. ${replacableText[0]}`
 	};
 	return prompts[key];
 }

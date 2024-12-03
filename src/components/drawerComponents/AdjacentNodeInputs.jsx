@@ -4,12 +4,13 @@ import "../../stylesheets/CustomDrawer.css";
 
 const AdjacentNodeInputs = ({
 	adjacencyNodes,
+	leftNodes,
 	adjacentNodeInputs,
 	handleInputChange,
 }) => (
 	<Box className='adjacent-tabnode-input-container'>
 		{adjacencyNodes
-			.filter((node) => node.type === "TabNode")
+			.filter((node) => leftNodes.includes(node.id))
 			.map((node) => (
 				<Box
 					key={node.id}

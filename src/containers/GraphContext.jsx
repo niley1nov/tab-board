@@ -112,6 +112,77 @@ export const GraphProvider = ({ children }) => {
 		);
 	};
 
+	const createWriteNode = (x, y) => {
+		const id = generateRandomID();
+		addNodeToAdjacencyList(id);
+		return createNode(
+			id,
+			"WriteNode",
+			{ x, y },
+			{
+				label: "Write Node",
+				content: "",
+				prompt: "",
+				context: "",
+				processing: false,
+				session: null,
+				ready: false,
+				adjacentNodeInputs: {},
+				model: 'Gemini Pro',
+				service: null,
+				loading: false,
+			},
+		);
+	};
+
+	const createRewriteNode = (x, y) => {
+		const id = generateRandomID();
+		addNodeToAdjacencyList(id);
+		return createNode(
+			id,
+			"RewriteNode",
+			{ x, y },
+			{
+				label: "Rewrite Node",
+				content: "",
+				prompt: "",
+				context: "",
+				processing: false,
+				session: null,
+				ready: false,
+				adjacentNodeInputs: {},
+				model: 'Gemini Pro',
+				service: null,
+				loading: false,
+			},
+		);
+	};
+
+	const createTranslationNode = (x, y) => {
+		const id = generateRandomID();
+		addNodeToAdjacencyList(id);
+		return createNode(
+			id,
+			"TranslateNode",
+			{ x, y },
+			{
+				label: "Translate Node",
+				content: "",
+				prompt: "",
+				context: "",
+				processing: false,
+				session: null,
+				ready: false,
+				adjacentNodeInputs: {},
+				model: 'Gemini Pro',
+				service: null,
+				loading: false,
+				sourceLanguage: "en",
+				targetLanguage: "en",
+			},
+		);
+	};
+
 	const createChatNode = (x, y) => {
 		const id = generateRandomID();
 		addNodeToAdjacencyList(id);
@@ -183,8 +254,20 @@ export const GraphProvider = ({ children }) => {
 	const handleDeleteNode = (e, node) => {
 		setSelectedNode(node);
 		const nodeId = node.id;
-		const neighbors = adjacencyList.current[nodeId];
 
+		adjacencyList.current[nodeId].left.forEach((neighbor) => {
+			updateAdjacencyList(neighbor, nodeId, "remove");
+		});
+		adjacencyList.current[nodeId].right.forEach((neighbor) => {
+			updateAdjacencyList(nodeId, neighbor, "remove");
+		});
+
+		//remove from local lists also
+		setEdges((prevEdges) =>
+			prevEdges.filter((edge) => edge.source !== nodeId && edge.target !== nodeId)
+		);
+
+		const neighbors = adjacencyList.current[nodeId];
 		if (neighbors) {
 			neighbors.left.forEach((neighbor) => {
 				adjacencyList.current[neighbor].right = adjacencyList.current[
@@ -233,11 +316,14 @@ export const GraphProvider = ({ children }) => {
 			// Update adjacencyNodes array on each node after edge removal
 			const sourceNode = getNode(source);
 			const targetNode = getNode(target);
-			if (sourceNode && targetNode) {
+
+			if (sourceNode) {
 				sourceNode.data.adjacencyNodes =
 					sourceNode.data.adjacencyNodes.filter(
 						(node) => node.id !== target,
 					);
+			}
+			if (targetNode) {
 				targetNode.data.adjacencyNodes =
 					targetNode.data.adjacencyNodes.filter(
 						(node) => node.id !== source,
@@ -271,6 +357,24 @@ export const GraphProvider = ({ children }) => {
 				yCustPosRef.current,
 			);
 			yCustPosRef.current += 250;
+		} else if (option === "write") {
+			newNode = createWriteNode(
+				xCustPosRef.current,
+				yCustPosRef.current,
+			);
+			yCustPosRef.current += 250;
+		} else if (option === "rewrite") {
+			newNode = createRewriteNode(
+				xCustPosRef.current,
+				yCustPosRef.current,
+			);
+			yCustPosRef.current += 250;
+		} else if (option === "translate") {
+			newNode = createTranslationNode(
+				xCustPosRef.current,
+				yCustPosRef.current,
+			);
+			yCustPosRef.current += 250;
 		} else if (option === "output") {
 			newNode = createOutputNode(
 				xOutPosRef.current,
@@ -286,10 +390,11 @@ export const GraphProvider = ({ children }) => {
 
 	const addEdge = (params, eds) => {
 		const targetNode = getNode(params.target);
-		if (targetNode?.type === "OutputNode" || targetNode?.type === "SummaryNode") {
+		const nodeType = targetNode?.type;
+		if (nodeType === "OutputNode" || nodeType === "SummaryNode" || nodeType === "TranslateNode" || nodeType === "RewriteNode") {
 			const connectedEdges = eds.filter((edge) => edge.target === params.target);
 			if (connectedEdges.length >= 1) {
-				console.warn("OutputNode can only have one edge connected.");
+				console.warn("This Node can only have one edge connected.");
 				return eds;
 			}
 		}
@@ -334,6 +439,9 @@ export const GraphProvider = ({ children }) => {
 				createTabNode,
 				createPromptNode,
 				createSumamryNode,
+				createWriteNode,
+				createRewriteNode,
+				createTranslationNode,
 				createChatNode,
 				createOutputNode,
 				nodes,

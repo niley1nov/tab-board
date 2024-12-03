@@ -6,6 +6,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { Handle, Position } from "@xyflow/react";
 import { useGraph } from "../../containers/GraphContext";
+import "../../stylesheets/Node.css";
 import "../../stylesheets/PromptNode.css";
 
 const PromptNode = ({ data }) => {
@@ -31,7 +32,7 @@ const PromptNode = ({ data }) => {
 		<div
 			onClick={data.onClick}
 			ref={nodeRef}
-			className="prompt-node"
+			className="node"
 			style={{ backgroundColor: data.backgroundColor || "#FFF" }}
 		>
 			{/* Left Handle for Schema */}
@@ -43,20 +44,20 @@ const PromptNode = ({ data }) => {
 			/>
 
 			{/* Header Section */}
-			<div className="prompt-node-header">
+			<div className="node-header">
 				<Typography
 					variant="subtitle2"
-					className="prompt-node-title"
+					className="node-title"
 					style={{ fontFamily: "Poppins, sans-serif" }}
 				>
 					{data.label}
 				</Typography>
 			</div>
 
-			<Divider className="prompt-node-divider" sx={{ margin: "8px 0" }} />
+			<Divider className="node-divider" />
 
 			{/* Action Icons Section */}
-			<div className="prompt-node-actions-container">
+			<div className="node-actions-container">
 				<Button
 					className="edit-title-button"
 					variant="outlined"

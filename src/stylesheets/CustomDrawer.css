@@ -3,7 +3,7 @@
 	margin-right: 10px !important;
 	margin-bottom: calc(50px + env(safe-area-inset-bottom, 0)) !important;
 	border-radius: 10px !important;
-	width: 320px !important;
+	width: 30% !important;
 	padding: 16px !important;
 	background-color: #49454f !important;
 	color: white !important;
@@ -125,6 +125,17 @@
 	color: white !important;
 }
 
+.language-selector-title {
+	font-weight: 100 !important;
+	white-space: nowrap !important;
+	overflow: hidden !important;
+	text-overflow: ellipsis !important;
+	margin-bottom: 4px !important;
+	margin-top: 4px !important;
+	font-size: 14px !important;
+	color: white !important;
+}
+
 .text-field-token {
 	--background-color: #333;
 	--label-color: #ffffff;
@@ -150,6 +161,7 @@
 	border-top-left-radius: 10px !important;
 	border-top-right-radius: 10px !important;
 	background-color: #322f35 !important;
+	width: 100%; /* Ensure text field takes the full width */
 }
 
 .custom-text-field .MuiOutlinedInput-root {
@@ -266,11 +278,7 @@
 .prompt-container {
 	display: flex;
 	flex-direction: column; /* Stack the input and button vertically */
-	width: 100%;
-}
-
-.custom-text-field {
-	width: 100%; /* Ensure text field takes the full width */
+	width: 100% !important;
 }
 
 .box-container {

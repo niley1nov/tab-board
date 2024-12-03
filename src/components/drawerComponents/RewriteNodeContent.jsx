@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
 import AdjacentNodeInputs from "./AdjacentNodeInputs";
-import { Button, Box, Divider } from "@mui/material";
+import { Button, Box } from "@mui/material";
+import { Divider } from "@mui/material";
 import ModelSelector from "./ModelSelector";
+import PromptInputField from "./PromptInputField";
 import { useGraph } from "../../containers/GraphContext";
-import ChatWindow from "./ChatWindow";
+import GeminiProRewriteService from "../../services/GeminiProRewriteService";
+import GeminiNanoRewriteService from "../../services/GeminiNanoRewriteService";
 import "../../stylesheets/ChatNodeContent.css"
-import GeminiProChatService from "../../services/GeminiProChatService";
-import GeminiNanoChatService from "../../services/GeminiNanoChatService";
 
-const ChatNodeContent = ({
+const RewriteNodeContent = ({
 	token,
 	setDialogOpen
 }) => {
@@ -28,34 +29,6 @@ const ChatNodeContent = ({
 		setGeminiService(graph.getNode(nodeId)?.data?.service || null);
 	}, [nodeId]);
 
-	const initializeChat = async () => {
-		let inputNodes = graph.adjacencyList[nodeId].left;
-		let context = "";
-		for (let nnid of inputNodes) {
-			let name = adjacentNodeInputs[nnid];
-			if (!!name) {
-				context += (name + '\n\n');
-			}
-			context += (graph.getNode(nnid).data.content + '\n\n----------\n\n');
-		}
-		console.log(context);
-		const node = graph.getNode(nodeId);
-		node.data.context = context;
-		node.data.chatHistory = [];
-		node.data.processing = false;
-		let service;
-		if (modelSelection === "Gemini Pro") {
-			service = new GeminiProChatService(token);
-		} else if (modelSelection === "Gemini Nano") {
-			service = new GeminiNanoChatService();
-		}
-		node.data.service = service;
-		setGeminiService(service);
-		node.data.session = await node.data.service.initializeSession(context);
-		node.data.ready = true;
-		setChatVisible(true);
-	};
-
 	const handleModelChange = (nodeId, event) => {
 		const selectedValue = event.target.value;
 		graph.getNode(nodeId).data.model = selectedValue;
@@ -63,14 +36,33 @@ const ChatNodeContent = ({
 		if (selectedValue === "Gemini Pro" && !token) setDialogOpen(true);
 	};
 
-	const handleSendMessage = async (message) => {
+	const handleSubmitPrompt = async () => {
+		if (graph.adjacencyList[nodeId].left.length === 0) return;
 		try {
-			// Call the model with the message
 			const node = graph.getNode(nodeId);
-			const response = await node.data.service.callModel(node, message);
-			return response;
+			let inputNode = graph.getNode(graph.adjacencyList[nodeId].left[0]);
+			let context = inputNode.data.content;
+			let name = adjacentNodeInputs[inputNode.id]; //use tab name + title
+			console.log(context);
+			node.data.context = context;
+			node.data.processing = false;
+			let service;
+			if (modelSelection === "Gemini Pro") {
+				service = new GeminiProRewriteService(token);
+			} else if (modelSelection === "Gemini Nano") {
+				service = new GeminiNanoRewriteService();
+			}
+			node.data.service = service;
+			setGeminiService(service);
+			node.data.session = await node.data.service.initializeSession(name);
+			const response = await node.data.service.callModel(node, context, prompt);
+			console.log("Response:", response);
+			graph.selectedNode.data.content = response.text;
+			node.data.ready = true;
+			setChatVisible(true);
 		} catch (error) {
-			console.error("Error sending message:", error.message);
+			console.error("Error while submitting prompt.");
+			console.error(error);
 			throw error;
 		}
 	};
@@ -93,19 +85,14 @@ const ChatNodeContent = ({
 				}
 				}
 			/>
-			<Box className="centered-button">
-				<Button
-					variant="contained"
-					color="primary"
-					onClick={initializeChat}
-					className="send-button"
-				>
-					Initialize
-				</Button>
-			</Box>
-			{chatVisible && <ChatWindow handleSendMessage={handleSendMessage} />}
+			{graph.adjacencyList[nodeId].left.length > 0 && (
+				<PromptInputField
+					handleSubmit={handleSubmitPrompt} //take names for button states
+					nodeId={nodeId}
+				/>
+			)}
 		</>
 	);
 };
 
-export default ChatNodeContent;
+export default RewriteNodeContent;

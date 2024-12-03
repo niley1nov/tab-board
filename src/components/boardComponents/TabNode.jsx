@@ -4,20 +4,21 @@ import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 import EditIcon from "@mui/icons-material/Edit";
 import { Handle, Position } from "@xyflow/react";
+import "../../stylesheets/Node.css";
 import "../../stylesheets/TabNode.css";
 
 const TabNode = ({ data }) => {
 	return (
 		<div
-			className="tab-node"
+			className="node"
 			onClick={data.onClick}
 			style={{ backgroundColor: data.backgroundColor || "#FFF" }}
 		>
 			{/* Header Section */}
-			<div className="tab-node-header">
+			<div className="node-header">
 				<Typography
 					variant="subtitle2"
-					className="tab-node-title"
+					className="node-title"
 					title={data.label}
 					style={{ fontFamily: "Poppins, sans-serif" }}
 				>
@@ -26,10 +27,10 @@ const TabNode = ({ data }) => {
 			</div>
 
 			{/* Divider Line */}
-			<Divider className="tab-node-divider" sx={{ margin: "8px 0" }} />
+			<Divider className="node-divider" />
 
 			{/* Action Icons Section */}
-			<div className="tab-node-actions-container">
+			<div className="node-actions-container">
 				<Button
 					className="edit-title-button"
 					variant="outlined"

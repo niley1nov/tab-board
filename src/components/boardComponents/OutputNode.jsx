@@ -6,6 +6,7 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { Handle, Position } from "@xyflow/react";
 import { useGraph } from "../../containers/GraphContext";
 import "../../stylesheets/OutputNode.css";
+import "../../stylesheets/Node.css";
 
 const OutputNode = ({ data }) => {
 	const nodeRef = useRef(null);
@@ -30,7 +31,7 @@ const OutputNode = ({ data }) => {
 		<div
 			onClick={data.onClick}
 			ref={nodeRef}
-			className="output-node"
+			className="node"
 			style={{ backgroundColor: data.backgroundColor || "#FFF" }}
 		>
 			{/* Left Handle */}
@@ -42,19 +43,19 @@ const OutputNode = ({ data }) => {
 			/>
 
 			{/* Header Section */}
-			<div className="output-node-header">
+			<div className="node-header">
 				<Typography
-					className="output-node-title"
+					className="node-title"
 					style={{ fontFamily: "Poppins, sans-serif" }}
 				>
 					{data.label}
 				</Typography>
 			</div>
 
-			<Divider className="output-node-divider" sx={{ margin: "8px 0" }} />
+			<Divider className="node-divider" />
 
 			{/* Action Icons Section */}
-			<div className="tab-node-actions-container">
+			<div className="node-actions-container">
 				<Button
 					className="delete-node-button"
 					variant="outlined"

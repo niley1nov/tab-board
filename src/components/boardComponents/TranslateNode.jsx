@@ -7,9 +7,9 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { Handle, Position } from "@xyflow/react";
 import { useGraph } from "../../containers/GraphContext";
 import "../../stylesheets/Node.css";
-import "../../stylesheets/SummaryNode.css";
+import "../../stylesheets/TranslateNode.css";
 
-const SummaryNode = ({ data }) => {
+const TranslateNode = ({ data }) => {
 	const nodeRef = useRef(null);
 	const graph = useGraph();
 	const { nodeId, adjacencyNodes } = graph.sidebarContent;
@@ -63,10 +63,7 @@ const SummaryNode = ({ data }) => {
 					variant="outlined"
 					onClick={data.editTitle}
 					startIcon={
-						<EditIcon 
-							className="edit-icon" 
-							fontSize="inherit" 
-						/>
+						<EditIcon className="edit-icon" fontSize="inherit" />
 					}
 				>
 					Edit
@@ -97,4 +94,4 @@ const SummaryNode = ({ data }) => {
 	);
 };
 
-export default SummaryNode;
+export default TranslateNode;

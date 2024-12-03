@@ -6,6 +6,9 @@ import TokenDialog from "./TokenDialog";
 import { useGraph } from "../../containers/GraphContext";
 import { useToken } from "../../containers/TokenContext";
 import PromptNodeContent from "./PromptNodeContent";
+import TranslateNodeContent from "./TranslateNodeContent";
+import WriteNodeContent from "./WriteNodeContent";
+import RewriteNodeContent from "./RewriteNodeContent";
 import SummaryNodeContent from "./SummaryNodeContent";
 import ChatNodeContent from "./ChatNodeContent";
 import TabNodeContent from "./TabNodeContent";
@@ -18,6 +21,7 @@ const CustomDrawer = ({ open, onClose }) => {
 	const [dialogOpen, setDialogOpen] = useState(false);
 	const [apiToken, setApiToken] = useState("");
 	const { nodeId, title, nodeType } = graph.sidebarContent;
+	const noPaddingNodeTypes = ["PromptNode", "ChatNode", "SummaryNode", "WriteNode", "RewriteNode", "TranslateNode"];
 
 	useEffect(() => {
 		// Initialize apiToken with the current token value on component mount
@@ -48,7 +52,7 @@ const CustomDrawer = ({ open, onClose }) => {
 			>
 				<DrawerHeader title={title} onClose={onClose} />
 				<Divider sx={{ marginY: 2, borderColor: "#F1E9FF" }} />
-				<div className={`drawer-wrapper ${nodeType === "PromptNode" || nodeType === "ChatNode" || nodeType === "SummaryNode" ? "no-padding" : ""}`}
+				<div className={`drawer-wrapper ${noPaddingNodeTypes.includes(nodeType) ? "no-padding" : ""}`}
 					style={{
 						background:
 							nodeType === "TabNode"
@@ -58,9 +62,27 @@ const CustomDrawer = ({ open, onClose }) => {
 									: "#49454F",
 					}}
 				>
-					<div className={`drawer-content ${nodeType === "PromptNode" || nodeType === "ChatNode" || nodeType === "SummaryNode" ? "no-padding-content" : ""}`}>
+					<div className={`drawer-content ${noPaddingNodeTypes.includes(nodeType) ? "no-padding-content" : ""}`}>
 						{nodeType === "PromptNode" && (
 							<PromptNodeContent
+								token={token}
+								setDialogOpen={setDialogOpen}
+							/>
+						)}
+						{nodeType === "TranslateNode" && (
+							<TranslateNodeContent
+								token={token}
+								setDialogOpen={setDialogOpen}
+							/>
+						)}
+						{nodeType === "WriteNode" && (
+							<WriteNodeContent
+								token={token}
+								setDialogOpen={setDialogOpen}
+							/>
+						)}
+						{nodeType === "RewriteNode" && (
+							<RewriteNodeContent
 								token={token}
 								setDialogOpen={setDialogOpen}
 							/>
