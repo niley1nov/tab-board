@@ -3,7 +3,7 @@
 	margin-right: 10px !important;
 	margin-bottom: calc(50px + env(safe-area-inset-bottom, 0)) !important;
 	border-radius: 10px !important;
-	width: 320px !important;
+	width: 30% !important;
 	padding: 16px !important;
 	background-color: #49454f !important;
 	color: white !important;
@@ -278,7 +278,7 @@
 .prompt-container {
 	display: flex;
 	flex-direction: column; /* Stack the input and button vertically */
-	width: 304px !important;
+	width: 100% !important;
 }
 
 .box-container {
