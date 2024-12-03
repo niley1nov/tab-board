@@ -19,7 +19,7 @@ export default class GeminiProWriteService extends AIService {
 		try {
 			const model = this.genAI.getGenerativeModel({
 				model: models["pro"],
-				systemInstruction: getPrompts("system_prompt") + " " + context,
+				systemInstruction: getPrompts("write_prompt", [context]),
 			});
 			const chatSession = model.startChat({
 				generationConfig: getGenConfig(1, "text/plain"),

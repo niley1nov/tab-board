@@ -16,10 +16,16 @@ export default class GeminiProChatService extends AIService {
 	async initializeSession(context) {
 		console.log('Initialize Session');
 		try {
+			let system_prompt;
+			if(!!context) {
+				system_prompt = getPrompts("chat_with_context_prompt", [context]); 
+			} else {
+				system_prompt = getPrompts("system_prompt");
+			}
 			const model = this.genAI.getGenerativeModel({
 				model: models["pro"],
-				systemInstruction: getPrompts("system_prompt") + `\n\nContext:\n\n` + context,
-			}); //use chat prompt here
+				systemInstruction: system_prompt,
+			});
 			const chatSession = model.startChat({
 				generationConfig: getGenConfig(1, "text/plain"),
 				safetySettings: safety_settings,
