@@ -59,6 +59,19 @@ const SummaryNode = ({ data }) => {
 			{/* Action Icons Section */}
 			<div className="node-actions-container">
 				<Button
+					className="edit-title-button"
+					variant="outlined"
+					onClick={data.editTitle}
+					startIcon={
+						<EditIcon 
+							className="edit-icon" 
+							fontSize="inherit" 
+						/>
+					}
+				>
+					Edit
+				</Button>
+				<Button
 					className="delete-node-button"
 					variant="outlined"
 					onClick={handleDelete}

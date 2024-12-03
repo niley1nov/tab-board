@@ -132,7 +132,6 @@ const WriteNodeContent = ({
 					rows={4}
 				/>
 			</div>
-			<Divider sx={{ marginY: 2, borderColor: "#F1E9FF" }} />
 			<Box className="centered-button">
 				<Button
 					variant="contained"
