@@ -3,7 +3,6 @@ import AdjacentNodeInputs from "./AdjacentNodeInputs";
 import { Button, Divider, Box, Typography, FormControl, Select, MenuItem } from "@mui/material";
 import "../../stylesheets/CustomDrawer.css";
 import ModelSelector from "./ModelSelector";
-import PromptInputField from "./PromptInputField";
 import { useGraph } from "../../containers/GraphContext";
 import GeminiProTranslateService from "../../services/GeminiProTranslateService";
 import GeminiNanoTranslateService from "../../services/GeminiNanoTranslateService";
@@ -14,7 +13,6 @@ const TranslateNodeContent = ({
 	setDialogOpen
 }) => {
 	const graph = useGraph();
-	const [promptNodeDetails, setPromptNodeDetails] = useState({});
 	const [language, setLanguage] = useState("English");
 	const { nodeId, adjacencyNodes } = graph.sidebarContent;
 	const [adjacentNodeInputs, setAdjacentNodeInputs] = useState(graph.getNode(nodeId)?.data?.adjacentNodeInputs ?? {});
@@ -33,10 +31,11 @@ const TranslateNodeContent = ({
 	}, [nodeId]);
 
 	const handleSendClick = async () => {
-		if (graph.adjacencyList[nodeId].left.length === 0) return;
-		graph.getNode(nodeId).data.loading = true;
-		setLoading(true);
 		try {
+			setLoading(true);
+			if (graph.adjacencyList[nodeId].left.length === 0) return;
+			const node = graph.getNode(nodeId);
+			node.data.loading = true;
 			let inputNode = graph.getNode(graph.adjacencyList[nodeId].left[0]);
 			let context = "";
 			let name = adjacentNodeInputs[inputNode.id];
@@ -45,7 +44,6 @@ const TranslateNodeContent = ({
 			}
 			context += inputNode.data.content;
 			console.log(context);
-			const node = graph.getNode(nodeId);
 			node.data.context = context;
 			node.data.processing = false;
 			let service;
