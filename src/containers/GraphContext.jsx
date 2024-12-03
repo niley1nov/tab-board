@@ -177,8 +177,8 @@ export const GraphProvider = ({ children }) => {
 				model: 'Gemini Pro',
 				service: null,
 				loading: false,
-				sourceLanguage: "",
-				targetLanguage: "",
+				sourceLanguage: "en",
+				targetLanguage: "en",
 			},
 		);
 	};

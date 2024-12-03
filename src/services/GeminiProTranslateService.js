@@ -14,8 +14,24 @@ export default class GeminiProTranslateService extends AIService {
 	}
 
 	// Initialize a session for a specific node
-	async initializeSession(language, name) {
-		return null;
+	async initializeSession(sourceLanguage, targetLanguage) {
+		console.log('Initialize Summary Session - pro');
+		try {
+			const model = this.genAI.getGenerativeModel({
+				model: models["pro"],
+				systemInstruction: getPrompts("translation_prompt", [sourceLanguage, targetLanguage]),
+			});
+			const chatSession = model.startChat({
+				generationConfig: getGenConfig(1, "text/plain"),
+				safetySettings: safety_settings,
+				history: [],
+			});
+			return chatSession;
+		} catch (error) {
+			this.showWarningPopup(error.message);
+			console.error("Error initializing AI session:", error);
+			throw new Error("Failed to initialize AI session");
+		}
 	}
 
 	// Call the model with a prompt for a specific node

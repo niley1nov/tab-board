@@ -13,12 +13,14 @@ const TranslateNodeContent = ({
 	setDialogOpen
 }) => {
 	const graph = useGraph();
-	const [language, setLanguage] = useState("English");
+
 	const { nodeId, adjacencyNodes } = graph.sidebarContent;
 	const [adjacentNodeInputs, setAdjacentNodeInputs] = useState(graph.getNode(nodeId)?.data?.adjacentNodeInputs ?? {});
 	const [chatVisible, setChatVisible] = useState(
 		graph.getNode(nodeId)?.data?.ready ?? false
 	);
+	const [sourceLanguage, setSourceLanguage] = useState(graph.getNode(nodeId)?.data?.sourceLanguage || "English");
+	const [targetLanguage, setTargetLanguage] = useState(graph.getNode(nodeId)?.data?.targetLanguage || "English");
 	const [modelSelection, setModelSelection] = useState(graph.getNode(nodeId)?.data?.model ?? "Gemini Pro");
 	const [geminiService, setGeminiService] = useState(graph.getNode(nodeId)?.data?.service ?? null);
 	const [loading, setLoading] = useState(false);
@@ -28,6 +30,8 @@ const TranslateNodeContent = ({
 		setAdjacentNodeInputs(graph.getNode(nodeId)?.data?.adjacentNodeInputs || {});
 		setModelSelection(graph.getNode(nodeId)?.data?.model || "Gemini Pro");
 		setGeminiService(graph.getNode(nodeId)?.data?.service || null);
+		setSourceLanguage(graph.getNode(nodeId)?.data?.sourceLanguage || "English");
+		setTargetLanguage(graph.getNode(nodeId)?.data?.targetLanguage || "English");
 	}, [nodeId]);
 
 	const handleSendClick = async () => {
@@ -54,7 +58,7 @@ const TranslateNodeContent = ({
 			}
 			node.data.service = service;
 			setGeminiService(service);
-			node.data.session = await node.data.service.initializeSession(language, name);
+			node.data.session = await node.data.service.initializeSession(graph.selectedNode.data.sourceLanguage, graph.selectedNode.data.targetLanguage);
 			const response = await node.data.service.callModel(node, context);
 			console.log("Response:", response);
 			graph.selectedNode.data.content = response.text;
@@ -77,10 +81,16 @@ const TranslateNodeContent = ({
 		if (selectedValue === "Gemini Pro" && !token) setDialogOpen(true);
 	};
 
-	const handleLanguageChange = (nodeId, event) => {
+	const handleSourceLanguageChange = (nodeId, event) => {
+		const selectedValue = event.target.value;
+		graph.getNode(nodeId).data.sourceLanguage = selectedValue;
+		setSourceLanguage(selectedValue);
+	};
+
+	const handleTargetLanguageChange = (nodeId, event) => {
 		const selectedValue = event.target.value;
 		graph.getNode(nodeId).data.targetLanguage = selectedValue;
-		setLanguage(selectedValue);
+		setTargetLanguage(selectedValue);
 	};
 
 	return (
@@ -106,18 +116,47 @@ const TranslateNodeContent = ({
 						<div className="prompt-container">
 							<div>
 								<Typography className="language-selector-title" style={{ fontFamily: "Poppins, sans-serif" }}>
-									Choose Language
+									Source Language
 								</Typography>
 								<FormControl fullWidth>
 									<Select
-										value={language || "English"}
-										onChange={(e) => handleLanguageChange(nodeId, e)}
+										value={sourceLanguage || "English"}
+										onChange={(e) => handleSourceLanguageChange(nodeId, e)}
 										style={{ fontFamily: "Poppins, sans-serif" }}
 										className="custom-select"
 									>
-										<MenuItem value="English">English</MenuItem>
-										<MenuItem value="German">German</MenuItem>
-										<MenuItem value="French">French</MenuItem>
+										<MenuItem value="en">English</MenuItem>
+										<MenuItem value="de">German</MenuItem>
+										<MenuItem value="fr">French</MenuItem>
+										<MenuItem value="es">Spanish</MenuItem>
+										<MenuItem value="ja">Japanese</MenuItem>
+										<MenuItem value="ko">Korean</MenuItem>
+										<MenuItem value="hi">Hindi</MenuItem>
+										<MenuItem value="ar">Arabic</MenuItem>
+										<MenuItem value="ru">Russian</MenuItem>
+									</Select>
+								</FormControl>
+							</div>
+							<div>
+								<Typography className="language-selector-title" style={{ fontFamily: "Poppins, sans-serif" }}>
+									Target Language
+								</Typography>
+								<FormControl fullWidth>
+									<Select
+										value={targetLanguage || "English"}
+										onChange={(e) => handleTargetLanguageChange(nodeId, e)}
+										style={{ fontFamily: "Poppins, sans-serif" }}
+										className="custom-select"
+									>
+										<MenuItem value="en">English</MenuItem>
+										<MenuItem value="de">German</MenuItem>
+										<MenuItem value="fr">French</MenuItem>
+										<MenuItem value="es">Spanish</MenuItem>
+										<MenuItem value="ja">Japanese</MenuItem>
+										<MenuItem value="ko">Korean</MenuItem>
+										<MenuItem value="hi">Hindi</MenuItem>
+										<MenuItem value="ar">Arabic</MenuItem>
+										<MenuItem value="ru">Russian</MenuItem>
 									</Select>
 								</FormControl>
 							</div>

@@ -6,8 +6,23 @@ export default class GeminiNanoTranslateService extends AIService {
 		super();
 	}
 
-	async initializeSession(language, name) {
-		return null;
+	async initializeSession(sourceLanguage, targetLanguage) {
+		console.log('Initialize Session');
+
+		const options = {
+			sourceLanguage: sourceLanguage,
+			targetLanguage: targetLanguage
+		};
+
+		try {
+			const chatSession = await window.translation.createTranslator(options);
+			return chatSession;
+		} catch (error) {
+			console.error(error);
+			this.showWarningPopup(error.message);
+			// More informative error message
+			throw new Error("Failed to initialize AI Session.");
+		}
 	}
 
 	async callModel(node, context) {
@@ -17,7 +32,7 @@ export default class GeminiNanoTranslateService extends AIService {
 			if (!chatSession) {
 				throw new Error(`Session not initialized`);
 			}
-			let result = await chatSession.prompt(context);
+			let result = await chatSession.translate(context);
 			return {
 				id: nodeId,
 				text: result
