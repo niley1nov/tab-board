@@ -26,6 +26,9 @@ function getPrompts(key, replacableText = []) {
 	const prompts = {
 		system_prompt: `You are a helpful assistant.`,
 		summary_prompt: `You are a helpful assistant. You will receive content of a web page, you need to summarize the text.`,
+		translation_prompt: `You are a language translator assistant.
+Source Language: ${replacableText[0]}
+Target Language: ${replacableText[1]}`,
 	};
 	return prompts[key];
 }
