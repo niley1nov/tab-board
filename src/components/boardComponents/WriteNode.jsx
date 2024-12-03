@@ -2,7 +2,6 @@ import React, { useRef } from "react";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
-import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { Handle, Position } from "@xyflow/react";
 import { useGraph } from "../../containers/GraphContext";
@@ -50,16 +49,6 @@ const WriteNode = ({ data }) => {
 
 			{/* Action Icons Section */}
 			<div className="node-actions-container">
-				<Button
-					className="edit-title-button"
-					variant="outlined"
-					onClick={data.editTitle}
-					startIcon={
-						<EditIcon className="edit-icon" fontSize="inherit" />
-					}
-				>
-					Edit
-				</Button>
 				<Button
 					className="delete-node-button"
 					variant="outlined"
