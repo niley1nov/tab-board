@@ -1,12 +1,15 @@
 {
 	"manifest_version": 3,
 	"name": "Tab Board",
-	"version": "0.1.0",
-	"description": "Tab Board",
+	"version": "1.0.0",
+	"description": "Visualize and organize tabs with our Chrome extension for smarter workflows!",
 	"action": {
 		"default_popup": "index.html"
 	},
 	"icons": {
+		"128": "logo.png",
+		"48": "logo.png",
+		"32": "logo.png",
 		"16": "logo.png"
 	},
 	"permissions": [
