@@ -1,5 +1,6 @@
 import AIService from "./AIService.js";
 import { getPrompts } from "./AIConfigData.js";
+import { handleError } from "./ErrorHandling.js"
 
 export default class GeminiNanoChatService extends AIService {
 	constructor() {
@@ -28,10 +29,9 @@ export default class GeminiNanoChatService extends AIService {
 			});
 			return chatSession;
 		} catch (error) {
-			console.error(error);
-			this.showWarningPopup(error.message);
-			// More informative error message
-			throw new Error("Failed to initialize AI session.");
+			const errorMessage = handleError(error)
+			this.showWarningPopup(errorMessage);
+			throw new Error("Failed to initialize GEMINI Session.");
 		}
 	}
 
@@ -48,12 +48,9 @@ export default class GeminiNanoChatService extends AIService {
 				text: result
 			};
 		} catch (error) {
-			this.showWarningPopup(error.message);
-			console.error("Error in GeminiNanoChatService callModel:", error);
-			throw error;
+			const errorMessage = handleError(error)
+			this.showWarningPopup(errorMessage);
+			throw new Error("Failed to initialize GEMINI Session.");
 		}
 	}
 }
-
-// use destroy to destroy session
-// sharedContext??
