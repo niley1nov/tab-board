@@ -1,70 +1,44 @@
-# Getting Started with Create React App
+**TabBoard: Revolutionizing Browsing with AI-Powered Workflows**
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+TabBoard, an innovative Chrome extension powered by Gemini Nano, transforms the way users interact with their browser tabs. By representing each tab as a dynamic, interconnected node on a visual board, TabBoard empowers users to seamlessly manage, interact with, and enhance their browsing content—all within their browser.
 
-## Available Scripts
+### **Key Features:**
 
-In the project directory, you can run:
+- **Tab Content Extraction:**  
+  Extract and view text from any tab via an intuitive sidebar for focused content interaction and seamless navigation.
 
-### `npm start`
+- **Prompt Nodes:**  
+  Combine multiple Tab Nodes, provide contextual inputs, and generate AI-driven insights by submitting prompts across tabs simultaneously.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **Chat Nodes:**  
+  Link Tab Nodes to engage in interactive AI chats. Maintain seamless context with a history of conversations for continuity and deeper insights.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- **Summarization Nodes:**  
+  Simplify dense content with a single click. Summarize lengthy documents, articles, or reviews directly from a Tab Node in seconds.
 
-### `npm test`
+- **Write Nodes:**  
+  Generate creative outputs, structured data, or narratives with ease. Enter a prompt and let AI craft tailored content for your needs.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **Rewrite Nodes:**  
+  Reframe or enhance existing text using advanced rewriting capabilities. Perfect for improving clarity, tone, or structure.
 
-### `npm run build`
+- **Translation Nodes:**  
+  Break language barriers by translating content into any desired language, ensuring global accessibility.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- **Output Node:**  
+  Centralize and visualize all generated outputs in one place. Review, compare, and utilize results from multiple nodes efficiently.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### **Why TabBoard?**
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+TabBoard combines these powerful features to let users create intricate graphs of interconnected workflows. It’s perfect for:  
+- Researchers organizing and analyzing data across multiple sources.  
+- Content creators brainstorming and refining ideas.  
+- Professionals managing productivity tasks and collaborating across teams.  
 
-### `npm run eject`
+Whether you’re summarizing a report, rewriting an email, creating a study plan, or generating multilingual outputs, TabBoard makes your browser smarter and more productive.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### **Unleash the Potential of AI-Powered Browsing**
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+With Gemini Nano’s cutting-edge capabilities, TabBoard bridges the gap between browser content and AI tools. Unlock the full potential of your browsing experience—enhanced privacy, reduced latency, and offline functionality make TabBoard the ultimate productivity extension.  
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Explore the future of AI-driven browsing with **TabBoard**—your browser, your board, your productivity powerhouse!
