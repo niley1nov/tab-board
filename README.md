@@ -42,3 +42,6 @@ Whether you’re summarizing a report, rewriting an email, creating a study plan
 With Gemini Nano’s cutting-edge capabilities, TabBoard bridges the gap between browser content and AI tools. Unlock the full potential of your browsing experience—enhanced privacy, reduced latency, and offline functionality make TabBoard the ultimate productivity extension.  
 
 Explore the future of AI-driven browsing with **TabBoard**—your browser, your board, your productivity powerhouse!
+
+Demo:
+https://www.youtube.com/watch?v=-1VKQlnuKfw&ab_channel=PotatoPeas
